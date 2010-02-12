@@ -1,0 +1,20 @@
+<html> 
+  <head> 
+      <title>Hello World</title> 
+
+      <script type="text/javascript" src="../lib/air/AIRAliases.js"></script> 
+      <script type="text/javascript" src="../lib/extjs/adapter/ext/ext-base.js"></script> 
+      <script type="text/javascript" src="../lib/extjs/ext-all.js"></script> 
+      <script type="text/javascript" src="../lib/extjs/ext-air.js"></script> 
+      
+      <script type="text/javascript"> 
+          function appLoad(){
+            var mp = new Ext.air.MusicPlayer();
+            mp.play('file:///Volumes/glazba/Afion - cudni svati/1 - Tica moja.mp3')
+          }  
+      </script> 
+  </head> 
+  <body onLoad="appLoad()"> 
+      <h1>Hello World</h1> 
+  </body> 
+</html>
