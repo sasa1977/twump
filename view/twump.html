@@ -8,6 +8,8 @@
       <script type="text/javascript" src="../lib/extjs/ext-all-debug.js"></script> 
       <script type="text/javascript" src="../lib/extjs/ext-air-debug.js"></script>
       
+      <script type="text/javascript" src="../lib/prototype/prototype-1.5.1.2.js"></script>
+     
       <script type="text/javascript" src="../view/ChromeViewport.js"></script>
       <script type="text/javascript" src="../view/MainWindow.js"></script>
       
@@ -27,7 +29,7 @@
 				 
 				  win.Ext.getCmp('mainPanel').getUpdater().update({
             url: "player.html",
-            callback: function(){ document.getElementById('close').addEventListener("click", function() { close(); });},
+            callback: function(){ $('close').addEventListener("click", function() { close(); });},
             text: "Loading...",
             scripts: true
           }); 
