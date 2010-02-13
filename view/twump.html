@@ -4,9 +4,6 @@
 
       <script type="text/javascript" src="../lib/air/AIRIntrospector.js"></script>      
       <script type="text/javascript" src="../lib/air/AIRAliases.js"></script> 
-      <script type="text/javascript" src="../lib/extjs/adapter/ext/ext-base-debug.js"></script> 
-      <script type="text/javascript" src="../lib/extjs/ext-all-debug.js"></script> 
-      <script type="text/javascript" src="../lib/extjs/ext-air-debug.js"></script>
       
       <script type="text/javascript" src="../lib/prototype/prototype-1.5.1.2.js"></script>
      
@@ -14,29 +11,16 @@
       <script type="text/javascript" src="../view/MainWindow.js"></script>
       
       <script type="text/javascript">
-        Ext.onReady(function() {
-				  Ext.BLANK_IMAGE_URL = '../extjs/resources/images/s.gif';
-				  				
-				  Ext.QuickTips.init();
-				  var vp = new Ext.air.ChromeViewport({
-					  panel: {
-						  id: 'mainPanel',
-						  xtype: 'xp:ui:main'
-					  }
-				  });
-				  
-				  var win = Ext.air.NativeWindow.getRootHtmlWindow();
-				 
-				  win.Ext.getCmp('mainPanel').getUpdater().update({
-            url: "player.html",
-            callback: function(){ $('close').addEventListener("click", function() { close(); });},
-            text: "Loading...",
-            scripts: true
-          }); 
-			  });
+			  function init(){
+          document.body.onmousedown = function() { window.nativeWindow.startMove(); } 
+          //$('close').addEventListener("click", function() { close(); });
+			  }
       </script>
       
   </head> 
-  <body> 
+  <body onload="init();"> 
+    <div id='close'>
+      close
+    </div>
   </body> 
 </html>
