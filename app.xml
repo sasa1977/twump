@@ -4,7 +4,7 @@
     <version>0.1</version> 
     <filename>twump</filename> 
     <initialWindow> 
-        <content>view/shuffler.html</content> 
+        <content>view/twump.html</content> 
         <visible>true</visible> 
         <systemChrome>none</systemChrome>
     </initialWindow> 
