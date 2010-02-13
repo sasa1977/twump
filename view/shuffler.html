@@ -1,20 +1,40 @@
 <html> 
   <head> 
-      <title>Hello World</title> 
+      <title></title>
 
+      <script type="text/javascript" src="../lib/air/AIRIntrospector.js"></script>      
       <script type="text/javascript" src="../lib/air/AIRAliases.js"></script> 
-      <script type="text/javascript" src="../lib/extjs/adapter/ext/ext-base.js"></script> 
-      <script type="text/javascript" src="../lib/extjs/ext-all.js"></script> 
-      <script type="text/javascript" src="../lib/extjs/ext-air.js"></script> 
+      <script type="text/javascript" src="../lib/extjs/adapter/ext/ext-base-debug.js"></script> 
+      <script type="text/javascript" src="../lib/extjs/ext-all-debug.js"></script> 
+      <script type="text/javascript" src="../lib/extjs/ext-air-debug.js"></script>
       
-      <script type="text/javascript"> 
-          function appLoad(){
-            var mp = new Ext.air.MusicPlayer();
-            mp.play('')
-          }  
-      </script> 
+      <script type="text/javascript" src="../view/ChromeViewport.js"></script>
+      <script type="text/javascript" src="../view/MainWindow.js"></script>
+      
+      <script type="text/javascript">
+        Ext.onReady(function() {
+				  Ext.BLANK_IMAGE_URL = '../extjs/resources/images/s.gif';
+				  				
+				  Ext.QuickTips.init();
+				  var vp = new Ext.air.ChromeViewport({
+					  panel: {
+						  id: 'mainPanel',
+						  xtype: 'xp:ui:main'
+					  }
+				  });
+				  
+				  var win = Ext.air.NativeWindow.getRootHtmlWindow();
+				 
+				  win.Ext.getCmp('mainPanel').getUpdater().update({
+            url: "player.html",
+            callback: function(){ document.getElementById('close').addEventListener("click", function() { close(); });},
+            text: "Loading...",
+            scripts: true
+          }); 
+			  });
+      </script>
+      
   </head> 
-  <body onLoad="appLoad()"> 
-      <h1>Hello World</h1> 
+  <body> 
   </body> 
 </html>
