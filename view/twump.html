@@ -13,14 +13,89 @@
       <script type="text/javascript">
 			  function init(){
           document.body.onmousedown = function() { window.nativeWindow.startMove(); } 
-          //$('close').addEventListener("click", function() { close(); });
+          $('close').addEventListener("click", function() { close(); });
+          
+          var file = new air.File(); 
+          file.addEventListener(air.Event.SELECT, dirSelected); 
+          file.browseForDirectory('select folder')
 			  }
+			  
+			  function dirSelected(event){
+          this.list = getFilesRecursive(event.target.nativePath);
+          this.currentFile = 0;
+          this.playCurrent();
+			  }
+			  
+			  function playCurrent(){
+			    this.playFile(this.list[this.currentFile])
+			  }
+			  
+			  function getFilesRecursive(folder){
+			    var fileList = []
+			    _getFilesRecursive(folder, fileList)
+			    
+			    return fileList;
+			  }
+			  
+			  function _getFilesRecursive(folder, container) {
+  			  var currentFolder = new air.File(folder);
+          var files = $A(currentFolder.getDirectoryListing());
+          
+          files.each(function(file){
+            if (file.isDirectory) {
+              if (file.name !="." && file.name !="..") {
+                //it's a directory
+                _getFilesRecursive(file.nativePath, container);
+              }
+            } 
+            else
+              container.push(file.url);
+          });
+        }
+        
+        function stopPlaying(){
+          if (this.channel)
+            this.channel.stop();
+            
+          this.channel = null;
+          this.playing = null;
+        }
+        
+        function playFile(file){
+          this.stopPlaying();
+        
+          this.playing = new air.Sound(new air.URLRequest(file))
+          this.channel = this.playing.play()
+          this.channel.addEventListener(air.Event.SOUND_COMPLETE, onPlaybackComplete); 
+        }
+        
+        var timer = setInterval(monitorPlaying, 500); 
+        
+        function onPlaybackComplete(){
+          this.currentFile++;
+          this.playCurrent();
+        }
+        
+        function monitorPlaying(){
+          var progress = ''
+          
+          if (this.playing && this.channel){          
+            var estimatedLength = Math.ceil(this.playing.length / (this.playing.bytesLoaded / this.playing.bytesTotal)); 
+            var playbackPercent = Math.round(100 * (this.channel.position / estimatedLength)); 
+
+            progress = this.playing.url + "<br/>" + parseInt(this.channel.position / 1000) + " / " + parseInt(this.playing.length / 1000);
+          }
+
+          $('progress').update(progress)
+        }
+        
       </script>
-      
   </head> 
+  
   <body onload="init();"> 
     <div id='close'>
       close
     </div>
+    <div id='progress'></div>
   </body> 
 </html>
