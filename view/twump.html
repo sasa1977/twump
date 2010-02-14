@@ -12,30 +12,20 @@
       <script type="text/javascript" src="../lib/twump/player.js"></script>
 
       <script type="text/javascript" src="../controller/twump_controller.js"></script>
+      <script type="text/javascript" src="../view/player_window.js"></script>
 
       <script type="text/javascript">
-			  function init(){
-          document.body.onmousedown = function() { window.nativeWindow.startMove(); } 
-          $('close').addEventListener("click", function() { close(); });
+        function init(){
+          Twump.Application = Class.create();
+          Twump.Application.prototype = {
+            initialize: function(){
+              this.playerWindow = new Twump.View.PlayerWindow();
+              this.controller = new Twump.Controller(this.playerWindow);
+            }
+          };
           
-          this.controller = new Twump.Controller();
-			  }
-			  
-			  function dirSelected(event){
-          this.list = getFilesRecursive(event.target.nativePath);
-          this.currentFile = 0;
-          this.playCurrent();
-			  }
-			  
-			  function playCurrent(){
-			    this.playFile(this.list[this.currentFile])
-			  }
-			  
-        function onPlaybackComplete(){
-          this.currentFile++;
-          this.playCurrent();
+          Twump.application = new Twump.Application();
         }
-        
       </script>
   </head> 
   

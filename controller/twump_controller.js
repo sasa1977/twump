@@ -1,6 +1,7 @@
 Twump.Controller = Class.create()
 Twump.Controller.prototype = {
-  initialize: function(){
+  initialize: function(playerWindow){
+    this.playerWindow = playerWindow;
     this.player = new Twump.PlayerFacade();
     this.openFolder();
   },
@@ -23,7 +24,9 @@ Twump.Controller.prototype = {
   
   playCurrent: function(){
     if (this.list){
-      this.player.play(this.currentFile(), {onPlayProgress: this.onPlayProgress.bind(this)});
+      this.player.play(this.currentFile(), {
+        onPlayProgress: this.playerWindow.displayPlayProgress.bind(this.playerWindow)
+      });
     }
   },
   
@@ -34,9 +37,5 @@ Twump.Controller.prototype = {
   
   currentIndex: function(){
     return this.current || 0;
-  },
-  
-  onPlayProgress: function(data){
-    air.trace(data.position)
   }
 }
