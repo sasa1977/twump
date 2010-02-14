@@ -7,18 +7,18 @@
       
       <script type="text/javascript" src="../lib/prototype/prototype-1.5.1.2.js"></script>
       
+      <script type="text/javascript" src="../lib/twump/base.js"></script>
+      <script type="text/javascript" src="../lib/twump/file_utils.js"></script>
       <script type="text/javascript" src="../lib/twump/player.js"></script>
+
+      <script type="text/javascript" src="../controller/twump_controller.js"></script>
 
       <script type="text/javascript">
 			  function init(){
           document.body.onmousedown = function() { window.nativeWindow.startMove(); } 
           $('close').addEventListener("click", function() { close(); });
           
-          this.player = new Twump.PlayerFacade();
-          
-          var file = new air.File(); 
-          file.addEventListener(air.Event.SELECT, dirSelected); 
-          file.browseForDirectory('select folder')
+          this.controller = new Twump.Controller();
 			  }
 			  
 			  function dirSelected(event){
@@ -31,43 +31,6 @@
 			    this.playFile(this.list[this.currentFile])
 			  }
 			  
-			  function getFilesRecursive(folder){
-			    var fileList = []
-			    _getFilesRecursive(folder, fileList)
-			    
-			    return fileList;
-			  }
-			  
-			  function _getFilesRecursive(folder, container) {
-  			  var currentFolder = new air.File(folder);
-          var files = $A(currentFolder.getDirectoryListing());
-          
-          files.each(function(file){
-            if (file.isDirectory) {
-              if (file.name !="." && file.name !="..") {
-                //it's a directory
-                _getFilesRecursive(file.nativePath, container);
-              }
-            } 
-            else
-              container.push(file.url);
-          });
-        }
-        
-        function stop(){
-          this.player.stop();
-        }
-        
-        function playFile(file){
-          this.player.play(file, {
-            onPlayProgress: this.onPlayProgress.bind(this)
-          });
-        }
-        
-        function onPlayProgress(data){
-          air.trace(data.position)
-        }
-        
         function onPlaybackComplete(){
           this.currentFile++;
           this.playCurrent();
