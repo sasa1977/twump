@@ -2,16 +2,14 @@ Twump.Controller = Class.create()
 Twump.Controller.prototype = {
   initialize: function(playerWindow){
     this.playerWindow = playerWindow;
-    
-    this.subscribeToViewEvents(this.playerWindow, ["previous", "next", "pause", "stop", "play"])
+    this.subscribeToViewEvents(this.playerWindow, ["previous", "next", "pause", "stop", "play", "openFolder"])
     
     this.player = new Twump.PlayerFacade();
-    this.openFolder();
   },
   
   subscribeToViewEvents: function(view, events){
     events.each(function(event){
-      var fullName = "on" + event.capitalize();
+      var fullName = "on" + event.capitalizeEachWord();
       if (this[fullName])
         view[fullName] = this[fullName].bind(this);
     }.bind(this))
@@ -24,8 +22,15 @@ Twump.Controller.prototype = {
   },
   
   dirSelected: function(event){
-    this.setPlaylist(air.File.getFilesRecursive(event.target.nativePath));
+    this.stop();
+    this.setPlaylist(this.collectMusicFiles(air.File.getFilesRecursive(event.target.nativePath)));
     this.playCurrent();
+  },
+  
+  collectMusicFiles: function(files){
+    return files.map(function(fileName){
+      return (fileName.toLowerCase().endsWith('.mp3')) ? fileName : null;
+    }.bind(this)).compact();
   },
   
   setPlaylist: function(list){
@@ -98,5 +103,9 @@ Twump.Controller.prototype = {
   
   onPrevious: function(){
     this.play(this.currentIndex() - 1);
-  }
+  },
+  
+  onOpenFolder: function(){
+    this.openFolder();
+  },
 }
