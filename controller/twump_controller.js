@@ -2,8 +2,19 @@ Twump.Controller = Class.create()
 Twump.Controller.prototype = {
   initialize: function(playerWindow){
     this.playerWindow = playerWindow;
+    
+    this.subscribeToViewEvents(this.playerWindow, ["previous", "next"])
+    
     this.player = new Twump.PlayerFacade();
     this.openFolder();
+  },
+  
+  subscribeToViewEvents: function(view, events){
+    events.each(function(event){
+      var fullName = "on" + event.capitalize();
+      if (this[fullName])
+        view[fullName] = this[fullName].bind(this);
+    }.bind(this))
   },
   
   openFolder: function(){
@@ -36,7 +47,7 @@ Twump.Controller.prototype = {
   },
   
   onPlaybackComplete: function(){
-    this.playNext();
+    this.onNext();
   },
   
   currentFile: function(){
@@ -49,17 +60,30 @@ Twump.Controller.prototype = {
   },
   
   setCurrentIndex: function(index){
+    if (!this.list || index == null || index >= this.list.length || index < 0)
+      return;
+  
     this.current = index;  
+  },
+  
+  play: function(index){
+    if (!this.list || index == null || index >= this.list.length || index < 0)
+      return;
+    
+    this.stop();
+    this.setCurrentIndex(index);
+    this.playCurrent();
   },
    
   stop: function(){
     this.player.stop();
   },
   
-  playNext: function(){
-    if (!this.list || this.currentIndex() + 1 >= this.list.length) return;
-    this.stop();
-    this.setCurrentIndex(this.currentIndex() + 1);
-    this.playCurrent();
+  onNext: function(){
+    this.play(this.currentIndex() + 1);
+  },
+  
+  onPrevious: function(){
+    this.play(this.currentIndex() - 1);
   }
 }
