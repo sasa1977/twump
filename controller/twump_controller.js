@@ -3,7 +3,7 @@ Twump.Controller.prototype = {
   initialize: function(playerWindow){
     this.playerWindow = playerWindow;
     
-    this.subscribeToViewEvents(this.playerWindow, ["previous", "next"])
+    this.subscribeToViewEvents(this.playerWindow, ["previous", "next", "pause"])
     
     this.player = new Twump.PlayerFacade();
     this.openFolder();
@@ -81,6 +81,10 @@ Twump.Controller.prototype = {
   
   onNext: function(){
     this.play(this.currentIndex() + 1);
+  },
+  
+  onPause: function(){
+    this.player.pauseOrResume();
   },
   
   onPrevious: function(){
