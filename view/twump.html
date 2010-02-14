@@ -13,6 +13,8 @@
       <script type="text/javascript" src="../lib/twump/string_extensions.js"></script>
       <script type="text/javascript" src="../lib/twump/file_utils.js"></script>
       <script type="text/javascript" src="../lib/twump/player.js"></script>
+      
+      <script type="text/javascript" src="../storage/binary.js"></script>
 
       <script type="text/javascript" src="../controller/twump_controller.js"></script>
       <script type="text/javascript" src="../view/player_window.js"></script>
@@ -22,8 +24,9 @@
           Twump.Application = Class.create();
           Twump.Application.prototype = {
             initialize: function(){
+              this.storage = new Twump.Storage.Binary();
               this.playerWindow = new Twump.View.PlayerWindow();
-              this.controller = new Twump.Controller(this.playerWindow);
+              this.controller = new Twump.Controller(this.playerWindow, this.storage);
             }
           };
           

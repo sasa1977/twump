@@ -1,10 +1,13 @@
 Twump.Controller = Class.create()
 Twump.Controller.prototype = {
-  initialize: function(playerWindow){
+  initialize: function(playerWindow, storage){
     this.playerWindow = playerWindow;
+    this.storage = storage;
     this.subscribeToViewEvents(this.playerWindow, ["previous", "next", "pause", "stop", "play", "openFolder"])
     
     this.player = new Twump.PlayerFacade();
+    
+    this.loadLastList();
   },
   
   subscribeToViewEvents: function(view, events){
@@ -40,6 +43,8 @@ Twump.Controller.prototype = {
   
   playCurrent: function(){
     if (!this.list) return;
+    
+    this.saveCurrentList();
     
     this.player.play(this.currentFile(), {
       onPlayProgress: this.onPlayProgress.bind(this),
@@ -108,4 +113,19 @@ Twump.Controller.prototype = {
   onOpenFolder: function(){
     this.openFolder();
   },
+  
+  saveCurrentList: function(){
+    if (!this.list) return;
+    
+    this.storage.writeAppData('last_played.twumpl', {
+      list: this.list, current: this.currentIndex()
+    })
+  },
+  
+  loadLastList: function(){
+    var data = this.storage.readAppData('last_played.twumpl');
+    if (!data) return;
+    this.list = data.list;
+    this.play(data.current);
+  }
 }
