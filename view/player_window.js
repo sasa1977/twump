@@ -4,7 +4,9 @@ Twump.View.PlayerWindow = Class.create();
 Twump.View.PlayerWindow.prototype = {
   initialize: function(){
     document.body.onmousedown = function() { window.nativeWindow.startMove(); } 
-    this.addEventListeners("click", ["close", "previous", "next", "pause", "stop", "play", "openFolder"]);
+    this.addEventListeners("click", 
+      ["close", "previous", "next", "pause", "stop", "play", "openFolder", "shuffle"]
+     );
   },
   
   displayPlayProgress: function(data){
