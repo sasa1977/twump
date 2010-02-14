@@ -6,7 +6,7 @@ Twump.View.PlayerWindow.prototype = {
     document.body.onmousedown = function() { window.nativeWindow.startMove(); } 
     this.addEventListeners("click", 
       [
-        "close", "previous", "next", "pause", "stop", "play", 
+        "close", "previous", "next", "pause", "stop", "play", "volumeDown", "volumeUp",
         "openFolder", "addFolder", "shuffle", "shuffleRemaining", "delete"
       ]
      );
