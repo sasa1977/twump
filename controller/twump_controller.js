@@ -18,16 +18,25 @@ Twump.Controller.prototype = {
   },
   
   setPlaylist: function(list){
-    this.current = 0;
+    this.setCurrentIndex(0);
     this.list = list;
   },
   
   playCurrent: function(){
-    if (this.list){
-      this.player.play(this.currentFile(), {
-        onPlayProgress: this.playerWindow.displayPlayProgress.bind(this.playerWindow)
-      });
-    }
+    if (!this.list) return;
+    
+    this.player.play(this.currentFile(), {
+      onPlayProgress: this.onPlayProgress.bind(this),
+      onPlaybackComplete: this.onPlaybackComplete.bind(this)
+    });
+  },
+  
+  onPlayProgress: function(data){
+    this.playerWindow.displayPlayProgress(Object.extend(data, {file: this.currentFile()}));
+  },
+  
+  onPlaybackComplete: function(){
+    this.playNext();
   },
   
   currentFile: function(){
@@ -37,5 +46,20 @@ Twump.Controller.prototype = {
   
   currentIndex: function(){
     return this.current || 0;
+  },
+  
+  setCurrentIndex: function(index){
+    this.current = index;  
+  },
+   
+  stop: function(){
+    this.player.stop();
+  },
+  
+  playNext: function(){
+    if (!this.list || this.currentIndex() + 1 >= this.list.length) return;
+    this.stop();
+    this.setCurrentIndex(this.currentIndex() + 1);
+    this.playCurrent();
   }
 }

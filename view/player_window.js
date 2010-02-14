@@ -8,6 +8,7 @@ Twump.View.PlayerWindow.prototype = {
   },
   
   displayPlayProgress: function(data){
-    air.trace(data.position);
+    $('playing').update(data.file);
+    $('progress').update("" + data.position + " / " + data.length)
   }
 }
