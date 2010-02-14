@@ -4,7 +4,10 @@ Twump.Controller.prototype = {
     this.playerWindow = playerWindow;
     this.storage = storage;
     this.subscribeToViewEvents(this.playerWindow, 
-      ["previous", "next", "pause", "stop", "play", "openFolder", "addFolder", "shuffle", "delete"]
+      [
+        "previous", "next", "pause", "stop", "play", 
+        "openFolder", "addFolder", "shuffle", "shuffleRemaining", "delete"
+      ]
     )
     
     this.player = new Twump.PlayerFacade();
@@ -143,6 +146,11 @@ Twump.Controller.prototype = {
   onShuffle: function(){
     this.playlist.shuffle();
     this.play(0);
+  },
+  
+  onShuffleRemaining: function(){
+    this.playlist.shuffle(this.currentIndex() + 1)
+    this.saveCurrentList();
   },
   
   onDelete: function(){

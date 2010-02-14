@@ -9,8 +9,8 @@ Twump.Model.Playlist.prototype = {
   length: function(){return this.files.length},
   empty: function(){return this.files.length == 0},
   
-  shuffle: function(){
-    this.files = this.files.shuffle();
+  shuffle: function(from){
+    this.files = this.files.shuffle(from);
   },
   
   deleteAt: function(index){
