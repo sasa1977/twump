@@ -4,7 +4,7 @@ Twump.Controller.prototype = {
     this.playerWindow = playerWindow;
     this.storage = storage;
     this.subscribeToViewEvents(this.playerWindow, 
-      ["previous", "next", "pause", "stop", "play", "openFolder", "shuffle"]
+      ["previous", "next", "pause", "stop", "play", "openFolder", "shuffle", "delete"]
     )
     
     this.player = new Twump.PlayerFacade();
@@ -45,9 +45,10 @@ Twump.Controller.prototype = {
   },
   
   playCurrent: function(){
-    if (!this.currentFile()) return;
-  
+    this.stop();
     this.saveCurrentList();
+    
+    if (!this.currentFile()) return;
     
     this.player.play(this.currentFile(), {
       onPlayProgress: this.onPlayProgress.bind(this),
@@ -56,10 +57,17 @@ Twump.Controller.prototype = {
   },
   
   onPlayProgress: function(data){
-    this.playerWindow.displayPlayProgress(Object.extend(data, {file: this.currentFile()}));
+    this.playerWindow.displayPlayProgress(
+      Object.extend(data, {
+        file: this.currentFile(),
+        currentIndex: this.currentIndex() + 1,
+        playlistLength: this.playlist.length()
+      })
+     );
   },
   
   onPlaybackComplete: function(){
+    this.stop();
     this.onNext();
   },
   
@@ -72,7 +80,7 @@ Twump.Controller.prototype = {
   },
   
   indexOk: function(index){
-    return index >= 0 && index < this.playlist.list.length;
+    return index >= 0 && index < this.playlist.length();
   },
   
   setCurrentIndex: function(index){
@@ -84,7 +92,6 @@ Twump.Controller.prototype = {
   play: function(index){
     if (!this.indexOk(index)) return;
     
-    this.stop();
     this.setCurrentIndex(index);
     this.playCurrent();
   },
@@ -121,6 +128,13 @@ Twump.Controller.prototype = {
   onShuffle: function(){
     this.playlist.shuffle();
     this.play(0);
+  },
+  
+  onDelete: function(){
+    if (!this.indexOk(this.currentIndex())) return;
+    
+    this.playlist.deleteAt(this.currentIndex());
+    this.playCurrent();
   },
   
   saveCurrentList: function(){

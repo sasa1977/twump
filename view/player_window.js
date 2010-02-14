@@ -5,17 +5,19 @@ Twump.View.PlayerWindow.prototype = {
   initialize: function(){
     document.body.onmousedown = function() { window.nativeWindow.startMove(); } 
     this.addEventListeners("click", 
-      ["close", "previous", "next", "pause", "stop", "play", "openFolder", "shuffle"]
+      ["close", "previous", "next", "pause", "stop", "play", "openFolder", "shuffle", "delete"]
      );
   },
   
   displayPlayProgress: function(data){
     $('playing').update(data.file);
+    $('playlistPos').update("Playing file: " + data.currentIndex + " of " + data.playlistLength)
     $('progress').update("" + data.position + " / " + data.length)
   },
   
   clearPlayProgress: function(){
     $('playing').update();
+    $('playlistPos').update();
     $('progress').update()
   },
   
