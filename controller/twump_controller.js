@@ -6,6 +6,7 @@ Twump.Controller.prototype = {
     this.subscribeToViewEvents(this.playerWindow, ["previous", "next", "pause", "stop", "play", "openFolder"])
     
     this.player = new Twump.PlayerFacade();
+    this.setPlaylist([])
     
     this.loadLastList();
   },
@@ -36,14 +37,14 @@ Twump.Controller.prototype = {
     }.bind(this)).compact();
   },
   
-  setPlaylist: function(list){
-    this.setCurrentIndex(0);
-    this.list = list;
+  setPlaylist: function(list, index){
+    this.playlist = new Twump.Model.Playlist(list);
+    this.setCurrentIndex(index || 0);
   },
   
   playCurrent: function(){
-    if (!this.list) return;
-    
+    if (!this.currentFile()) return;
+  
     this.saveCurrentList();
     
     this.player.play(this.currentFile(), {
@@ -61,24 +62,25 @@ Twump.Controller.prototype = {
   },
   
   currentFile: function(){
-    if (!this.list) return null;
-    return this.list[this.currentIndex()]     
+    return this.playlist.get(this.currentIndex())
   },
   
   currentIndex: function(){
     return this.current || 0;
   },
   
+  indexOk: function(index){
+    return index >= 0 && index < this.playlist.list.length;
+  },
+  
   setCurrentIndex: function(index){
-    if (!this.list || index == null || index >= this.list.length || index < 0)
-      return;
+    if (!this.indexOk(index)) return;
   
     this.current = index;  
   },
   
   play: function(index){
-    if (!this.list || index == null || index >= this.list.length || index < 0)
-      return;
+    if (!this.indexOk(index)) return;
     
     this.stop();
     this.setCurrentIndex(index);
@@ -115,17 +117,16 @@ Twump.Controller.prototype = {
   },
   
   saveCurrentList: function(){
-    if (!this.list) return;
-    
     this.storage.writeAppData('last_played.twumpl', {
-      list: this.list, current: this.currentIndex()
+      list: this.playlist.list, current: this.currentIndex()
     })
   },
   
   loadLastList: function(){
     var data = this.storage.readAppData('last_played.twumpl');
     if (!data) return;
-    this.list = data.list;
-    this.play(data.current);
+    
+    this.setPlaylist(data.list, data.current);
+    this.playCurrent();
   }
 }
