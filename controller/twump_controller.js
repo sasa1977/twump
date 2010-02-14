@@ -4,7 +4,7 @@ Twump.Controller.prototype = {
     this.playerWindow = playerWindow;
     this.storage = storage;
     this.subscribeToViewEvents(this.playerWindow, 
-      ["previous", "next", "pause", "stop", "play", "openFolder", "shuffle", "delete"]
+      ["previous", "next", "pause", "stop", "play", "openFolder", "addFolder", "shuffle", "delete"]
     )
     
     this.player = new Twump.PlayerFacade();
@@ -23,14 +23,25 @@ Twump.Controller.prototype = {
   
   openFolder: function(){
     var file = new air.File(); 
-    file.addEventListener(air.Event.SELECT, this.dirSelected.bind(this)); 
+    file.addEventListener(air.Event.SELECT, this.openFolderSelected.bind(this)); 
     file.browseForDirectory('Select folder');
   },
   
-  dirSelected: function(event){
+  openFolderSelected: function(event){
     this.stop();
     this.setPlaylist(this.collectMusicFiles(air.File.getFilesRecursive(event.target.nativePath)));
     this.playCurrent();
+  },
+  
+  addFolder: function(){
+    var file = new air.File(); 
+    file.addEventListener(air.Event.SELECT, this.addFolderSelected.bind(this)); 
+    file.browseForDirectory('Select folder');
+  },
+  
+  addFolderSelected: function(event){
+    var newFiles = this.collectMusicFiles(air.File.getFilesRecursive(event.target.nativePath))
+    this.playlist.insertAt(this.currentIndex() + 1, newFiles)
   },
   
   collectMusicFiles: function(files){
@@ -125,6 +136,10 @@ Twump.Controller.prototype = {
     this.openFolder();
   },
   
+  onAddFolder: function(){
+   (this.playlist.empty()) ? this.onOpenFolder() : this.addFolder();
+  },
+  
   onShuffle: function(){
     this.playlist.shuffle();
     this.play(0);
@@ -139,7 +154,7 @@ Twump.Controller.prototype = {
   
   saveCurrentList: function(){
     this.storage.writeAppData('last_played.twumpl', {
-      list: this.playlist.list, current: this.currentIndex()
+      list: this.playlist.files, current: this.currentIndex()
     })
   },
   
