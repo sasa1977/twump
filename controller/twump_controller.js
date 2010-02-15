@@ -88,9 +88,7 @@ Twump.Controller.prototype = {
   onPlayProgress: function(data){
     this.playerWindow.displayPlayProgress(
       Object.extend(data, {
-        file: this.currentFile(),
-        currentIndex: this.currentIndex() + 1,
-        playlistLength: this.playlist.length()
+        file: this.currentFile().split(/(\\|\/)/).last()
       })
      );
   },

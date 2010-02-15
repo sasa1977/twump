@@ -6,3 +6,7 @@
 .header td{
   background-color:lightGrey
 }
+
+.playingInfo {
+  height:50px;
+}

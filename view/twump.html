@@ -53,7 +53,7 @@
   </head> 
   
   <body onload="init();" style="overflow:hidden;"> 
-    <div id="player" style="height:200;width:500;background-color:darkgrey">
+    <div id="player" style="height:165;width:500;background-color:darkgrey">
       <table cellpadding="0" cellspacing="0" border="0" width="100%">
         <tr class="header" id="header">
           <td width="*">&nbsp;</td>
@@ -65,9 +65,11 @@
         </tr>
       </table>
       
-      <div id='playing'></div>
-      <div id='playlistPos'></div>
-      <div id='progress'></div>
+      <div class='playingInfo'>
+        <div id='playing'></div>
+        <div id='playlistPos'></div>
+        <div id='progress'></div>
+      </div>
       <div id="playProgress" tabIndex="1" style="float:left;width: 500px">
       	<input id="playProgressInput" style="display:none;"/>
       </div>
@@ -97,7 +99,7 @@
       </div>
     </div>
     
-    <div id="playlist" style="height:300;width:500;background-color:lightgrey;overflow:auto;">
+    <div id="playlist" style="height:335;width:500;background-color:lightgrey;overflow:auto;">
     </div>
   </body> 
 </html>

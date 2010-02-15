@@ -34,7 +34,6 @@ Twump.View.PlayerWindow.prototype = {
     this.inDisplayPlayProgress = true;
     
     $('playing').update(data.file);
-    $('playlistPos').update("Playing file: " + data.currentIndex + " of " + data.playlistLength)
     $('progress').update((data.length - data.position).secondsToTimeString());
     this.playProgress.setValue(data.playbackPercent);
     
