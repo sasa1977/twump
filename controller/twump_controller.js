@@ -1,8 +1,8 @@
 Twump.Controller = Class.create()
 Twump.Controller.prototype = {
-  initialize: function(playerWindow, storage){
-    this.playerWindow = playerWindow;
-    this.storage = storage;
+  initialize: function(options){
+    Object.extend(this, options);
+    
     this.subscribeToViewEvents(this.playerWindow, 
       [
         "previous", "next", "pause", "stop", "play", "volumeChange", "setPlayPosition",
@@ -50,7 +50,8 @@ Twump.Controller.prototype = {
   
   addFolderSelected: function(event){
     var newFiles = this.collectMusicFiles(air.File.getFilesRecursive(event.target.nativePath))
-    this.playlist.insertAt(this.currentIndex() + 1, newFiles)
+    this.playlist.insertAt(this.currentIndex() + 1, newFiles);
+    this.refreshPlaylist();
   },
   
   collectMusicFiles: function(files){
@@ -62,6 +63,11 @@ Twump.Controller.prototype = {
   setPlaylist: function(list, index){
     this.playlist = new Twump.Model.Playlist(list);
     this.setCurrentIndex(index || 0);
+    this.refreshPlaylist();
+  },
+  
+  refreshPlaylist: function(){
+    this.playlistWindow.display(this.playlist);
   },
   
   playCurrent: function(){
@@ -69,6 +75,8 @@ Twump.Controller.prototype = {
     this.saveCurrentList();
     
     if (!this.currentFile()) return;
+    
+    this.playlistWindow.selectItem(this.currentIndex());
     
     this.player.play(this.currentFile(), {
       volume: this.volume,
@@ -152,11 +160,13 @@ Twump.Controller.prototype = {
   
   onShuffle: function(){
     this.playlist.shuffle();
+    this.refreshPlaylist();
     this.play(0);
   },
   
   onShuffleRemaining: function(){
-    this.playlist.shuffle(this.currentIndex() + 1)
+    this.playlist.shuffle(this.currentIndex() + 1);
+    this.refreshPlaylist();
     this.saveCurrentList();
   },
   
@@ -164,6 +174,7 @@ Twump.Controller.prototype = {
     if (!this.indexOk(this.currentIndex())) return;
     
     this.playlist.deleteAt(this.currentIndex());
+    this.refreshPlaylist();
     this.playCurrent();
   },
   

@@ -8,7 +8,7 @@
         <visible>true</visible> 
         <systemChrome>none</systemChrome>
         <width>500</width>
-    		<height>200</height>
+    		<height>500</height>
     </initialWindow> 
     
 </application>

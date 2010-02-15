@@ -1,5 +1,3 @@
-Twump.View = {}
-
 Twump.View.PlayerWindow = Class.create();
 Twump.View.PlayerWindow.prototype = {
   initialize: function(){

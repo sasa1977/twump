@@ -2,8 +2,10 @@
   <head> 
       <title></title>
       
-      <link href="css/player_window.css" rel="stylesheet" type="text/css">
       <link type="text/css" rel="StyleSheet" href="../lib/slider/css/bluecurve/bluecurve.css" />
+
+      <link href="css/player_window.css" rel="stylesheet" type="text/css">
+      <link href="css/playlist.css" rel="stylesheet" type="text/css">
   
       <script type="text/javascript" src="../lib/air/AIRIntrospector.js"></script>      
       <script type="text/javascript" src="../lib/air/AIRAliases.js"></script> 
@@ -20,9 +22,14 @@
       
       <script type="text/javascript" src="../storage/binary.js"></script>
 
+      <script>
+        Twump.View = {}
+      </script>
+    
       <script type="text/javascript" src="../model/playlist.js"></script>
       <script type="text/javascript" src="../controller/twump_controller.js"></script>
       <script type="text/javascript" src="../view/player_window.js"></script>
+      <script type="text/javascript" src="../view/playlist_window.js"></script>
 
       <script type="text/javascript">
         function init(){
@@ -31,7 +38,12 @@
             initialize: function(){
               this.storage = new Twump.Storage.Binary();
               this.playerWindow = new Twump.View.PlayerWindow();
-              this.controller = new Twump.Controller(this.playerWindow, this.storage);
+              this.playlistWindow = new Twump.View.PlaylistWindow();
+              
+              this.controller = new Twump.Controller({
+                playerWindow: this.playerWindow, playlistWindow: this.playlistWindow,
+                storage: this.storage
+              });
             }
           };
           
@@ -40,47 +52,52 @@
       </script>
   </head> 
   
-  <body onload="init();"> 
-    <table cellpadding="0" cellspacing="0" border="0" width="100%">
-      <tr class="header" id="header">
-        <td width="*">&nbsp;</td>
-        <td width="10px">
-          <div id='close'>
-            close
-          </div>
-        </td>
-      </tr>
-    </table>
-  
-    <div id='playing'></div>
-    <div id='playlistPos'></div>
-    <div id='progress'></div>
-    <div id="playProgress" tabIndex="1" style="float:left;width: 500px">
-    	<input id="playProgressInput" style="display:none;"/>
-    </div>
-    <br/>
-
-    <div>
-      <div class='playWindowButton' id='previous'>|<</div>
-      <div class='playWindowButton' id='play'>></div>
-      <div class='playWindowButton' id='pause'>||</div>
-      <div class='playWindowButton' id='stop'>O</div>
-      <div class='playWindowButton' id='next'>>|</div>
-      <div class='playWindowButton' ></div>
+  <body onload="init();" style="overflow:hidden;"> 
+    <div id="player" style="height:200;width:500;background-color:darkgrey">
+      <table cellpadding="0" cellspacing="0" border="0" width="100%">
+        <tr class="header" id="header">
+          <td width="*">&nbsp;</td>
+          <td width="10px">
+            <div id='close'>
+              close
+            </div>
+          </td>
+        </tr>
+      </table>
       
-      <div id="volume" tabIndex="1" style="float:left;">
-      	<input id="volumeInput" style="display:none;"/>
+      <div id='playing'></div>
+      <div id='playlistPos'></div>
+      <div id='progress'></div>
+      <div id="playProgress" tabIndex="1" style="float:left;width: 500px">
+      	<input id="playProgressInput" style="display:none;"/>
+      </div>
+      <br/>
+
+      <div>
+        <div class='playWindowButton' id='previous'>|<</div>
+        <div class='playWindowButton' id='play'>></div>
+        <div class='playWindowButton' id='pause'>||</div>
+        <div class='playWindowButton' id='stop'>O</div>
+        <div class='playWindowButton' id='next'>>|</div>
+        <div class='playWindowButton' ></div>
+        
+        <div id="volume" tabIndex="1" style="float:left;">
+        	<input id="volumeInput" style="display:none;"/>
+        </div>
+      </div>
+      <br/>
+      <br/>
+      
+      <div>
+        <div class='playWindowButton' id='openFolder'>Ld</div>
+        <div class='playWindowButton' id='addFolder'>Ld+</div>
+        <div class='playWindowButton' id='shuffle'>Sh</div>
+        <div class='playWindowButton' id='shuffleRemaining'>Sh+</div>
+        <div class='playWindowButton' id='delete'>Rm</div>
       </div>
     </div>
-    <br/>
-    <br/>
     
-    <div>
-      <div class='playWindowButton' id='openFolder'>Ld</div>
-      <div class='playWindowButton' id='addFolder'>Ld+</div>
-      <div class='playWindowButton' id='shuffle'>Sh</div>
-      <div class='playWindowButton' id='shuffleRemaining'>Sh+</div>
-      <div class='playWindowButton' id='delete'>Rm</div>
+    <div id="playlist" style="height:300;width:500;background-color:lightgrey;overflow:auto;">
     </div>
   </body> 
 </html>
