@@ -31,27 +31,31 @@ Twump.Controller.prototype = {
   },
   
   openFolder: function(){
-    var file = new air.File(); 
-    file.addEventListener(air.Event.SELECT, this.openFolderSelected.bind(this)); 
-    file.browseForDirectory('Select folder');
+    this.doOpenFolder({onSelect: this.openFolderSelected.bind(this)})
   },
   
-  openFolderSelected: function(event){
+  openFolderSelected: function(files){
     this.stop();
-    this.setPlaylist(this.collectMusicFiles(air.File.getFilesRecursive(event.target.nativePath)));
+    this.setPlaylist(files);
     this.playCurrent();
   },
   
   addFolder: function(){
-    var file = new air.File(); 
-    file.addEventListener(air.Event.SELECT, this.addFolderSelected.bind(this)); 
-    file.browseForDirectory('Select folder');
+    this.doOpenFolder({onSelect: this.addFolderSelected.bind(this)})
   },
   
-  addFolderSelected: function(event){
-    var newFiles = this.collectMusicFiles(air.File.getFilesRecursive(event.target.nativePath))
+  addFolderSelected: function(newFiles){
     this.playlist.insertAt(this.currentIndex() + 1, newFiles);
     this.refreshPlaylist();
+  },
+  
+  doOpenFolder: function(options){
+    var file = new air.File(); 
+    file.addEventListener(air.Event.SELECT, function(event){
+      options.onSelect(this.collectMusicFiles(air.File.getFilesRecursive(event.target.nativePath)))
+    }.bind(this)); 
+    file.browseForDirectory('Select folder');
+  
   },
   
   collectMusicFiles: function(files){
