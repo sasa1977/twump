@@ -32,9 +32,22 @@ Twump.View.PlaylistWindow.prototype = {
     var el = $('playlistItem' + index);
     if (!el) return;
     
-    el.addClassName('selected')
+    el.addClassName('selected');
+    this.showInView(el);
 
     this.selectedItem = el;
     this.selectedIndex = index;
+  },
+  
+  showInView: function(el){
+    var viewTop = $('playlist').scrollTop;
+    var viewHeight = $('playlist').clientHeight;
+    var viewBottom = viewTop + viewHeight;
+    var elTop = el.offsetTop;
+    var elBottom = elTop + el.offsetHeight;
+    
+    if (elTop < viewTop || elBottom > viewBottom) {
+      $('playlist').scrollTop = Math.max(elTop - parseInt(viewHeight / 2), 0);
+    }
   }
 }
