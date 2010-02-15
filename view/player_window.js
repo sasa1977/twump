@@ -55,15 +55,23 @@ Twump.View.PlayerWindow.prototype = {
   },
   
   initSliders: function(){
-    this.volumeSlider = new Slider($("volume"), $("volumeInput"), "horizontal");
-    this.volumeSlider.onchange = this.onVolumeSliderChange.bind(this);
-    this.volumeSlider.setMinimum(0);
-    this.volumeSlider.setMaximum(100)
+    this.volumeSlider = this.initSlider('volume', {min: 0, max: 100, direction: 'horizontal',
+      onchange: this.onVolumeSliderChange.bind(this)
+    })
     
-    this.playProgress = new Slider($('playProgress'), $('playProgressInput'), "horizontal");
-    this.playProgress.onchange = this.onPlayProgressChange.bind(this);
-    this.playProgress.setMinimum(0);
-    this.playProgress.setMaximum(100);
+    this.playProgress = this.initSlider('playProgress', {min: 0, max: 100, direction: 'horizontal',
+      onchange: this.onPlayProgressChange.bind(this)
+    })
+  },
+  
+  initSlider: function(id, options){
+    var slider = new Slider($(id), $(id + 'Input'), options.direction);
+    
+    slider.onchange = options.onchange;
+    slider.setMinimum(options.min);
+    slider.setMaximum(options.max);
+    
+    return slider;
   },
   
   setVolume: function(volume){
@@ -71,6 +79,7 @@ Twump.View.PlayerWindow.prototype = {
   },
   
   onVolumeSliderChange: function(){this.onVolumeChange(this.volumeSlider.getValue() / 100);},
+  
   onPlayProgressChange: function(){
     if(this.inDisplayPlayProgress) return;
     this.onSetPlayPosition(this.playProgress.getValue() / 100);
