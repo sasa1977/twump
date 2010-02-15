@@ -5,7 +5,7 @@ Twump.Controller.prototype = {
     this.storage = storage;
     this.subscribeToViewEvents(this.playerWindow, 
       [
-        "previous", "next", "pause", "stop", "play", "volumeChange",
+        "previous", "next", "pause", "stop", "play", "volumeChange", "setPlayPosition",
         "openFolder", "addFolder", "shuffle", "shuffleRemaining", "delete"
       ]
     )
@@ -171,6 +171,10 @@ Twump.Controller.prototype = {
   onVolumeChange: function(volume){
     this.setVolume(volume);
     this.player.setVolume(volume);
+  },
+  
+  onSetPlayPosition: function(position){
+    this.player.setPosition(position);
   },
   
   savePlayerData: function(){

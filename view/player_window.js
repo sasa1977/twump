@@ -33,9 +33,14 @@ Twump.View.PlayerWindow.prototype = {
   },
   
   displayPlayProgress: function(data){
+    this.inDisplayPlayProgress = true;
+    
     $('playing').update(data.file);
     $('playlistPos').update("Playing file: " + data.currentIndex + " of " + data.playlistLength)
-    $('progress').update("" + data.position + " / " + data.length)
+    $('progress').update("" + data.position + " / " + data.length);
+    this.playProgress.setValue(data.playbackPercent);
+    
+    this.inDisplayPlayProgress = false;
   },
   
   clearPlayProgress: function(){
@@ -57,11 +62,20 @@ Twump.View.PlayerWindow.prototype = {
     this.volumeSlider.onchange = this.onVolumeSliderChange.bind(this);
     this.volumeSlider.setMinimum(0);
     this.volumeSlider.setMaximum(100)
+    
+    this.playProgress = new Slider($('playProgress'), $('playProgressInput'), "horizontal");
+    this.playProgress.onchange = this.onPlayProgressChange.bind(this);
+    this.playProgress.setMinimum(0);
+    this.playProgress.setMaximum(100);
   },
   
   setVolume: function(volume){
     this.volumeSlider.setValue(parseInt(volume * 100));
   },
   
-  onVolumeSliderChange: function(){this.onVolumeChange(this.volumeSlider.getValue() / 100);} 
+  onVolumeSliderChange: function(){this.onVolumeChange(this.volumeSlider.getValue() / 100);},
+  onPlayProgressChange: function(){
+    if(this.inDisplayPlayProgress) return;
+    this.onSetPlayPosition(this.playProgress.getValue() / 100);
+  }
 }
