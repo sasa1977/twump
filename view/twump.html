@@ -3,11 +3,16 @@
       <title></title>
       
       <link href="css/player_window.css" rel="stylesheet" type="text/css">
+      <link type="text/css" rel="StyleSheet" href="../lib/slider/css/bluecurve/bluecurve.css" />
   
       <script type="text/javascript" src="../lib/air/AIRIntrospector.js"></script>      
       <script type="text/javascript" src="../lib/air/AIRAliases.js"></script> 
       
       <script type="text/javascript" src="../lib/prototype/prototype-1.5.1.2.js"></script>
+      
+      <script type="text/javascript" src="../lib/slider/js/range.js"></script>
+      <script type="text/javascript" src="../lib/slider/js/timer.js"></script>
+      <script type="text/javascript" src="../lib/slider/js/slider.js"></script>
       
       <script type="text/javascript" src="../lib/twump/base.js"></script>
       <script type="text/javascript" src="../lib/twump/extensions.js"></script>
@@ -36,9 +41,17 @@
   </head> 
   
   <body onload="init();"> 
-    <div id='close'>
-      close
-    </div>
+    <table cellpadding="0" cellspacing="0" border="0" width="100%">
+      <tr class="header" id="header">
+        <td width="*">&nbsp;</td>
+        <td width="10px">
+          <div id='close'>
+            close
+          </div>
+        </td>
+      </tr>
+    </table>
+  
     <div id='playing'></div>
     <div id='playlistPos'></div>
     <div id='progress'></div>
@@ -50,9 +63,12 @@
       <div class='playWindowButton' id='stop'>O</div>
       <div class='playWindowButton' id='next'>>|</div>
       <div class='playWindowButton' ></div>
-      <div class='playWindowButton' id='volumeUp'>V+</div>
-      <div class='playWindowButton' id='volumeDown'>V-</div>
+      
+      <div id="volume" tabIndex="1" style="float:left;">
+      	<input id="volumeInput" style="display:none;"/>
+      </div>
     </div>
+    <br/>
     <br/>
     
     <div>

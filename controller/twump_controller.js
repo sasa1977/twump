@@ -5,15 +5,21 @@ Twump.Controller.prototype = {
     this.storage = storage;
     this.subscribeToViewEvents(this.playerWindow, 
       [
-        "previous", "next", "pause", "stop", "play", "volumeDown", "volumeUp",
+        "previous", "next", "pause", "stop", "play", "volumeChange",
         "openFolder", "addFolder", "shuffle", "shuffleRemaining", "delete"
       ]
     )
     
     this.player = new Twump.PlayerFacade();
     this.setPlaylist([])
-    
+    this.loadPlayerData();
     this.loadLastList();
+  },
+  
+  setVolume: function(volume){
+    this.volume = volume;
+    this.playerWindow.setVolume(volume);
+    this.savePlayerData();
   },
   
   subscribeToViewEvents: function(view, events){
@@ -65,6 +71,7 @@ Twump.Controller.prototype = {
     if (!this.currentFile()) return;
     
     this.player.play(this.currentFile(), {
+      volume: this.volume,
       onPlayProgress: this.onPlayProgress.bind(this),
       onPlaybackComplete: this.onPlaybackComplete.bind(this)
     });
@@ -160,12 +167,22 @@ Twump.Controller.prototype = {
     this.playCurrent();
   },
   
-  onVolumeDown: function(){
-    this.player.volumeDown();
+  
+  onVolumeChange: function(volume){
+    this.setVolume(volume);
+    this.player.setVolume(volume);
   },
   
-  onVolumeUp: function(){
-    this.player.volumeUp();
+  savePlayerData: function(){
+    this.storage.writeAppData('app_data.dat', {
+      volume: this.volume
+    })
+  },
+  
+  loadPlayerData: function(){
+    var data = this.storage.readAppData('app_data.dat');
+    if (!data) return;
+    this.setVolume(data.volume);
   },
   
   saveCurrentList: function(){
