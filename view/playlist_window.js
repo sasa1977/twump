@@ -10,7 +10,7 @@ Twump.View.PlaylistWindow.prototype = {
   },
   
   playlistHtml: function(playlist){
-    var html = "<table style='width:1000px;'>";
+    var html = "<table class='playlistTable'>";
     
     playlist.files.each(function(file, index){
       html +=

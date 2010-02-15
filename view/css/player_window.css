@@ -1,3 +1,9 @@
+#player {
+  height:165;
+  width:500;
+  background-color:darkgrey;
+}
+
 .playWindowButton{
   float: left;
   width: 40px;
@@ -9,4 +15,21 @@
 
 .playingInfo {
   height:50px;
+}
+
+.playProgress {
+  float:left;
+  width: 500px;
+}
+
+.playProgress input {
+  display:none;
+}
+
+.volume {
+  float:left;
+}
+
+.volume input {
+  display:none;
 }
