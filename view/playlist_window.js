@@ -12,12 +12,15 @@ Twump.View.PlaylistWindow.prototype = {
   playlistHtml: function(playlist){
     var html = "<table class='playlistTable'>";
     
+    var itemTemplate = new Template(
+      "<tr class='playlistItem' id='playlistItem#{index}'>" +
+        "<td>#{index + 1}</td>" +
+        "<td>#{file}</td>" +
+      "</tr>"
+    )
+    
     playlist.files.each(function(file, index){
-      html +=
-        "<tr class='playlistItem' id='playlistItem" + index + "'>" + 
-          "<td>" + (index + 1) + "</td>" +
-          "<td>" + file + "</td>"
-        "</tr>";
+      html += itemTemplate.evaluate({file: file, index: index});
     })
     
     html += "</table>";
