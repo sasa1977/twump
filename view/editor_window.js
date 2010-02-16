@@ -5,9 +5,16 @@ Object.extend(Twump.View.EditorWindow.prototype, Twump.View.Common);
 Object.extend(Twump.View.EditorWindow.prototype, {
   initialize: function(){
     this.insertHeader('editor');
+    this.delayExecute = new Twump.Utils.DelayExecute(1000);
+    this.selectedItems = [];
+
+    // disable text selection    
+    $('results').onmousedown = function(){
+      return false;
+    };
     
     this.addEventListener('filter', 'keydown');
-    this.delayExecute = new Twump.Utils.DelayExecute(1000);
+    this.addEventListeners('click', ['results'])
   },
   
   onFilter: function(){
@@ -18,13 +25,69 @@ Object.extend(Twump.View.EditorWindow.prototype, {
   },
   
   renderSearchResults: function(results){
-    var html = results.inject("", function(memo, result){
+    this.deselectAllItems();
+    
+    var index = 0, html = results.inject("", function(memo, result){
       var resultTemplate = new Template(
-        "<div>#{result}</div>"
+        "<div class='result' id='result#{index}' index='#{index}'> \
+          #{result} \
+         </div>"
       )
-      return memo + resultTemplate.evaluate({result: result});
+      var result = memo + resultTemplate.evaluate({result: result, index: index});
+      index++;
+      return result;
     })
 
-    $('results').update(html)
+    $('results').update(html);
+  },
+  
+  getResultItem: function(index){
+    return $('result' + index)
+  },
+  
+  onResults: function(data){
+    var index = data.srcElement.getAttribute('index');
+    if (index == null) return;
+    
+    if (!data.shiftKey || this.selectionEmpty())
+      this.selectItem(index);
+    else if(data.shiftKey)
+      this.selectToItem(index);
+  },
+  
+  selectItem: function(index){
+    this.deselectAllItems();
+    this.addSelectItem(index);
+  },
+  
+  selectToItem: function(index){
+    if (this.selectionEmpty()) return;
+    
+    var lastSelected = this.selectedItems.last().getAttribute('index');
+    this.deselectAllItems();
+    
+    $R(Math.min(lastSelected, index), Math.max(lastSelected, index)).each(function(itemIndex){
+      this.addSelectItem(itemIndex)
+    }.bind(this))
+  },
+  
+  addSelectItem: function(index){
+    var item = this.getResultItem(index);
+    if (!item) return;
+    
+    item.addClassName('selected')
+    this.selectedItems.push(item);  
+  },
+  
+  deselectAllItems: function(){
+    this.selectedItems.each(function(selectedItem){
+      selectedItem.removeClassName('selected');
+    })
+    
+    this.selectedItems.clear();
+  },
+  
+  selectionEmpty: function(){
+    return (this.selectedItems.length == 0);
   }
 });

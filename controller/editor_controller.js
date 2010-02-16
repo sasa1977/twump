@@ -11,6 +11,9 @@ Object.extend(Twump.Controller.Editor.prototype, {
   },
   
   onFilterChanged: function(filter){
+    if (filter == this.lastFilter) return;
+    
     this.editorWindow.renderSearchResults(this.playlist.search(filter))
+    this.lastFilter = filter;
   }
 })

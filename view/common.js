@@ -1,7 +1,7 @@
 Twump.View.Common = {
   addEventListener: function(element, event){
-    $(element).addEventListener(event, function(){
-      this.invokeEvent("on" + element.capitalizeEachWord())
+    $(element).addEventListener(event, function(data){
+      this.invokeEvent("on" + element.capitalizeEachWord(), data)
     }.bind(this), false);
   },
   
@@ -11,9 +11,9 @@ Twump.View.Common = {
     }.bind(this))
   },
   
-  invokeEvent: function(event){
+  invokeEvent: function(event, data){
     if (this[event])
-      this[event]();
+      this[event](data);
   },
   
   insertHeader: function(parentId){
