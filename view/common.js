@@ -2,7 +2,7 @@ Twump.View.Common = {
   addEventListener: function(element, event){
     $(element).addEventListener(event, function(){
       this.invokeEvent("on" + element.capitalizeEachWord())
-    }.bind(this));
+    }.bind(this), false);
   },
   
   addEventListeners: function(event, elements){

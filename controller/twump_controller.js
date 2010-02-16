@@ -1,5 +1,8 @@
-Twump.Controller = Class.create()
-Twump.Controller.prototype = {
+Twump.Controller.Player = Class.create()
+
+Object.extend(Twump.Controller.Player.prototype, Twump.Controller.Common);
+
+Object.extend(Twump.Controller.Player.prototype, {
   initialize: function(options){
     Object.extend(this, options);
     
@@ -20,14 +23,6 @@ Twump.Controller.prototype = {
     this.volume = volume;
     this.playerWindow.setVolume(volume);
     this.savePlayerData();
-  },
-  
-  subscribeToViewEvents: function(view, events){
-    events.each(function(event){
-      var fullName = "on" + event.capitalizeEachWord();
-      if (this[fullName])
-        view[fullName] = this[fullName].bind(this);
-    }.bind(this))
   },
   
   openFolder: function(){
@@ -232,10 +227,16 @@ Twump.Controller.prototype = {
   
   openEditor: function(){
     if (this.editorOpened()) return;
-    this.editor = Twump.Api.newWindow({url: "playlist_editor.html", playerController: this})
+    this.editor = Twump.Api.newWindow({url: "playlist_editor.html", 
+      playerController: this, playlist: this.playlist
+    })
   },
   
   onEditor: function(){
     (this.editorOpened()) ? this.closeEditor() : this.openEditor();
+  },
+  
+  onEditorClosing: function(){
+    this.editor = null;
   }
-}
+})

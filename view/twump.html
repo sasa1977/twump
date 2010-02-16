@@ -1,61 +1,63 @@
 <html> 
   <head> 
-      <title></title>
-      
-      <link type="text/css" rel="StyleSheet" href="../lib/slider/css/bluecurve/bluecurve.css" />
-
-      <link href="css/common.css" rel="stylesheet" type="text/css">
-      <link href="css/player_window.css" rel="stylesheet" type="text/css">
-      <link href="css/playlist.css" rel="stylesheet" type="text/css">
-  
-      <script type="text/javascript" src="../lib/air/AIRIntrospector.js"></script>      
-      <script type="text/javascript" src="../lib/air/AIRAliases.js"></script> 
-      
-      <script type="text/javascript" src="../lib/prototype/prototype-1.5.1.2.js"></script>
-      
-      <script type="text/javascript" src="../lib/slider/js/range.js"></script>
-      <script type="text/javascript" src="../lib/slider/js/timer.js"></script>
-      <script type="text/javascript" src="../lib/slider/js/slider.js"></script>
-      
-      <script type="text/javascript" src="../lib/twump/base.js"></script>
-      <script type="text/javascript" src="../lib/twump/extensions.js"></script>
-      <script type="text/javascript" src="../lib/twump/utils.js"></script>
-      <script type="text/javascript" src="../lib/twump/api.js"></script>
-      <script type="text/javascript" src="../lib/twump/player.js"></script>
-      
-      <script type="text/javascript" src="../storage/binary.js"></script>
-
-      <script>
-        Twump.View = {}
-      </script>
+    <title></title>
     
-      <script type="text/javascript" src="../model/playlist.js"></script>
-      
-      <script type="text/javascript" src="../controller/twump_controller.js"></script>
-      
-      <script type="text/javascript" src="../view/common.js"></script>
-      <script type="text/javascript" src="../view/player_window.js"></script>
-      <script type="text/javascript" src="../view/playlist_window.js"></script>
+    <link type="text/css" rel="StyleSheet" href="../lib/slider/css/bluecurve/bluecurve.css" />
 
-      <script type="text/javascript">
-        function init(){
-          Twump.Application = Class.create();
-          Twump.Application.prototype = {
-            initialize: function(){
-              this.storage = new Twump.Storage.Binary();
-              this.playerWindow = new Twump.View.PlayerWindow();
-              this.playlistWindow = new Twump.View.PlaylistWindow();
-              
-              this.controller = new Twump.Controller({
-                playerWindow: this.playerWindow, playlistWindow: this.playlistWindow,
-                storage: this.storage
-              });
-            }
-          };
-          
-          Twump.application = new Twump.Application();
-        }
-      </script>
+    <link href="css/common.css" rel="stylesheet" type="text/css">
+    <link href="css/player_window.css" rel="stylesheet" type="text/css">
+    <link href="css/playlist.css" rel="stylesheet" type="text/css">
+
+    <script type="text/javascript" src="../lib/air/AIRIntrospector.js"></script>      
+    <script type="text/javascript" src="../lib/air/AIRAliases.js"></script> 
+    
+    <script type="text/javascript" src="../lib/prototype/prototype-1.5.1.2.js"></script>
+    
+    <script type="text/javascript" src="../lib/slider/js/range.js"></script>
+    <script type="text/javascript" src="../lib/slider/js/timer.js"></script>
+    <script type="text/javascript" src="../lib/slider/js/slider.js"></script>
+    
+    <script type="text/javascript" src="../lib/twump/base.js"></script>
+    <script type="text/javascript" src="../lib/twump/extensions.js"></script>
+    <script type="text/javascript" src="../lib/twump/utils.js"></script>
+    <script type="text/javascript" src="../lib/twump/api.js"></script>
+    <script type="text/javascript" src="../lib/twump/player.js"></script>
+    
+    <script type="text/javascript" src="../storage/binary.js"></script>
+
+    <script>
+      Twump.View = {}
+      Twump.Controller = {}
+    </script>
+  
+    <script type="text/javascript" src="../model/playlist.js"></script>
+    
+    <script type="text/javascript" src="../controller/common.js"></script>
+    <script type="text/javascript" src="../controller/twump_controller.js"></script>
+    
+    <script type="text/javascript" src="../view/common.js"></script>
+    <script type="text/javascript" src="../view/player_window.js"></script>
+    <script type="text/javascript" src="../view/playlist_window.js"></script>
+
+    <script type="text/javascript">
+      function init(){
+        Twump.Application = Class.create();
+        Twump.Application.prototype = {
+          initialize: function(){
+            this.storage = new Twump.Storage.Binary();
+            this.playerWindow = new Twump.View.PlayerWindow();
+            this.playlistWindow = new Twump.View.PlaylistWindow();
+            
+            this.controller = new Twump.Controller.Player({
+              playerWindow: this.playerWindow, playlistWindow: this.playlistWindow,
+              storage: this.storage
+            });
+          }
+        };
+        
+        Twump.application = new Twump.Application();
+      }
+    </script>
   </head> 
   
   <body onload="init();" style="overflow:hidden;">

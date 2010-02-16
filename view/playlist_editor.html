@@ -14,24 +14,33 @@
     <script type="text/javascript" src="../lib/twump/utils.js"></script>
     <script type="text/javascript" src="../lib/twump/api.js"></script>
     
-    <script type="text/javascript" src="../storage/binary.js"></script>
-    
     <script>
-      Twump.View = {}
+      Twump.View = {};
+      Twump.Controller= {};
     </script>
+    
+    <script type="text/javascript" src="../controller/common.js"></script>
+    <script type="text/javascript" src="../controller/editor_controller.js"></script>
     
     <script type="text/javascript" src="../view/common.js"></script>
     <script type="text/javascript" src="../view/editor_window.js"></script>
 
     <script type="text/javascript">
       function init(){
-        var view = new Twump.View.EditorWindow();
+        controller = new Twump.Controller.Editor({
+          editorWindow: new Twump.View.EditorWindow(),
+          playerController: options.playerController,
+          playlist: options.playlist
+        })
       }
     </script>
   </head> 
   
   <body onload="init();" style="overflow:hidden;">
     <div id="editor">
+      <input id="filter" type="text"/>
+      <div id="results">
+      </div>
     </div>
   </body> 
 </html>

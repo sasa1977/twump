@@ -19,5 +19,15 @@ Twump.Model.Playlist.prototype = {
   
   insertAt: function(at, files){
     this.files = this.files.insertArrayAt(at, files);
+  },
+  
+  search: function(filter){
+    var regex = new RegExp(filter, "i");
+    return this.files.inject([],function(memo, file){
+      if (file.match(regex))
+        memo.push(file);
+      
+      return memo;
+    })
   }
 }
