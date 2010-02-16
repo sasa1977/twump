@@ -14,7 +14,7 @@ Object.extend(Twump.View.EditorWindow.prototype, {
     };
     
     this.addEventListener('filter', 'keydown');
-    this.addEventListeners('click', ['results'])
+    this.addEventListeners('click', ['results', 'moveAfterCurrent'])
   },
   
   onFilter: function(){
@@ -29,7 +29,7 @@ Object.extend(Twump.View.EditorWindow.prototype, {
     
     var index = 0, html = results.inject("", function(memo, result){
       var resultTemplate = new Template(
-        "<div class='result' id='result#{index}' index='#{index}'> \
+        "<div class='result' id='result#{index}' value='#{result}' index='#{index}'> \
           #{result} \
          </div>"
       )
@@ -89,5 +89,11 @@ Object.extend(Twump.View.EditorWindow.prototype, {
   
   selectionEmpty: function(){
     return (this.selectedItems.length == 0);
+  },
+  
+  getSelectedItems: function(){
+    return this.selectedItems.map(function(item){
+      return item.getAttribute('value');
+    })
   }
 });

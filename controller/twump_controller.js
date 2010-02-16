@@ -41,7 +41,7 @@ Object.extend(Twump.Controller.Player.prototype, {
   
   addFolderSelected: function(newFiles){
     this.playlist.insertAt(this.currentIndex() + 1, newFiles);
-    this.refreshPlaylist();
+    this.redrawPlayList();
   },
   
   doOpenFolder: function(options){
@@ -62,10 +62,10 @@ Object.extend(Twump.Controller.Player.prototype, {
   setPlaylist: function(list, index){
     this.playlist = new Twump.Model.Playlist(list);
     this.setCurrentIndex(index || 0);
-    this.refreshPlaylist();
+    this.redrawPlayList();
   },
   
-  refreshPlaylist: function(){
+  redrawPlayList: function(){
     this.playlistWindow.display(this.playlist);
   },
   
@@ -157,13 +157,13 @@ Object.extend(Twump.Controller.Player.prototype, {
   
   onShuffle: function(){
     this.playlist.shuffle();
-    this.refreshPlaylist();
+    this.redrawPlayList();
     this.play(0);
   },
   
   onShuffleRemaining: function(){
     this.playlist.shuffle(this.currentIndex() + 1);
-    this.refreshPlaylist();
+    this.redrawPlayList();
     this.saveCurrentList();
   },
   
@@ -171,7 +171,7 @@ Object.extend(Twump.Controller.Player.prototype, {
     if (!this.indexOk(this.currentIndex())) return;
     
     this.playlist.deleteAt(this.currentIndex());
-    this.refreshPlaylist();
+    this.redrawPlayList();
     this.playCurrent();
   },
   
@@ -238,5 +238,11 @@ Object.extend(Twump.Controller.Player.prototype, {
   
   onEditorClosing: function(){
     this.editor = null;
+  },
+  
+  moveAfterCurrent: function(items){
+    this.setCurrentIndex(this.playlist.moveAfterCurrent(items, this.currentIndex()));
+    this.redrawPlayList();
+    this.playlistWindow.selectItem(this.currentIndex());
   }
 })

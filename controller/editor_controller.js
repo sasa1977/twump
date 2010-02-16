@@ -7,7 +7,7 @@ Object.extend(Twump.Controller.Editor.prototype, {
     Object.extend(this, options);
     
     this.onWindowClosing = this.playerController.onEditorClosing.bind(this.playerController);
-    this.subscribeToViewEvents(this.editorWindow, ["windowClosing", "filterChanged"]);
+    this.subscribeToViewEvents(this.editorWindow, ["windowClosing", "filterChanged", "moveAfterCurrent"]);
   },
   
   onFilterChanged: function(filter){
@@ -15,5 +15,9 @@ Object.extend(Twump.Controller.Editor.prototype, {
     
     this.editorWindow.renderSearchResults(this.playlist.search(filter))
     this.lastFilter = filter;
+  },
+  
+  onMoveAfterCurrent: function(){
+    this.playerController.moveAfterCurrent(this.editorWindow.getSelectedItems());
   }
 })

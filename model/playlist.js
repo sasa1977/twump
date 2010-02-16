@@ -29,5 +29,45 @@ Twump.Model.Playlist.prototype = {
       
       return memo;
     })
+  },
+  
+  moveAfterCurrent: function(items, currentIndex){
+    var searchers = items.map(function(item){
+      return new RegExp("^" + item + "$")
+    });
+    
+    var filesToMove = [];
+    var offset = 0;
+    
+    for (var i=0, l=this.files.length;i < l;i++){
+      var match = this.matchSearchers(this.files[i], searchers);
+      if (match >= 0){
+        searchers.splice(match, 1);
+        if (i != currentIndex) {
+          filesToMove.push(this.files[i]);
+          this.files[i] = null;
+          
+          if (i < currentIndex)
+            offset++;
+        }
+      }
+    }
+    
+    if (filesToMove.length == 0)
+      return currentIndex;
+      
+    this.files = this.files.compact();
+    var newCurrentIndex = currentIndex - offset;
+    this.insertAt(newCurrentIndex + 1, filesToMove);
+    
+    return newCurrentIndex;
+  },
+  
+  matchSearchers: function(file, searchers){
+    for (var i=0, l=searchers.length;i < l;i++)
+      if (file.match(searchers[i]))
+        return i;
+        
+    return -1;
   }
 }
