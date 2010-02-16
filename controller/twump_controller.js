@@ -5,7 +5,7 @@ Twump.Controller.prototype = {
     
     this.subscribeToViewEvents(this.playerWindow, 
       [
-        "close", "previous", "next", "pause", "stop", "play", "volumeChange", "setPlayPosition",
+        "windowClosing", "previous", "next", "pause", "stop", "play", "volumeChange", "setPlayPosition",
         "openFolder", "addFolder", "shuffle", "shuffleRemaining", "delete", "editor"
       ]
     )
@@ -216,9 +216,8 @@ Twump.Controller.prototype = {
     this.playCurrent();
   },
   
-  onClose: function(){
+  onWindowClosing: function(){
     this.closeEditor();
-    close();
   },
   
   editorOpened: function(){

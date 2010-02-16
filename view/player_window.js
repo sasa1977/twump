@@ -1,33 +1,19 @@
 Twump.View.PlayerWindow = Class.create();
-Twump.View.PlayerWindow.prototype = {
+
+Object.extend(Twump.View.PlayerWindow.prototype, Twump.View.Common);
+
+Object.extend(Twump.View.PlayerWindow.prototype, {
   initialize: function(){
-    this.addEventListener("header", "mousedown");
+    this.insertHeader('player');
     
     this.addEventListeners("click", 
       [
-        "close", "previous", "next", "pause", "stop", "play",
+        "previous", "next", "pause", "stop", "play",
         "openFolder", "addFolder", "shuffle", "shuffleRemaining", "delete", "editor"
       ]
      );
      
      this.initSliders();
-  },
-  
-  addEventListener: function(element, event){
-    $(element).addEventListener(event, function(){
-      this.invokeEvent("on" + element.capitalizeEachWord())
-    }.bind(this));
-  },
-  
-  addEventListeners: function(event, elements){
-    elements.each(function(element){
-      this.addEventListener(element, event)
-    }.bind(this))
-  },
-  
-  invokeEvent: function(event){
-    if (this[event])
-      this[event]();
   },
   
   displayPlayProgress: function(data){
@@ -44,10 +30,6 @@ Twump.View.PlayerWindow.prototype = {
     $('playing').update();
     $('playlistPos').update();
     $('progress').update()
-  },
-  
-  onHeader: function(){
-    window.nativeWindow.startMove();
   },
   
   initSliders: function(){
@@ -80,4 +62,4 @@ Twump.View.PlayerWindow.prototype = {
     if(this.inDisplayPlayProgress) return;
     this.onSetPlayPosition(this.playProgress.getValue() / 100);
   }
-}
+});

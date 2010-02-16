@@ -4,6 +4,7 @@
       
       <link type="text/css" rel="StyleSheet" href="../lib/slider/css/bluecurve/bluecurve.css" />
 
+      <link href="css/common.css" rel="stylesheet" type="text/css">
       <link href="css/player_window.css" rel="stylesheet" type="text/css">
       <link href="css/playlist.css" rel="stylesheet" type="text/css">
   
@@ -29,7 +30,10 @@
       </script>
     
       <script type="text/javascript" src="../model/playlist.js"></script>
+      
       <script type="text/javascript" src="../controller/twump_controller.js"></script>
+      
+      <script type="text/javascript" src="../view/common.js"></script>
       <script type="text/javascript" src="../view/player_window.js"></script>
       <script type="text/javascript" src="../view/playlist_window.js"></script>
 
@@ -56,17 +60,6 @@
   
   <body onload="init();" style="overflow:hidden;">
     <div id="player">
-      <table cellpadding="0" cellspacing="0" border="0" width="100%">
-        <tr class="header" id="header">
-          <td width="*">&nbsp;</td>
-          <td width="10px">
-            <div id='close'>
-              close
-            </div>
-          </td>
-        </tr>
-      </table>
-      
       <div class='playingInfo'>
         <div id='playing'></div>
         <div id='playlistPos'></div>
