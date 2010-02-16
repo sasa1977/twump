@@ -5,8 +5,8 @@ Twump.Controller.prototype = {
     
     this.subscribeToViewEvents(this.playerWindow, 
       [
-        "previous", "next", "pause", "stop", "play", "volumeChange", "setPlayPosition",
-        "openFolder", "addFolder", "shuffle", "shuffleRemaining", "delete"
+        "close", "previous", "next", "pause", "stop", "play", "volumeChange", "setPlayPosition",
+        "openFolder", "addFolder", "shuffle", "shuffleRemaining", "delete", "editor"
       ]
     )
     
@@ -214,5 +214,29 @@ Twump.Controller.prototype = {
     
     this.setPlaylist(data.list, data.current);
     this.playCurrent();
+  },
+  
+  onClose: function(){
+    this.closeEditor();
+    close();
+  },
+  
+  editorOpened: function(){
+    return (this.editor != null)
+  },
+  
+  closeEditor: function(){
+    if (!this.editorOpened()) return;
+    this.editor.window.close();
+    this.editor = null;
+  },
+  
+  openEditor: function(){
+    if (this.editorOpened()) return;
+    this.editor = Twump.Api.newWindow({url: "playlist_editor.html", playerController: this})
+  },
+  
+  onEditor: function(){
+    (this.editorOpened()) ? this.closeEditor() : this.openEditor();
   }
 }

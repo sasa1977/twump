@@ -6,7 +6,7 @@ Twump.View.PlayerWindow.prototype = {
     this.addEventListeners("click", 
       [
         "close", "previous", "next", "pause", "stop", "play",
-        "openFolder", "addFolder", "shuffle", "shuffleRemaining", "delete"
+        "openFolder", "addFolder", "shuffle", "shuffleRemaining", "delete", "editor"
       ]
      );
      
@@ -44,10 +44,6 @@ Twump.View.PlayerWindow.prototype = {
     $('playing').update();
     $('playlistPos').update();
     $('progress').update()
-  },
-  
-  onClose: function(){
-    close();
   },
   
   onHeader: function(){
