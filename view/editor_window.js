@@ -29,7 +29,7 @@ Object.extend(Twump.View.EditorWindow.prototype, {
     
     var index = 0, html = results.inject("", function(memo, result){
       var resultTemplate = new Template(
-        "<div class='result' id='result#{index}' value='#{result}' index='#{index}'> \
+        "<div class='result' id='result#{index}' value='#{result}' index='#{index}' style='width:1000'> \
           #{result} \
          </div>"
       )

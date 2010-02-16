@@ -9,7 +9,7 @@ Object.extend(Twump.Controller.Player.prototype, {
     this.subscribeToViewEvents(this.playerWindow, 
       [
         "windowClosing", "previous", "next", "pause", "stop", "play", "volumeChange", "setPlayPosition",
-        "openFolder", "addFolder", "shuffle", "shuffleRemaining", "delete", "editor"
+        "openFolder", "addFolder", "shuffle", "shuffleRemaining", "delete", "clear","editor"
       ]
     )
     
@@ -175,6 +175,13 @@ Object.extend(Twump.Controller.Player.prototype, {
     this.playCurrent();
   },
   
+  onClear: function(){
+    if (!confirm('Are you sure?')) return;
+    this.stop();
+    this.playlist.clear();
+    this.setCurrentIndex(0);
+    this.redrawPlayList();
+  },
   
   onVolumeChange: function(volume){
     this.setVolume(volume);

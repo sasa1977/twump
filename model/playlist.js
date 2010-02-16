@@ -13,6 +13,10 @@ Twump.Model.Playlist.prototype = {
     this.files = this.files.shuffle(from);
   },
   
+  clear: function(){
+    this.files.clear();
+  },
+  
   deleteAt: function(index){
     this.files.splice(index, 1);
   },
