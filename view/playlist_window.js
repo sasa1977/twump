@@ -14,13 +14,13 @@ Twump.View.PlaylistWindow.prototype = {
     
     var itemTemplate = new Template(
       "<tr class='playlistItem' id='playlistItem#{index}'>" +
-        "<td>#{index + 1}</td>" +
+        "<td>#{index}</td>" +
         "<td>#{file}</td>" +
       "</tr>"
     )
     
     playlist.files.each(function(file, index){
-      html += itemTemplate.evaluate({file: file, index: index});
+      html += itemTemplate.evaluate({file: file, index: index + 1});
     })
     
     html += "</table>";
@@ -32,7 +32,7 @@ Twump.View.PlaylistWindow.prototype = {
     if (this.selectedItem)
       this.selectedItem.removeClassName('selected')
   
-    var el = $('playlistItem' + index);
+    var el = $('playlistItem' + (index + 1));
     if (!el) return;
     
     el.addClassName('selected');
