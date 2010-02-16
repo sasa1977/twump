@@ -11,17 +11,6 @@ Object.extend(Twump.Controller.Editor.prototype, {
   },
   
   onFilterChanged: function(filter){
-    this.renderSearchResults(this.playlist.search(filter))
-  },
-  
-  renderSearchResults: function(results){
-    var html = results.inject("", function(memo, result){
-      var resultTemplate = new Template(
-        "<div>#{result}</div>"
-      )
-      return memo + resultTemplate.evaluate({result: result});
-    })
-
-    $('results').update(html)
+    this.editorWindow.renderSearchResults(this.playlist.search(filter))
   }
 })

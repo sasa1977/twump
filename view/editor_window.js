@@ -15,5 +15,16 @@ Object.extend(Twump.View.EditorWindow.prototype, {
     this.delayExecute.schedule(function(){
       this.onFilterChanged($('filter').value)
     }.bind(this))
+  },
+  
+  renderSearchResults: function(results){
+    var html = results.inject("", function(memo, result){
+      var resultTemplate = new Template(
+        "<div>#{result}</div>"
+      )
+      return memo + resultTemplate.evaluate({result: result});
+    })
+
+    $('results').update(html)
   }
 });
