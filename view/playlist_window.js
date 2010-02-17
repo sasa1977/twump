@@ -1,26 +1,35 @@
 Twump.View.PlaylistWindow = Class.create();
-Twump.View.PlaylistWindow.prototype = {
-  initialize: function(){},
+
+Object.extend(Twump.View.PlaylistWindow.prototype, Twump.View.Common);
+
+Object.extend(Twump.View.PlaylistWindow.prototype, {
+  initialize: function(){
+    this.addEventListener('playlist', 'mouseover')
+  },
   
   display: function(playlist){
     $('playlist').update(this.playlistHtml(playlist));
     
     if (this.selectedIndex)
       this.selectItem(this.selectedIndex);
+      
+    $$('.playlistItem').each(function(el){
+      el.addEventListener("dragover", this.onPlaylistItemOver.bind(this))
+    }.bind(this))
   },
   
   playlistHtml: function(playlist){
     var html = "<table class='playlistTable'>";
     
     var itemTemplate = new Template(
-      "<tr class='playlistItem' id='playlistItem#{index}'>" +
-        "<td>#{index}</td>" +
+      "<tr class='playlistItem' id='playlistItem#{index}' index='#{index}'>" +
+        "<td>#{ordinal}</td>" +
         "<td>#{file}</td>" +
       "</tr>"
     )
     
     playlist.files.each(function(file, index){
-      html += itemTemplate.evaluate({file: file, index: index + 1});
+      html += itemTemplate.evaluate({file: file, index: index, ordinal: index+1});
     })
     
     html += "</table>";
@@ -32,7 +41,7 @@ Twump.View.PlaylistWindow.prototype = {
     if (this.selectedItem)
       this.selectedItem.removeClassName('selected')
   
-    var el = $('playlistItem' + (index + 1));
+    var el = $('playlistItem' + index);
     if (!el) return;
     
     el.addClassName('selected');
@@ -52,5 +61,12 @@ Twump.View.PlaylistWindow.prototype = {
     if (elTop < viewTop || elBottom > viewBottom) {
       $('playlist').scrollTop = Math.max(elTop - parseInt(viewHeight / 2), 0);
     }
+  },
+  
+  onPlaylistItemOver: function(event){
+    var playlistItemEl = event.srcElement.parentElement;
+    if (playlistItemEl.hasClassName('playlistItem')) {
+      this.itemUnderMouseIndex = playlistItemEl.getAttribute('index');
+    }
   }
-}
+});

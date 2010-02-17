@@ -35,41 +35,34 @@ Twump.Model.Playlist.prototype = {
     })
   },
   
-  moveAfterCurrent: function(items, currentIndex){
-    var searchers = items.map(function(item){
-      return new RegExp("^" + item + "$")
-    });
-    
-    var filesToMove = [];
-    var offset = 0;
+  moveAfter: function(items, index, currentIndex){
+    var currentFile = this.files[currentIndex];
+  
+    var searchers = items.clone();
     
     for (var i=0, l=this.files.length;i < l;i++){
       var match = this.matchSearchers(this.files[i], searchers);
       if (match >= 0){
         searchers.splice(match, 1);
-        if (i != currentIndex) {
-          filesToMove.push(this.files[i]);
-          this.files[i] = null;
-          
-          if (i < currentIndex)
-            offset++;
-        }
+        this.files[i] = null;
+        if (searchers.length == 0)
+          break;
       }
     }
     
-    if (filesToMove.length == 0)
-      return currentIndex;
-      
+    this.insertAt(index, items);
     this.files = this.files.compact();
-    var newCurrentIndex = currentIndex - offset;
-    this.insertAt(newCurrentIndex + 1, filesToMove);
     
-    return newCurrentIndex;
+    for (var i=0, l=this.files.length;i < l;i++){
+      if (this.files[i] == currentFile)
+        return i;
+    }
+    return currentIndex;
   },
   
   matchSearchers: function(file, searchers){
     for (var i=0, l=searchers.length;i < l;i++)
-      if (file.match(searchers[i]))
+      if (file == searchers[i])
         return i;
         
     return -1;

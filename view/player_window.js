@@ -13,7 +13,17 @@ Object.extend(Twump.View.PlayerWindow.prototype, {
       ]
      );
      
-     this.initSliders();
+    this.initSliders();
+     
+    window.htmlLoader.addEventListener("nativeDragDrop", this.onNativeDragDrop.bind(this));
+  },
+  
+  
+  onNativeDragDrop: function(event){ 
+    var data = event.clipboard.getData(air.ClipboardFormats.TEXT_FORMAT);
+    if (data && data.match(/^twump\:/)){
+      this.onDrop({action: data.gsub("twump:","")});
+    }
   },
   
   displayPlayProgress: function(data){

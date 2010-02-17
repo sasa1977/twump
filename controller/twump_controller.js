@@ -9,7 +9,7 @@ Object.extend(Twump.Controller.Player.prototype, {
     this.subscribeToViewEvents(this.playerWindow, 
       [
         "windowClosing", "previous", "next", "pause", "stop", "play", "volumeChange", "setPlayPosition",
-        "openFolder", "addFolder", "shuffle", "shuffleRemaining", "delete", "clear","editor"
+        "openFolder", "addFolder", "shuffle", "shuffleRemaining", "delete", "clear","editor", "drop"
       ]
     )
     
@@ -226,6 +226,11 @@ Object.extend(Twump.Controller.Player.prototype, {
     return (this.editor != null)
   },
   
+  editorController: function(){
+    if (!this.editorOpened()) return null;
+    return this.editor.window.controller;
+  },
+  
   closeEditor: function(){
     if (!this.editorOpened()) return;
     this.editor.window.close();
@@ -249,6 +254,22 @@ Object.extend(Twump.Controller.Player.prototype, {
   
   moveAfterCurrent: function(items){
     this.setCurrentIndex(this.playlist.moveAfterCurrent(items, this.currentIndex()));
+    this.redrawPlayList();
+    this.playlistWindow.selectItem(this.currentIndex());
+  },
+  
+  onDrop: function(options){
+    this[options.action](options);
+  },
+  
+  moveAfter: function(options){
+    var newIndex = this.playlist.moveAfter(
+      this.editorController().selectedItems(), 
+      this.playlistWindow.itemUnderMouseIndex,
+      this.currentIndex()
+    );
+    
+    this.setCurrentIndex(newIndex);
     this.redrawPlayList();
     this.playlistWindow.selectItem(this.currentIndex());
   }
