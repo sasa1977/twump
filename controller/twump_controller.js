@@ -239,7 +239,7 @@ Object.extend(Twump.Controller.Player.prototype, {
   
   openEditor: function(){
     if (this.editorOpened()) return;
-    this.editor = Twump.Api.newWindow({url: "playlist_editor.html", 
+    this.editor = Twump.Api.newWindow({url: "editor_window.html", 
       playerController: this, playlist: this.playlist
     })
   },
