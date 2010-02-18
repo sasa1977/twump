@@ -29,9 +29,9 @@ Object.extend(Twump.Controller.Player.prototype, {
     this.doOpenFolder({onSelect: this.openFolderSelected.bind(this)})
   },
   
-  openFolderSelected: function(files){
+  openFolderSelected: function(paths){
     this.stop();
-    this.setPlaylist(files);
+    this.setPlaylist(paths);
     this.playCurrent();
   },
   
@@ -40,21 +40,21 @@ Object.extend(Twump.Controller.Player.prototype, {
   },
   
   addFolderSelected: function(newFiles){
-    this.playlist.insertAt(this.currentIndex() + 1, newFiles);
+    this.playlist.insertPathsAt(this.currentIndex() + 1, newFiles);
     this.redrawPlayList();
   },
   
   doOpenFolder: function(options){
     var file = new air.File(); 
     file.addEventListener(air.Event.SELECT, function(event){
-      options.onSelect(this.collectMusicFiles(air.File.getFilesRecursive(event.target.nativePath)))
+      options.onSelect(this.collectMusicPaths(air.File.getFilesRecursive(event.target.nativePath)))
     }.bind(this)); 
     file.browseForDirectory('Select folder');
   
   },
   
-  collectMusicFiles: function(files){
-    return files.map(function(fileName){
+  collectMusicPaths: function(paths){
+    return paths.map(function(fileName){
       return (fileName.toLowerCase().endsWith('.mp3')) ? fileName : null;
     }.bind(this)).compact();
   },
@@ -69,15 +69,19 @@ Object.extend(Twump.Controller.Player.prototype, {
     this.playlistWindow.display(this.playlist);
   },
   
+  selectCurrentItemInPlaylistWindow: function(){
+    this.playlistWindow.selectItem(this.currentFile());
+  },
+  
   playCurrent: function(){
     this.stop();
     this.saveCurrentList();
     
     if (!this.currentFile()) return;
     
-    this.playlistWindow.selectItem(this.currentIndex());
+    this.selectCurrentItemInPlaylistWindow();
     
-    this.player.play(this.currentFile(), {
+    this.player.play(this.currentFile().path, {
       volume: this.volume,
       onPlayProgress: this.onPlayProgress.bind(this),
       onPlaybackComplete: this.onPlaybackComplete.bind(this)
@@ -87,7 +91,7 @@ Object.extend(Twump.Controller.Player.prototype, {
   onPlayProgress: function(data){
     this.playerWindow.displayPlayProgress(
       Object.extend(data, {
-        file: this.currentFile().split(/(\\|\/)/).last()
+        file: this.currentFile().path.split(/(\\|\/)/).last()
       })
      );
   },
@@ -96,11 +100,7 @@ Object.extend(Twump.Controller.Player.prototype, {
     this.stop();
     this.onNext();
   },
-  
-  currentFile: function(){
-    return this.playlist.get(this.currentIndex())
-  },
-  
+    
   currentIndex: function(){
     return this.current || 0;
   },
@@ -206,7 +206,7 @@ Object.extend(Twump.Controller.Player.prototype, {
   
   saveCurrentList: function(){
     this.storage.writeAppData('last_played.twumpl', {
-      list: this.playlist.files, current: this.currentIndex()
+      list: this.playlist.paths(), current: this.currentIndex()
     })
   },
   
@@ -252,10 +252,8 @@ Object.extend(Twump.Controller.Player.prototype, {
     this.editor = null;
   },
   
-  moveAfterCurrent: function(items){
-    this.setCurrentIndex(this.playlist.moveAfterCurrent(items, this.currentIndex()));
-    this.redrawPlayList();
-    this.playlistWindow.selectItem(this.currentIndex());
+  currentFile: function(){
+    return this.playlist.fileAt(this.currentIndex());
   },
   
   onDrop: function(options){
@@ -266,11 +264,11 @@ Object.extend(Twump.Controller.Player.prototype, {
     var newIndex = this.playlist.moveAfter(
       this.editorController().selectedItems(), 
       this.playlistWindow.itemUnderMouseIndex,
-      this.currentIndex()
+      this.currentFile()
     );
     
     this.setCurrentIndex(newIndex);
     this.redrawPlayList();
-    this.playlistWindow.selectItem(this.currentIndex());
+    this.selectCurrentItemInPlaylistWindow();
   }
 })

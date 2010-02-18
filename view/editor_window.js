@@ -24,8 +24,8 @@ Object.extend(Twump.View.EditorWindow.prototype, {
   renderSearchResults: function(results){
     this.deselectAllItems();
     
-    var index = 0, html = results.inject("", function(memo, result){
-      var result = memo + this.searchResultTemplate.process({result: result, index: index});
+    var index = 0, html = results.inject("", function(memo, file){
+      var result = memo + this.searchResultTemplate.process({file: file, index: index});
       index++;
       return result;
     }.bind(this))
@@ -34,8 +34,8 @@ Object.extend(Twump.View.EditorWindow.prototype, {
   },
   
   searchResultTemplate: TrimPath.parseTemplate(" \
-    <div class='result' id='result${index}' value='${result}' index='${index}' style='width:1000'> \
-      ${result} \
+    <div class='result' id='result${index}' value='${file.path}' index='${index}' fileId='${file.id}' style='width:1000'> \
+      ${file.path} \
      </div> \
   "),
   
@@ -114,7 +114,7 @@ Object.extend(Twump.View.EditorWindow.prototype, {
   
   getSelectedItems: function(){
     return this.selectedItems.map(function(item){
-      return item.getAttribute('value');
+      return item.getAttribute('fileId');
     })
   }
 });

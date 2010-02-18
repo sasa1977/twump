@@ -10,8 +10,8 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
   display: function(playlist){
     $('playlist').update(this.playlistHtml(playlist));
     
-    if (this.selectedIndex)
-      this.selectItem(this.selectedIndex);
+    if (this.selectedFile)
+      this.selectItem(this.selectedFile);
       
     $$('.playlistItem').each(function(el){
       el.addEventListener("dragover", this.onPlaylistItemOver.bind(this))
@@ -24,30 +24,32 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
   
   playlistTemplate: TrimPath.parseTemplate(" \
     <table class='playlistTable'> \
-      {var index = 0;} \
       \
+      {var index = 0}\
       {for file in playlist.files} \
-        <tr class='playlistItem' id='playlistItem${index}' index='${index}'> \
-          <td>${index+1}</td> \
-          <td>${file}</td> \
+        <tr class='playlistItem' id='playlistItem${file.id}' fileId='${file.id}'> \
+          <td>${index +1}</td> \
+          <td>${file.path}</td> \
         </tr> \
-        {eval}index++;{/eval}\
+        {eval}index++{/eval}\
       {/for} \
     </table>\
  "),
   
-  selectItem: function(index){
+  selectItem: function(file){
     if (this.selectedItem)
       this.selectedItem.removeClassName('selected')
   
-    var el = $('playlistItem' + index);
+    if (!file) return;
+  
+    var el = $('playlistItem' + file.id);
     if (!el) return;
     
     el.addClassName('selected');
     this.showInView(el);
 
     this.selectedItem = el;
-    this.selectedIndex = index;
+    this.selectedFile = file;
   },
   
   showInView: function(el){
@@ -65,7 +67,7 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
   onPlaylistItemOver: function(event){
     var playlistItemEl = event.srcElement.parentElement;
     if (playlistItemEl.hasClassName('playlistItem')) {
-      this.itemUnderMouseIndex = playlistItemEl.getAttribute('index');
+      this.itemUnderMouseIndex = playlistItemEl.getAttribute('fileId');
     }
   }
 });

@@ -1,70 +1,101 @@
-Twump.Model = {}
 Twump.Model.Playlist = Class.create();
 Twump.Model.Playlist.prototype = {
-  initialize: function(files){
-    this.files = $A(files || []);
+  initialize: function(paths){
+    this.lastId = 0;
+    this.filesIndex = {}
+    this.setFiles(this.filesFromPaths(paths || []));
   },
   
-  get: function(index){return this.files[index]},
+  generateId: function(){
+    return this.lastId++;
+  },
+  
+  reindexPositions: function(){
+    this.positions = this.files.inject({}, function(memo, file, index){
+      memo[file.id] = index;
+      return memo;
+    })
+  },
+  
+  setFiles: function(files){
+    this.files = files;
+    this.reindexPositions();
+  },
+  
+  filesFromPaths: function(paths){
+    return $A(paths.map(function(path){
+      var newFile = new Twump.Model.File({id: this.generateId(), path: path});
+      this.filesIndex[newFile.id] = newFile;
+      
+      return newFile;
+    }.bind(this)))
+  },
+  
+  fileAt: function(position){
+    return this.files[position];
+  },
+  
+  file: function(id){
+    return this.filesIndex[id];
+  },
+  
+  paths: function(){
+    return $A(this.files.map(function(file){return file.path}));
+  },
+  
+  indexOf: function(file){
+    return this.positions[file.id];
+  },
+  
   length: function(){return this.files.length},
   empty: function(){return this.files.length == 0},
   
   shuffle: function(from){
-    this.files = this.files.shuffle(from);
+    this.setFiles(this.files.shuffle(from))
   },
   
   clear: function(){
-    this.files.clear();
+    this.setFiles([])
   },
   
   deleteAt: function(index){
-    this.files.splice(index, 1);
+    var removed = this.files.splice(index, 1);
+    if (!removed) return;
+    
+    this.filesIndex[removed.id] = null;
+    this.positions[removed.id] = null;
   },
   
   insertAt: function(at, files){
-    this.files = this.files.insertArrayAt(at, files);
+    this.setFiles(this.files.insertArrayAt(at, files).compact());
+  },
+  
+  insertPathsAt: function(at, paths){
+    this.insertAt(at, this.filesFromPaths(paths));
   },
   
   search: function(filter){
     var regex = new RegExp(filter, "i");
     return this.files.inject([],function(memo, file){
-      if (file.match(regex))
+      if (file.path.match(regex))
         memo.push(file);
       
       return memo;
     })
   },
   
-  moveAfter: function(items, index, currentIndex){
-    var currentFile = this.files[currentIndex];
+  moveAfter: function(items, id, currentFile){  
+    var position = this.indexOf({id: id});
   
-    var searchers = items.clone();
+    var filesToMove = items.inject([], function(memo, id){
+      memo.push(this.file(id));
+      this.files[this.indexOf({id: id})] = null;
+      
+      return memo;
+    }.bind(this))
+
+    this.insertAt(position, filesToMove);
     
-    for (var i=0, l=this.files.length;i < l;i++){
-      var match = this.matchSearchers(this.files[i], searchers);
-      if (match >= 0){
-        searchers.splice(match, 1);
-        this.files[i] = null;
-        if (searchers.length == 0)
-          break;
-      }
-    }
-    
-    this.insertAt(index, items);
-    this.files = this.files.compact();
-    
-    for (var i=0, l=this.files.length;i < l;i++){
-      if (this.files[i] == currentFile)
-        return i;
-    }
-    return currentIndex;
-  },
-  
-  matchSearchers: function(file, searchers){
-    for (var i=0, l=searchers.length;i < l;i++)
-      if (file == searchers[i])
-        return i;
-        
-    return -1;
+    return this.indexOf(currentFile);
   }
 }
