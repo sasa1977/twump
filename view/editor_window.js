@@ -64,9 +64,7 @@ Object.extend(Twump.View.EditorWindow.prototype, {
     if (!this.itemSelected(index))
       this.handleSelectItem(data);
     
-    var clipboard = new air.Clipboard();
-    clipboard.setData(air.ClipboardFormats.TEXT_FORMAT, "twump:moveAfter")
-    air.NativeDragManager.doDrag(window.htmlLoader, clipboard)
+    Twump.Api.startDrag("twump:moveAfter");
   },
   
   selectItem: function(index){

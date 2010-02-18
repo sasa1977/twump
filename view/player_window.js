@@ -20,7 +20,8 @@ Object.extend(Twump.View.PlayerWindow.prototype, {
   
   
   onNativeDragDrop: function(event){ 
-    var data = event.clipboard.getData(air.ClipboardFormats.TEXT_FORMAT);
+    var data = Twump.Api.getDropData(event);
+    
     if (data && data.match(/^twump\:/)){
       this.onDrop({action: data.gsub("twump:","")});
     }
