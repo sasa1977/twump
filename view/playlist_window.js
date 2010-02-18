@@ -19,23 +19,22 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
   },
   
   playlistHtml: function(playlist){
-    var html = "<table class='playlistTable'>";
-    
-    var itemTemplate = new Template(
-      "<tr class='playlistItem' id='playlistItem#{index}' index='#{index}'>" +
-        "<td>#{ordinal}</td>" +
-        "<td>#{file}</td>" +
-      "</tr>"
-    )
-    
-    playlist.files.each(function(file, index){
-      html += itemTemplate.evaluate({file: file, index: index, ordinal: index+1});
-    })
-    
-    html += "</table>";
-    
-    return html;
+    return this.playlistTemplate.process({playlist: playlist})
   },
+  
+  playlistTemplate: TrimPath.parseTemplate(" \
+    <table class='playlistTable'> \
+      {var index = 0;} \
+      \
+      {for file in playlist.files} \
+        <tr class='playlistItem' id='playlistItem${index}' index='${index}'> \
+          <td>${index+1}</td> \
+          <td>${file}</td> \
+        </tr> \
+        {eval}index++;{/eval}\
+      {/for} \
+    </table>\
+ "),
   
   selectItem: function(index){
     if (this.selectedItem)
@@ -70,3 +69,4 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
     }
   }
 });
+

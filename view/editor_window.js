@@ -25,18 +25,19 @@ Object.extend(Twump.View.EditorWindow.prototype, {
     this.deselectAllItems();
     
     var index = 0, html = results.inject("", function(memo, result){
-      var resultTemplate = new Template(
-        "<div class='result' id='result#{index}' value='#{result}' index='#{index}' style='width:1000'> \
-          #{result} \
-         </div>"
-      )
-      var result = memo + resultTemplate.evaluate({result: result, index: index});
+      var result = memo + this.searchResultTemplate.process({result: result, index: index});
       index++;
       return result;
-    })
+    }.bind(this))
 
     $('results').update(html);
   },
+  
+  searchResultTemplate: TrimPath.parseTemplate(" \
+    <div class='result' id='result${index}' value='${result}' index='${index}' style='width:1000'> \
+      ${result} \
+     </div> \
+  "),
   
   getResultItem: function(index){
     return $('result' + index)
