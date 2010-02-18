@@ -26,7 +26,7 @@ Object.extend(Twump.Controller.Player.prototype, {
   },
   
   openFolder: function(){
-    this.doOpenFolder({onSelect: this.openFolderSelected.bind(this)})
+    Twump.Api.openFolder({onSelect: this.openFolderSelected.bind(this)})
   },
   
   openFolderSelected: function(paths){
@@ -36,27 +36,12 @@ Object.extend(Twump.Controller.Player.prototype, {
   },
   
   addFolder: function(){
-    this.doOpenFolder({onSelect: this.addFolderSelected.bind(this)})
+    Twump.Api.openFolder({onSelect: this.addFolderSelected.bind(this)})
   },
   
   addFolderSelected: function(newFiles){
     this.playlist.insertPathsAt(this.currentIndex() + 1, newFiles);
     this.redrawPlayList();
-  },
-  
-  doOpenFolder: function(options){
-    var file = new air.File(); 
-    file.addEventListener(air.Event.SELECT, function(event){
-      options.onSelect(this.collectMusicPaths(air.File.getFilesRecursive(event.target.nativePath)))
-    }.bind(this)); 
-    file.browseForDirectory('Select folder');
-  
-  },
-  
-  collectMusicPaths: function(paths){
-    return paths.map(function(fileName){
-      return (fileName.toLowerCase().endsWith('.mp3')) ? fileName : null;
-    }.bind(this)).compact();
   },
   
   setPlaylist: function(list, index){
