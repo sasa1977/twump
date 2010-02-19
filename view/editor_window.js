@@ -50,17 +50,19 @@ Object.extend(Twump.View.EditorWindow.prototype, {
     var index = data.srcElement.getAttribute('index');
     if (index == null) return;
     
-    if (!data.shiftKey || this.selectionEmpty())
+    if ((!data.shiftKey && !data.ctrlKey) || this.selectionEmpty())
       this.selectItem(index);
-    else if(data.shiftKey)
+    else if (data.shiftKey)
       this.selectToItem(index);
+    else if (data.ctrlKey)
+      this.ctrlSelectItem(index);
   },
   
   onResultsMousedown: function(data){
     var index = data.srcElement.getAttribute('index');
     if (index == null) return;
     
-    if (!this.itemSelected(index))
+    if (!this.itemSelected(index) && !data.ctrlKey)
       this.handleSelectItem(data);
     
     Twump.Api.startDrag("twump:moveAfter");
@@ -69,6 +71,13 @@ Object.extend(Twump.View.EditorWindow.prototype, {
   selectItem: function(index){
     this.deselectAllItems();
     this.anchor = this.addSelectItem(index);
+  },
+  
+  ctrlSelectItem: function(index){
+    if (this.itemSelected(index))
+      this.deselectItem(index);
+    else
+      this.addSelectItem(index)
   },
   
   selectToItem: function(index){
@@ -89,6 +98,15 @@ Object.extend(Twump.View.EditorWindow.prototype, {
     item.addClassName('selected')
     this.selectedItems.push(item);
     return item;
+  },
+  
+  deselectItem: function(index){
+    var item = this.getResultItem(index);
+    if (!item) return;
+    
+    item.removeClassName('selected');
+    
+    this.selectedItems = this.selectedItems.reject(function(selectedItem){return selectedItem.id == item.id})
   },
   
   itemSelected: function(index){
