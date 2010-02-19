@@ -1,7 +1,7 @@
 Twump.View.Common = {
   addEventListener: function(element, event){
     $(element).addEventListener(event, function(data){
-      this.invokeEvent("on" + element.capitalizeEachWord(), data)
+      this.invokeEvent("on" + element.capitalizeEachWord() + event.capitalizeEachWord(), data)
     }.bind(this), false);
   },
   
@@ -31,14 +31,14 @@ Twump.View.Common = {
     new Insertion.Top(parentId, html);
     
     this.addEventListener("close", "click");
-    this.onClose = function(){
+    this.onCloseClick = function(){
       if (this.onWindowClosing)
         this.onWindowClosing();
       close();
     }
     
     this.addEventListener("header", "mousedown");
-    this.onHeader = function(){
+    this.onHeaderMousedown = function(){
       window.nativeWindow.startMove();
     }
   }

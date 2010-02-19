@@ -60,7 +60,7 @@ Twump.Controller.PlayerMixin = {
   
   onPlaybackComplete: function(){
     this.stop();
-    this.onNext();
+    this.onNextClick();
   },
   
   play: function(index){
@@ -75,23 +75,23 @@ Twump.Controller.PlayerMixin = {
     this.playerWindow.clearPlayProgress();
   },
   
-  onNext: function(){
+  onNextClick: function(){
     this.play(this.currentIndex() + 1);
   },
   
-  onPause: function(){
+  onPauseClick: function(){
     this.player.pauseOrResume();
   },
   
-  onStop: function(){
+  onStopClick: function(){
     this.stop();
   },
   
-  onPlay: function(){
+  onPlayClick: function(){
     this.playCurrent();  
   },
   
-  onPrevious: function(){
+  onPreviousClick: function(){
     this.play(this.currentIndex() - 1);
   },
   

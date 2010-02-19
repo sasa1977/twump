@@ -13,12 +13,12 @@ Twump.Controller.PlaylistMixin = {
     this.playCurrent();
   },
 
-  onOpenFolder: function(){
+  onOpenFolderClick: function(){
     this.openFolder();
   },
   
-  onAddFolder: function(){
-   (this.playlist.empty()) ? this.onOpenFolder() : this.addFolder();
+  onAddFolderClick: function(){
+   (this.playlist.empty()) ? this.openFolder() : this.addFolder();
   },
 
   openFolder: function(){
@@ -54,19 +54,19 @@ Twump.Controller.PlaylistMixin = {
     this.playlistWindow.selectItem(this.currentFile());
   },
   
-  onShuffle: function(){
+  onShuffleClick: function(){
     this.playlist.shuffle();
     this.redrawPlayList();
     this.play(0);
   },
   
-  onShuffleRemaining: function(){
+  onShuffleRemainingClick: function(){
     this.playlist.shuffle(this.currentIndex() + 1);
     this.redrawPlayList();
     this.saveCurrentList();
   },
   
-  onDelete: function(){
+  onDeleteClick: function(){
     if (!this.indexOk(this.currentIndex())) return;
     
     this.playlist.deleteAt(this.currentIndex());
@@ -74,7 +74,7 @@ Twump.Controller.PlaylistMixin = {
     this.playCurrent();
   },
   
-  onClear: function(){
+  onClearClick: function(){
     if (!confirm('Are you sure?')) return;
     this.stop();
     this.playlist.clear();
@@ -104,7 +104,7 @@ Twump.Controller.PlaylistMixin = {
     })
   },
   
-  onEditor: function(){
+  onEditorClick: function(){
     (this.editorOpened()) ? this.closeEditor() : this.openEditor();
   },
   

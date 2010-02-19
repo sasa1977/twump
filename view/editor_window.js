@@ -8,13 +8,12 @@ Object.extend(Twump.View.EditorWindow.prototype, {
     this.delayExecute = new Twump.Utils.DelayExecute(1000);
     this.selectedItems = [];
 
-    results.onmousedown = this.onResultsMouseDown.bind(this);
-    
     this.addEventListener('filter', 'keydown');
-    this.addEventListeners('click', ['results'])
+    this.addEventListeners('click', ['results']);
+    this.addEventListener('results', 'mousedown')
   },
   
-  onFilter: function(){
+  onFilterKeydown: function(){
     this.delayExecute.cancel();
     this.delayExecute.schedule(function(){
       this.onFilterChanged($('filter').value)
@@ -43,7 +42,7 @@ Object.extend(Twump.View.EditorWindow.prototype, {
     return $('result' + index)
   },
   
-  onResults: function(data){
+  onResultsClick: function(data){
     this.handleSelectItem(data);
   },
   
@@ -57,7 +56,7 @@ Object.extend(Twump.View.EditorWindow.prototype, {
       this.selectToItem(index);
   },
   
-  onResultsMouseDown: function(data){
+  onResultsMousedown: function(data){
     var index = data.srcElement.getAttribute('index');
     if (index == null) return;
     
