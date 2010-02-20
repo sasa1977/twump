@@ -6,6 +6,29 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
   initialize: function(){
     this.addEventListener('playlist', 'mouseover');
     this.selectionInfo = {};
+    new PeriodicalExecuter(this.scrollWatcher.bind(this), 2);
+  },
+  
+  scrollWatcher: function(){
+    var playlistEl = $('playlist');
+    var itemsParent = $('itemsParent');
+    var itemHeight = $('playlistItem0').clientHeight;
+    
+    if (!itemsParent.children || itemsParent.children.length == 0) return;
+    
+    var startIndex = Math.floor(playlistEl.scrollTop / itemHeight);
+    var endIndex = Math.ceil((playlistEl.scrollTop + playlistEl.clientHeight) / itemHeight);
+    endIndex = Math.min(itemsParent.children.length - 1, endIndex);
+
+    var ids = []
+    for (var index = startIndex;index <= endIndex;index++)
+      ids.push(this.itemId(itemsParent.children[index]))
+
+    this.onScrollChanged({ids: ids})
+  },
+  
+  itemId: function(item){
+    return $(item).getAttribute('fileId');
   },
   
   display: function(playlist){
@@ -32,12 +55,12 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
             {eval}index++{/eval}\
           {/for} \
         </td> \
-        <td> \
+        <td id='itemsParent'> \
           {var index = 0}\
           {for file in playlist.files} \
             <div class='playlistItem' id='playlistItem${file.id}' fileId='${file.id}'> \
               <nobr> \
-                ${file.name} \
+                ${file.displayName()} \
               </nobr> \
             </div>\
             {eval}index++{/eval}\
@@ -50,7 +73,7 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
  refreshItem: function(file){
   var element = $('playlistItem' + file.id);
   if (!element) return;
-  element.update(file.displayName())
+  element.update("<nobr>" + file.displayName() + "</nobr>")
  },
   
   selectItem: function(file, index){

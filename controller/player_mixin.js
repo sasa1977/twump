@@ -43,8 +43,7 @@ Twump.Controller.PlayerMixin = {
     
     this.selectCurrentItemInPlaylistWindow();
     
-    if (!this.currentFile().metadataLoaded())
-      this.loadMetadata(this.currentFile());
+    this.loadMetadata(this.currentFile());
     
     this.player.play(this.currentFile().path, {
       volume: this.volume,
@@ -54,6 +53,9 @@ Twump.Controller.PlayerMixin = {
   },
   
   loadMetadata: function(file){
+    if (file.metadataLoaded())
+      return;
+      
     Twump.Api.songMetadata(file.path, function(metadata){
       file.metadata = metadata;
       this.playlistWindow.refreshItem(file);

@@ -15,12 +15,22 @@ Object.extend(Twump.Controller.Player.prototype, {
         "openFolderClick", "addFolderClick", "shuffleClick", "shuffleRemainingClick", "deleteClick", "clearClick",
         "editorClick", "drop"
       ]
-    )
+    );
+    
+    this.subscribeToViewEvents(this.playlistWindow, ["scrollChanged"])
     
     this.player = new Twump.PlayerFacade();
     this.setPlaylist([])
     this.loadPlayerData();
     this.loadLastList();
+  },
+  
+  onScrollChanged: function(info){
+    info.ids.each(function(id){
+      var file = this.playlist.file(id);
+      if (file)
+        this.loadMetadata(file);
+    }.bind(this))
   },
   
   onWindowClosing: function(){
