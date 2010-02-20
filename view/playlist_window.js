@@ -46,33 +46,18 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
       </tr> \
      </table> \
  "),
+ 
+ refreshItem: function(file){
+  var element = $('playlistItem' + file.id);
+  if (!element) return;
+  element.update(file.displayName())
+ },
   
   selectItem: function(file, index){
     this.deselectCurrent();
     this.selectItemPart('playlistItem', file.id);
     this.selectItemPart('playlistOrdinal', index);
     this.drawCurrentSelection();
-    return;
-
-    if (this.selectedItem) {
-      this.selectedItem.removeClassName('selectedPlaylistItem');
-      this.selectedOrdinal.removeClassName('selectedPlaylistItem');
-    }
-  
-    if (!file) return;
-  
-    var el = $('playlistItem' + file.id);
-    if (!el) return;
-    
-    el.addClassName('selectedPlaylistItem');
-    this.showInView(el);
-    this.selectedItem = el;
-    
-    var ordinal = $('playlistOrdinal' + index);
-    ordinal.addClassName('selectedPlaylistItem')
-    this.selectedOrdinal = ordinal;
-    
-    this.selectedFile = file;
   },
   
   selectItemPart: function(prefix, suffix){

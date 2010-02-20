@@ -43,6 +43,9 @@ Twump.Controller.PlayerMixin = {
     
     this.selectCurrentItemInPlaylistWindow();
     
+    if (!this.currentFile().metadataLoaded())
+      this.loadMetadata(this.currentFile());
+    
     this.player.play(this.currentFile().path, {
       volume: this.volume,
       onPlayProgress: this.onPlayProgress.bind(this),
@@ -50,9 +53,16 @@ Twump.Controller.PlayerMixin = {
     });
   },
   
+  loadMetadata: function(file){
+    Twump.Api.songMetadata(file.path, function(metadata){
+      file.metadata = metadata;
+      this.playlistWindow.refreshItem(file);
+    }.bind(this));
+  },
+  
   onPlayProgress: function(data){
     this.playerWindow.displayPlayProgress(
-      Object.extend(data, {file: this.currentFile().name})
+      Object.extend(data, {file: this.currentFile().displayName()})
      );
   },
   
