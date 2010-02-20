@@ -1,14 +1,10 @@
 #playlist {
   height:335;
-  width:500;
   background-color:lightgrey;
   overflow:auto;
 }
 
-.playlistItem.selected {
+.selectedPlaylistItem {
   background-color: white;
 }
 
-.playlistTable {
-  width:1000px;
-}

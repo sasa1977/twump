@@ -51,7 +51,7 @@ Twump.Controller.PlaylistMixin = {
   },
   
   selectCurrentItemInPlaylistWindow: function(){
-    this.playlistWindow.selectItem(this.currentFile());
+    this.playlistWindow.selectItem(this.currentFile(), this.currentIndex());
   },
   
   onShuffleClick: function(){
@@ -112,15 +112,16 @@ Twump.Controller.PlaylistMixin = {
     this.editor = null;
   },
   
-  moveAfter: function(options){
-    var newIndex = this.playlist.moveAfter(
+  moveBefore: function(options){
+    var newIndex = this.playlist.moveBefore(
       this.editorController().selectedItems(), 
       this.playlistWindow.itemUnderMouseIndex,
       this.currentFile()
     );
     
+    this.playlistWindow.moveBefore(this.editorController().selectedItems());
+    
     this.setCurrentIndex(newIndex);
-    this.redrawPlayList();
     this.selectCurrentItemInPlaylistWindow();
   }
 }

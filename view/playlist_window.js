@@ -4,14 +4,14 @@ Object.extend(Twump.View.PlaylistWindow.prototype, Twump.View.Common);
 
 Object.extend(Twump.View.PlaylistWindow.prototype, {
   initialize: function(){
-    this.addEventListener('playlist', 'mouseover')
+    this.addEventListener('playlist', 'mouseover');
+    this.selectionInfo = {};
   },
   
   display: function(playlist){
     $('playlist').update(this.playlistHtml(playlist));
     
-    if (this.selectedFile)
-      this.selectItem(this.selectedFile);
+    this.drawCurrentSelection();
       
     $$('.playlistItem').each(function(el){
       el.addEventListener("dragover", this.onPlaylistItemOver.bind(this))
@@ -23,33 +23,86 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
   },
   
   playlistTemplate: TrimPath.parseTemplate(" \
-    <table class='playlistTable'> \
-      \
-      {var index = 0}\
-      {for file in playlist.files} \
-        <tr class='playlistItem' id='playlistItem${file.id}' fileId='${file.id}'> \
-          <td>${index +1}</td> \
-          <td>${file.path}</td> \
-        </tr> \
-        {eval}index++{/eval}\
-      {/for} \
-    </table>\
+    <table cellspacing='0' cellpadding='0' border='0'> \
+      <tr>\
+        <td>\
+          {var index = 0}\
+          {for file in playlist.files} \
+            <div id='playlistOrdinal${index}'>${index+1}</div>\
+            {eval}index++{/eval}\
+          {/for} \
+        </td> \
+        <td> \
+          {var index = 0}\
+          {for file in playlist.files} \
+            <div class='playlistItem' id='playlistItem${file.id}' fileId='${file.id}'> \
+              <nobr> \
+                ${file.path} \
+              </nobr> \
+            </div>\
+            {eval}index++{/eval}\
+          {/for} \
+        </td> \
+      </tr> \
+     </table> \
  "),
   
-  selectItem: function(file){
-    if (this.selectedItem)
-      this.selectedItem.removeClassName('selected')
+  selectItem: function(file, index){
+    this.deselectCurrent();
+    this.selectItemPart('playlistItem', file.id);
+    this.selectItemPart('playlistOrdinal', index);
+    this.drawCurrentSelection();
+    return;
+
+    if (this.selectedItem) {
+      this.selectedItem.removeClassName('selectedPlaylistItem');
+      this.selectedOrdinal.removeClassName('selectedPlaylistItem');
+    }
   
     if (!file) return;
   
     var el = $('playlistItem' + file.id);
     if (!el) return;
     
-    el.addClassName('selected');
+    el.addClassName('selectedPlaylistItem');
     this.showInView(el);
-
     this.selectedItem = el;
+    
+    var ordinal = $('playlistOrdinal' + index);
+    ordinal.addClassName('selectedPlaylistItem')
+    this.selectedOrdinal = ordinal;
+    
     this.selectedFile = file;
+  },
+  
+  selectItemPart: function(prefix, suffix){
+    this.selectionInfo[prefix] = suffix;
+  },
+  
+  currentSelectionPartElement: function(prefix){
+    var suffix = this.selectionInfo[prefix];
+    if (suffix == null) return null;
+
+    return $(prefix + suffix);
+  },
+  
+  deselectCurrent: function(){
+    for (prefix in this.selectionInfo){
+      var element = this.currentSelectionPartElement(prefix);
+      if (!element) return;
+      
+      element.removeClassName('selectedPlaylistItem');
+      this.selectionInfo[prefix] = null
+    }
+  },
+  
+  drawCurrentSelection: function(){
+    for (prefix in this.selectionInfo){
+      var element = this.currentSelectionPartElement(prefix);
+      if (!element) continue;
+    
+      element.addClassName('selectedPlaylistItem');
+    }
   },
   
   showInView: function(el){
@@ -69,6 +122,19 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
     if (playlistItemEl.hasClassName('playlistItem')) {
       this.itemUnderMouseIndex = playlistItemEl.getAttribute('fileId');
     }
+  },
+  
+  moveBefore: function(ids){
+    if (!this.itemUnderMouseIndex) return;
+    
+    var targetElement = $('playlistItem' + this.itemUnderMouseIndex);
+    var parentElement = targetElement.parentElement;
+    
+    ids.each(function(id){
+      if (id == this.itemUnderMouseIndex) return;
+      var elementToMove = $('playlistItem' + id);
+      
+      parentElement.insertBefore(elementToMove, targetElement)
+    }.bind(this))
   }
 });
-

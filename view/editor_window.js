@@ -65,7 +65,7 @@ Object.extend(Twump.View.EditorWindow.prototype, {
     if (!this.itemSelected(index) && !data.ctrlKey)
       this.handleSelectItem(data);
     
-    Twump.Api.startDrag("twump:moveAfter");
+    Twump.Api.startDrag("twump:moveBefore");
   },
   
   selectItem: function(index){
