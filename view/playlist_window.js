@@ -28,7 +28,7 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
         <td>\
           {var index = 0}\
           {for file in playlist.files} \
-            <div id='playlistOrdinal${index}'>${index+1}</div>\
+            <div id='playlistOrdinal${index}' style='text-align:right'>${index+1}.&nbsp;</div>\
             {eval}index++{/eval}\
           {/for} \
         </td> \
@@ -37,7 +37,7 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
           {for file in playlist.files} \
             <div class='playlistItem' id='playlistItem${file.id}' fileId='${file.id}'> \
               <nobr> \
-                ${file.path} \
+                ${file.name} \
               </nobr> \
             </div>\
             {eval}index++{/eval}\

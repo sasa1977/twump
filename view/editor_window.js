@@ -34,7 +34,7 @@ Object.extend(Twump.View.EditorWindow.prototype, {
   
   searchResultTemplate: TrimPath.parseTemplate(" \
     <div class='result' id='result${index}' value='${file.path}' index='${index}' fileId='${file.id}' style='width:1000'> \
-      ${file.path} \
+      ${file.name} \
      </div> \
   "),
   

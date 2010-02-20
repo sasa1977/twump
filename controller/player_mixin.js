@@ -52,9 +52,7 @@ Twump.Controller.PlayerMixin = {
   
   onPlayProgress: function(data){
     this.playerWindow.displayPlayProgress(
-      Object.extend(data, {
-        file: this.currentFile().path.split(/(\\|\/)/).last()
-      })
+      Object.extend(data, {file: this.currentFile().name})
      );
   },
   

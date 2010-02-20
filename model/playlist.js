@@ -24,7 +24,10 @@ Twump.Model.Playlist.prototype = {
   
   filesFromPaths: function(paths){
     return $A(paths.map(function(path){
-      var newFile = new Twump.Model.File({id: this.generateId(), path: path});
+      var newFile = new Twump.Model.File({
+        id: this.generateId(), path: path, name: Twump.Api.fileName(path)
+      });
+      
       this.filesIndex[newFile.id] = newFile;
       
       return newFile;
