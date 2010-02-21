@@ -70,7 +70,7 @@
     </script>
   </head> 
   
-  <body onload="init();" style="overflow:hidden;" 
+  <body onload="init();" style="overflow:hidden;-webkit-user-select:none;" 
     ondragenter="event.preventDefault()" ondragover="event.preventDefault()">
     <div id="player">
       <div class='playingInfo'>
@@ -110,6 +110,10 @@
     </div>
     
     <div id="playlist">
+    </div>
+    
+    <div id='playListContextMenu' style="display:none">
+      <div id="copyPathToClipboard">copy full path to clipboard</div>
     </div>
   </body> 
 </html>

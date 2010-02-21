@@ -5,8 +5,20 @@ Object.extend(Twump.View.PlaylistWindow.prototype, Twump.View.Common);
 Object.extend(Twump.View.PlaylistWindow.prototype, {
   initialize: function(){
     this.addEventListener('playlist', 'mouseover');
+    this.addEventListener('copyPathToClipboard', 'click');
+    
+    document.body.addEventListener('click', this.onBodyClick.bind(this))
+    
     this.selectionInfo = {};
     new PeriodicalExecuter(this.scrollWatcher.bind(this), 2);
+  },
+  
+  onBodyClick: function(event){
+    this.closeContextMenu();
+  },
+  
+  onCopyPathToClipboardClick: function(){
+    this.onCopyPathToClipboard(this.relatedContextMenuItem.getAttribute('fileId'));
   },
   
   scrollWatcher: function(){
@@ -38,7 +50,37 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
       
     $$('.playlistItem').each(function(el){
       el.addEventListener("dragover", this.onPlaylistItemOver.bind(this))
+      el.addEventListener("mousedown", this.onPlaylistItemMouseDown.bind(this))
     }.bind(this))
+  },
+  
+  onPlaylistItemMouseDown: function(event){
+    if (event.button == 2) {
+      this.openContextMenu(event);
+      return false;
+    }
+  },
+  
+  openContextMenu: function(event){
+    var contextMenu = $('playListContextMenu')
+    contextMenu.show();
+    Position.absolutize(contextMenu);
+    contextMenu.style.top = event.clientY.toString() + "px";
+    contextMenu.style.left = event.clientX.toString() + "px";
+    
+    this.relatedContextMenuItem = this.findPlaylistItem(event.srcElement);
+  },
+  
+  findPlaylistItem: function(el){
+    if (!el) return null;
+    
+    var el = $(el)
+    if (el.hasClassName('playlistItem')) return el;
+    return this.findPlaylistItem(el.parentElement);
+  },
+  
+  closeContextMenu: function(){
+    $('playListContextMenu').hide();
   },
   
   playlistHtml: function(playlist){
