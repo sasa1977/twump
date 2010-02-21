@@ -18,6 +18,6 @@ Object.extend(Twump.Controller.Editor.prototype, {
   },
   
   selectedItems: function(){
-    return this.editorWindow.getSelectedItems();
+    return this.editorWindow.selectedItems();
   }
 })
