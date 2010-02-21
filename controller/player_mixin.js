@@ -66,6 +66,11 @@ Twump.Controller.PlayerMixin = {
     this.playerWindow.displayPlayProgress(
       Object.extend(data, {file: this.currentFile().displayName()})
      );
+     
+     if (this.progressStep == 0)
+       this.lastFm.nowPlaying(this.currentFile())
+
+     this.progressStep = (this.progressStep + 1) % 10;
   },
   
   onPlaybackComplete: function(){

@@ -8,6 +8,8 @@ Object.extend(Twump.Controller.Player.prototype, {
   initialize: function(options){
     Object.extend(this, options);
     
+    this.lastFmSetup();
+    
     this.subscribeToViewEvents(this.playerWindow, 
       [
         "windowClosing", "previousClick", "nextClick", "pauseClick", "stopClick", "playClick", 
@@ -23,6 +25,41 @@ Object.extend(Twump.Controller.Player.prototype, {
     this.setPlaylist([])
     this.loadPlayerData();
     this.loadLastList();
+
+    this.progressStep = 0;
+  },
+  
+  lastFmSetup: function(){
+    var lastFmLoginData = null;
+    
+    if(confirm('last.fm?')){
+      var login = Twump.Api.readEncrypted('lastFmLogin'), password = Twump.Api.readEncrypted('lastFmPassword');
+      if (!login)
+        lastFmLoginData = this.lastFmLogin();
+      else {
+        if (confirm(login + '?'))
+          lastFmLoginData = {login: login, password: password};
+        else
+          lastFmLoginData = this.lastFmLogin();
+      }
+      
+      if (lastFmLoginData) {
+        Twump.Api.writeEncrypted('lastFmLogin', lastFmLoginData.login);
+        Twump.Api.writeEncrypted('lastFmPassword', lastFmLoginData.password);
+      }
+    }
+    
+    this.lastFm = new LastFm(lastFmLoginData);
+  },
+  
+  lastFmLogin: function(){
+    var login = prompt('login');
+    if (!login) return null;
+    
+    var password = prompt('password');
+    if (!password) return null;
+    
+    return {login: login, password: password}
   },
   
   onScrollChanged: function(info){
