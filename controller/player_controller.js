@@ -69,8 +69,10 @@ Object.extend(Twump.Controller.Player.prototype, {
   onScrollChanged: function(info){
     info.ids.each(function(id){
       var file = this.playlist.file(id);
-      if (file)
+      if (file && !file.loadingMetadata) {
         this.loadMetadata(file);
+        file.loadingMetadata = true;
+      }
     }.bind(this))
   },
   

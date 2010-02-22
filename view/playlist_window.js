@@ -10,7 +10,7 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
     document.body.addEventListener('click', this.onBodyClick.bind(this))
     
     this.selectionInfo = {};
-    new PeriodicalExecuter(this.scrollWatcher.bind(this), 2);
+    new PeriodicalExecuter(this.scrollWatcher.bind(this), 5);
   },
   
   onBodyClick: function(event){
@@ -123,6 +123,8 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
     this.selectItemPart('playlistItem', file.id);
     this.selectItemPart('playlistOrdinal', index);
     this.drawCurrentSelection();
+    
+    this.showInView(this.currentSelectionPartElement('playlistItem'))
   },
   
   selectItemPart: function(prefix, suffix){
