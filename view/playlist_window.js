@@ -11,6 +11,16 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
     
     this.selectionInfo = {};
     new PeriodicalExecuter(this.scrollWatcher.bind(this), 5);
+    
+    this.list = new Twump.List({
+      parentElement: $('playlist'), itemClass: 'playlistItem'
+    });
+    
+    this.list.onDoubleClick = this.onItemDoubleClick.bind(this);
+  },
+  
+  onItemDoubleClick: function(item, event){
+    this.onItemSelected(item.getAttribute('fileId'));
   },
   
   onBodyClick: function(event){
@@ -112,11 +122,11 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
      </table> \
  "),
  
- refreshItem: function(file){
-  var element = $('playlistItem' + file.id);
-  if (!element) return;
-  element.update("<nobr>" + file.displayName() + "</nobr>")
- },
+  refreshItem: function(file){
+    var element = $('playlistItem' + file.id);
+    if (!element) return;
+    element.update("<nobr>" + file.displayName() + "</nobr>")
+  },
   
   selectItem: function(file, index){
     this.deselectCurrent();
@@ -143,7 +153,7 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
       var element = this.currentSelectionPartElement(prefix);
       if (!element) return;
       
-      element.removeClassName('selectedPlaylistItem');
+      element.removeClassName('selected');
       this.selectionInfo[prefix] = null
     }
   },
@@ -153,7 +163,7 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
       var element = this.currentSelectionPartElement(prefix);
       if (!element) continue;
     
-      element.addClassName('selectedPlaylistItem');
+      element.addClassName('selected');
     }
   },
   

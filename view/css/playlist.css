@@ -4,7 +4,7 @@
   overflow:auto;
 }
 
-.selectedPlaylistItem {
+.playlist .selected {
   background-color: white;
 }
 

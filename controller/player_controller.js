@@ -19,7 +19,7 @@ Object.extend(Twump.Controller.Player.prototype, {
       ]
     );
     
-    this.subscribeToViewEvents(this.playlistWindow, ["scrollChanged", "copyPathToClipboard"])
+    this.subscribeToViewEvents(this.playlistWindow, ["scrollChanged", "copyPathToClipboard", "itemSelected"])
     
     this.player = new Twump.PlayerFacade();
     this.setPlaylist([])
@@ -27,6 +27,10 @@ Object.extend(Twump.Controller.Player.prototype, {
     this.loadLastList();
 
     this.progressStep = 0;
+  },
+  
+  onItemSelected: function(id){
+    this.play(this.playlist.indexOf(this.playlist.file(id)))
   },
   
   onCopyPathToClipboard: function(fileId){
