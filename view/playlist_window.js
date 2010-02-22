@@ -17,6 +17,18 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
     });
     
     this.list.onDoubleClick = this.onItemDoubleClick.bind(this);
+    
+    
+    Object.extend(this.list, {
+      indexOf: function(item){
+        return this.playlist.idToIndex(item.getAttribute('fileId'))
+      }.bind(this),
+      
+      item: function(index){
+        var id = this.playlist.fileAt(index).id;
+        return $('playlistItem' + id)
+      }.bind(this),
+    });
   },
   
   onItemDoubleClick: function(item, event){
@@ -32,6 +44,8 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
   },
   
   scrollWatcher: function(){
+    if (this.playlist.empty()) return;
+  
     var playlistEl = $('playlist');
     var itemsParent = $('itemsParent');
     var itemHeight = $('playlistItem0').clientHeight;
@@ -61,7 +75,9 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
     $$('.playlistItem').each(function(el){
       el.addEventListener("dragover", this.onPlaylistItemOver.bind(this))
       el.addEventListener("mousedown", this.onPlaylistItemMouseDown.bind(this))
-    }.bind(this))
+    }.bind(this));
+    
+    this.playlist = playlist;
   },
   
   onPlaylistItemMouseDown: function(event){
@@ -120,7 +136,7 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
         </td> \
       </tr> \
      </table> \
- "),
+  "),
  
   refreshItem: function(file){
     var element = $('playlistItem' + file.id);

@@ -30,7 +30,7 @@ Object.extend(Twump.Controller.Player.prototype, {
   },
   
   onItemSelected: function(id){
-    this.play(this.playlist.indexOf(this.playlist.file(id)))
+    this.play(this.playlist.idToIndex(id))
   },
   
   onCopyPathToClipboard: function(fileId){

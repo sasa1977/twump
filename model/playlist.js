@@ -50,6 +50,10 @@ Twump.Model.Playlist.prototype = {
     return this.positions[file.id];
   },
   
+  idToIndex: function(id){
+    return this.indexOf(this.file(id))
+  },
+  
   length: function(){return this.files.length},
   empty: function(){return this.files.length == 0},
   
