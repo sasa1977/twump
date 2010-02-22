@@ -8,3 +8,7 @@
   background-color: white;
 }
 
+.playlist .playing {
+  color: blue;
+}
+

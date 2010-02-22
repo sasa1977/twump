@@ -9,7 +9,7 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
     
     document.body.addEventListener('click', this.onBodyClick.bind(this))
     
-    this.selectionInfo = {};
+    this.playingParts = {};
     new PeriodicalExecuter(this.scrollWatcher.bind(this), 5);
     
     this.list = new Twump.List({
@@ -56,7 +56,7 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
   display: function(playlist){
     $('playlist').update(this.playlistHtml(playlist));
     
-    this.drawCurrentSelection();
+    this.drawPlayingItem();
       
     $$('.playlistItem').each(function(el){
       el.addEventListener("dragover", this.onPlaylistItemOver.bind(this))
@@ -128,42 +128,42 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
     element.update("<nobr>" + file.displayName() + "</nobr>")
   },
   
-  selectItem: function(file, index){
-    this.deselectCurrent();
-    this.selectItemPart('playlistItem', file.id);
-    this.selectItemPart('playlistOrdinal', index);
-    this.drawCurrentSelection();
+  setPlayingItem: function(file, index){
+    this.clearPlayingItem();
+    this.setPlayingItemPart('playlistItem', file.id);
+    this.setPlayingItemPart('playlistOrdinal', index);
+    this.drawPlayingItem();
     
-    this.showInView(this.currentSelectionPartElement('playlistItem'))
+    this.showInView(this.playingPart('playlistItem'))
   },
   
-  selectItemPart: function(prefix, suffix){
-    this.selectionInfo[prefix] = suffix;
+  setPlayingItemPart: function(prefix, suffix){
+    this.playingParts[prefix] = suffix;
   },
   
-  currentSelectionPartElement: function(prefix){
-    var suffix = this.selectionInfo[prefix];
+  playingPart: function(prefix){
+    var suffix = this.playingParts[prefix];
     if (suffix == null) return null;
 
     return $(prefix + suffix);
   },
   
-  deselectCurrent: function(){
-    for (prefix in this.selectionInfo){
-      var element = this.currentSelectionPartElement(prefix);
+  clearPlayingItem: function(){
+    for (prefix in this.playingParts){
+      var element = this.playingPart(prefix);
       if (!element) return;
       
-      element.removeClassName('selected');
-      this.selectionInfo[prefix] = null
+      element.removeClassName('playing');
+      this.setPlayingItemPart(prefix, null);
     }
   },
   
-  drawCurrentSelection: function(){
-    for (prefix in this.selectionInfo){
-      var element = this.currentSelectionPartElement(prefix);
+  drawPlayingItem: function(){
+    for (prefix in this.playingParts){
+      var element = this.playingPart(prefix);
       if (!element) continue;
     
-      element.addClassName('selected');
+      element.addClassName('playing');
     }
   },
   

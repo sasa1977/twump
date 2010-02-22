@@ -50,8 +50,8 @@ Twump.Controller.PlaylistMixin = {
     this.playlistWindow.display(this.playlist);
   },
   
-  selectCurrentItemInPlaylistWindow: function(){
-    this.playlistWindow.selectItem(this.currentFile(), this.currentIndex());
+  setPlaylistPlayingItem: function(){
+    this.playlistWindow.setPlayingItem(this.currentFile(), this.currentIndex());
   },
   
   onShuffleClick: function(){
@@ -122,6 +122,6 @@ Twump.Controller.PlaylistMixin = {
     this.playlistWindow.moveBefore(this.editorController().selectedItems());
     
     this.setCurrentIndex(newIndex);
-    this.selectCurrentItemInPlaylistWindow();
+    this.setPlaylistPlayingItem();
   }
 }

@@ -41,7 +41,7 @@ Twump.Controller.PlayerMixin = {
     
     if (!this.currentFile()) return;
     
-    this.selectCurrentItemInPlaylistWindow();
+    this.setPlaylistPlayingItem();
     
     this.loadMetadata(this.currentFile());
     
