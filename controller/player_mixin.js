@@ -70,27 +70,44 @@ Twump.Controller.PlayerMixin = {
   },
   
   lastFmPlayProgress: function(data){
+    if (!this.scrobbleCurrentPossible()) return;
+  
     if (this.progressStep == 0)
-      this.lastFm.nowPlaying(this.currentFile())
+      this.lastFmNowPlaying();
 
     this.progressStep = (this.progressStep + 1) % 10;
     
-    if ((data.position > 240 || data.position >= data.length / 2) && !this.scrobbledCurrent){
-      if (!this.startedPlaying)
-        this.startedPlaying = Math.round(new Date().getTime() / 1000 - (data.length / 2));
+    if (!this.startedPlaying)
+        this.startedPlaying = Math.round(new Date().getTime() / 1000);
     
-      this.lastFm.scrobble(this.currentFile(), Object.extend({startedPlaying: this.startedPlaying}, data));
-      this.scrobbledCurrent = true;
-    }
+    if (this.readyForScrobble(data))
+      this.scrobbleCurrent(data);
+  },
+  
+  lastFmNowPlaying: function(){
+    this.lastFm.nowPlaying(this.currentFile().metadata)
+  },
+  
+  scrobbleCurrent: function(data){
+    var file = this.currentFile();
+    
+    var arg = Object.extend({startedPlaying: this.startedPlaying}, data);
+    Object.extend(arg, this.currentFile().metadata)
+    
+    this.lastFm.pushForScrobble(arg)
+    this.scrobbledCurrent = true;
+  },
+  
+  scrobbleCurrentPossible: function(){
+    var file = this.currentFile();
+    return (file.metadata && file.metadata.name.length > 0 && file.metadata.performer.length > 0);
   },
   
   readyForScrobble: function(playingData){
-    if (this.scrobbledCurrent) return false;
-    
     return (
-      data.position > 30 &&
-      (data.position > 240 || data.position >= data.length / 2)
-    );
+      this.scrobbleCurrentPossible() && !this.scrobbledCurrent &&
+      (playingData.position > 240 || playingData.position >= playingData.length / 2)
+    )
   },
   
   onPlaybackComplete: function(){
@@ -106,6 +123,8 @@ Twump.Controller.PlayerMixin = {
   },
    
   stop: function(){
+    this.lastFm.scrobbleQueued();
+  
     this.startedPlaying = null;
     this.scrobbledCurrent = null;
     
