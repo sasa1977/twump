@@ -15,7 +15,7 @@ Object.extend(Twump.Controller.Player.prototype, {
         "windowClosing", "previousClick", "nextClick", "pauseClick", "stopClick", "playClick", 
         "volumeChange", "setPlayPosition", 
         "openFolderClick", "addFolderClick", "shuffleClick", "shuffleRemainingClick", "deleteClick", "clearClick",
-        "editorClick", "drop"
+        "editorClick", "drop", "filesDropped"
       ]
     );
     

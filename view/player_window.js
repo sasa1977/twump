@@ -24,6 +24,13 @@ Object.extend(Twump.View.PlayerWindow.prototype, {
     if (data && data.match(/^twump\:/)){
       this.onDrop({action: data.gsub("twump:","")});
     }
+    else {
+      var draggedFiles = $A(event.clipboard.getData(air.ClipboardFormats.FILE_LIST_FORMAT)).map(function(file){
+        return file.nativePath;
+      });
+      
+      this.onFilesDropped(Twump.Api.collectMusicPaths(air.File.getFilesRecursive(draggedFiles)))
+    }
   },
   
   displayPlayProgress: function(data){

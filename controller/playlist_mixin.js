@@ -40,6 +40,10 @@ Twump.Controller.PlaylistMixin = {
     this.redrawPlayList();
   },
   
+  onFilesDropped: function(files){
+    this.addFolderSelected(files);
+  },
+  
   setPlaylist: function(list, index){
     this.playlist = new Twump.Model.Playlist(list);
     this.setCurrentIndex(index || 0);
