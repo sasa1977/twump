@@ -31,6 +31,16 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
     });
   },
   
+  selectedIds: function(){
+    return this.list.selectedItems.map(function(item){
+      return item.getAttribute('fileId');
+    }.bind(this))
+  },
+  
+  selectItem: function(id){
+    this.list.selectItem($('playlistItem' + id))
+  },
+  
   onItemDoubleClick: function(item, event){
     this.onItemSelected(item.getAttribute('fileId'));
   },

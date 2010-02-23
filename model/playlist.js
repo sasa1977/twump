@@ -65,12 +65,23 @@ Twump.Model.Playlist.prototype = {
     this.setFiles([])
   },
   
-  deleteAt: function(index){
-    var removed = this.files.splice(index, 1);
-    if (!removed) return;
+  deleteFiles: function(ids, currentIndex){
+    var newIndex = currentIndex;
     
-    this.filesIndex[removed.id] = null;
-    this.positions[removed.id] = null;
+    ids.each(function(id){
+      var index = this.idToIndex(id);
+      
+      this.files[index] = null;
+      this.filesIndex[id] = null;
+      
+      if (index <= currentIndex)
+        newIndex--;
+    }.bind(this));
+    
+    this.files = this.files.compact();
+    this.reindexPositions();
+    
+    return newIndex;
   },
   
   insertAt: function(at, files){

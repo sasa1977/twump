@@ -67,11 +67,23 @@ Twump.Controller.PlaylistMixin = {
   },
   
   onDeleteClick: function(){
-    if (!this.indexOk(this.currentIndex())) return;
+    if (this.playlist.empty()) return;
+  
+    var currentFileId = this.currentFile().id;
+    var newIndex = this.playlist.deleteFiles(this.playlistWindow.selectedIds(), this.currentIndex());
+
+    var fileStillInList = this.playlist.file(currentFileId);
     
-    this.playlist.deleteAt(this.currentIndex());
+    this.setCurrentIndex(newIndex);
     this.redrawPlayList();
-    this.playCurrent();
+
+    if (this.playlist.empty()) return;
+
+    this.setPlaylistPlayingItem();
+    this.playlistWindow.selectItem(this.currentFile().id);
+    
+    if (this.playing && !fileStillInList)
+      this.onNextClick();
   },
   
   onClearClick: function(){

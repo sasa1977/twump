@@ -42,8 +42,11 @@ Twump.Controller.PlayerMixin = {
     if (!this.currentFile()) return;
     
     this.setPlaylistPlayingItem();
+    this.playlistWindow.selectItem(this.currentFile().id);
     
     this.loadMetadata(this.currentFile());
+    
+    this.playing = true;
     
     this.player.play(this.currentFile().path, {
       volume: this.volume,
@@ -123,6 +126,7 @@ Twump.Controller.PlayerMixin = {
   },
    
   stop: function(){
+    this.playing = true;
     this.lastFm.scrobbleQueued();
   
     this.startedPlaying = null;
