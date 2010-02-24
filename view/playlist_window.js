@@ -59,9 +59,10 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
   
     var playlistEl = $('playlist');
     var itemsParent = $('itemsParent');
-    var itemHeight = $('playlistItem0').clientHeight;
     
     if (!itemsParent.children || itemsParent.children.length == 0) return;
+    
+    var itemHeight = itemsParent.children[0].clientHeight;
     
     var startIndex = Math.floor(playlistEl.scrollTop / itemHeight);
     var endIndex = Math.ceil((playlistEl.scrollTop + playlistEl.clientHeight) / itemHeight);
@@ -183,6 +184,8 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
   },
   
   showInView: function(el){
+    if (!el) return;
+  
     var viewTop = $('playlist').scrollTop;
     var viewHeight = $('playlist').clientHeight;
     var viewBottom = viewTop + viewHeight;

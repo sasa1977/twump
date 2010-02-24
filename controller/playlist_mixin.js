@@ -55,6 +55,8 @@ Twump.Controller.PlaylistMixin = {
   },
   
   setPlaylistPlayingItem: function(){
+    if (this.playlist.empty()) return;
+    
     this.playlistWindow.setPlayingItem(this.currentFile(), this.currentIndex());
   },
   
@@ -71,23 +73,35 @@ Twump.Controller.PlaylistMixin = {
   },
   
   onDeleteClick: function(){
+    this.deleteFromPlaylist(this.playlistWindow.selectedIds());
+  },
+  
+  deleteFromPlaylist: function(ids){
     if (this.playlist.empty()) return;
   
     var currentFileId = this.currentFile().id;
-    var newIndex = this.playlist.deleteFiles(this.playlistWindow.selectedIds(), this.currentIndex());
+    var newCurrentIndex = this.playlist.deleteFiles(ids, this.currentIndex());
 
     var fileStillInList = this.playlist.file(currentFileId);
     
-    this.setCurrentIndex(newIndex);
+    this.setCurrentIndex(Math.max(newCurrentIndex, 0));
     this.redrawPlayList();
 
     if (this.playlist.empty()) return;
-
-    this.setPlaylistPlayingItem();
-    this.playlistWindow.selectItem(this.currentFile().id);
     
-    if (this.playing && !fileStillInList)
-      this.onNextClick();
+    if (!fileStillInList){
+      newCurrentIndex++;
+      
+      if (newCurrentIndex < 0)
+        newCurrentIndex = 0;
+      else if (newCurrentIndex >= this.playlist.length())
+        newCurrentIndex = this.playlist.length - 1;
+      
+      this.setCurrentIndex(newCurrentIndex);
+      
+      if (this.playing)
+        this.playCurrent();
+    }
   },
   
   onClearClick: function(){
@@ -138,6 +152,5 @@ Twump.Controller.PlaylistMixin = {
     this.playlistWindow.moveBefore(this.editorController().selectedItems());
     
     this.setCurrentIndex(newIndex);
-    this.setPlaylistPlayingItem();
   }
 }

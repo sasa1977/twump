@@ -69,6 +69,8 @@ Twump.Model.Playlist.prototype = {
     var newIndex = currentIndex;
     
     ids.each(function(id){
+      if (!this.file(id)) return;
+    
       var index = this.idToIndex(id);
       
       this.files[index] = null;

@@ -25,8 +25,9 @@ Twump.Controller.PlayerMixin = {
   
   setCurrentIndex: function(index){
     if (!this.indexOk(index)) return;
-  
+    
     this.current = index;  
+    this.setPlaylistPlayingItem();
   },
 
   setVolume: function(volume){
@@ -41,7 +42,6 @@ Twump.Controller.PlayerMixin = {
     
     if (!this.currentFile()) return;
     
-    this.setPlaylistPlayingItem();
     this.playlistWindow.selectItem(this.currentFile().id);
     
     this.loadMetadata(this.currentFile());
@@ -126,7 +126,7 @@ Twump.Controller.PlayerMixin = {
   },
    
   stop: function(){
-    this.playing = true;
+    this.playing = false;
     this.lastFm.scrobbleQueued();
   
     this.startedPlaying = null;

@@ -8,11 +8,38 @@ Object.extend(Twump.View.EditorWindow.prototype, {
     this.delayExecute = new Twump.Utils.DelayExecute(1000);
 
     this.addEventListener('filter', 'keydown');
+    this.addEventListener('remove', 'click');
+    
+    document.body.addEventListener('click', this.onBodyClick.bind(this))
     
     this.list = new Twump.List({
       parentElement: $('results'), itemClass: 'result'
     });
+    
     this.list.onStartDrag = this.onStartDrag.bind(this);
+    this.list.onRightClick = this.onItemRightClick.bind(this);
+  },
+  
+  onItemRightClick: function(item, event){
+    this.openContextMenu(item, event);
+  },
+  
+  openContextMenu: function(item, event){
+    var contextMenu = $('editorContextMenu')
+    contextMenu.show();
+    Position.absolutize(contextMenu);
+    contextMenu.style.top = event.clientY.toString() + "px";
+    contextMenu.style.left = event.clientX.toString() + "px";
+    
+    this.relatedContextMenuItem = item;
+  },
+  
+  onBodyClick: function(){
+    this.closeContextMenu();
+  },
+  
+  closeContextMenu: function(){
+    $('editorContextMenu').hide();
   },
   
   onFilterKeydown: function(){
