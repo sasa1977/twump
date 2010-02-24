@@ -102,7 +102,7 @@ Twump.Model.Playlist.prototype = {
     regex = new RegExp(regex, "i");
     
     return this.files.inject([],function(memo, file){
-      if (file.path.match(regex))
+      if (file.match(regex))
         memo.push(file);
       
       return memo;

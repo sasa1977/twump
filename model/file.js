@@ -22,5 +22,12 @@ Twump.Model.File.prototype = {
     if (this.metadata.name.length > 0) parts.push(this.metadata.name)
     
     return parts.join(" - ")
+  },
+  
+  match: function(regex){
+    var searchParts = [this.path];
+    if (this.metadataLoaded()) searchParts.push(this.metadata.name, this.metadata.performer);
+
+    return searchParts.join(" ").match(regex);
   }
 }
