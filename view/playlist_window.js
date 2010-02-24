@@ -17,6 +17,7 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
     });
     
     this.list.onDoubleClick = this.onItemDoubleClick.bind(this);
+    this.list.onRightClick = this.onItemRightClick.bind(this);
     
     
     Object.extend(this.list, {
@@ -84,35 +85,23 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
       
     $$('.playlistItem').each(function(el){
       el.addEventListener("dragover", this.onPlaylistItemOver.bind(this))
-      el.addEventListener("mousedown", this.onPlaylistItemMouseDown.bind(this))
     }.bind(this));
     
     this.playlist = playlist;
   },
   
-  onPlaylistItemMouseDown: function(event){
-    if (event.button == 2) {
-      this.openContextMenu(event);
-      return false;
-    }
+  onItemRightClick: function(item, event){
+    this.openContextMenu(item, event)
   },
   
-  openContextMenu: function(event){
+  openContextMenu: function(item, event){
     var contextMenu = $('playListContextMenu')
     contextMenu.show();
     Position.absolutize(contextMenu);
     contextMenu.style.top = event.clientY.toString() + "px";
     contextMenu.style.left = event.clientX.toString() + "px";
     
-    this.relatedContextMenuItem = this.findPlaylistItem(event.srcElement);
-  },
-  
-  findPlaylistItem: function(el){
-    if (!el) return null;
-    
-    var el = $(el)
-    if (el.hasClassName('playlistItem')) return el;
-    return this.findPlaylistItem(el.parentElement);
+    this.relatedContextMenuItem = item;
   },
   
   closeContextMenu: function(){
