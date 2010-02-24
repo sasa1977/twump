@@ -95,7 +95,12 @@ Twump.Model.Playlist.prototype = {
   },
   
   search: function(filter){
-    var regex = new RegExp(filter, "i");
+    var regex = filter.split(/\s+/).inject("", function(memo, part){
+      return memo + "(?=.*" + part.escapeForRegex() + ".*)"
+    })
+  
+    regex = new RegExp(regex, "i");
+    
     return this.files.inject([],function(memo, file){
       if (file.path.match(regex))
         memo.push(file);
