@@ -43,7 +43,7 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
   },
   
   scrollWatcher: function(){
-    if (this.playlist.empty()) return;
+    if (!this.displayOptions || this.displayOptions.playlist.empty()) return;
   
     var playlistEl = $('playlist');
     var itemsParent = $('itemsParent');
@@ -67,18 +67,16 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
     return $(item).getAttribute('fileId');
   },
   
-  display: function(playlist, options){
+  display: function(options){
     this.displayOptions = options;
     
-    $('playlist').update(this.playlistHtml(playlist, options));
+    $('playlist').update(this.playlistHtml(options));
     
     $$('.playlistItem').each(function(el){
       el.addEventListener("dragover", this.onPlaylistItemOver.bind(this))
     }.bind(this));
     
     this.drawCurrentPlayingItem();
-    
-    this.playlist = playlist;
   },
   
   onItemRightClick: function(item, event){
@@ -99,8 +97,10 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
     $('playListContextMenu').hide();
   },
   
-  playlistHtml: function(playlist, options){
-    return this.playlistTemplate.process({playlist: playlist, files: playlist.filesAround(options)})
+  playlistHtml: function(options){
+    return this.playlistTemplate.process({playlist: options.playlist, 
+      files: options.playlist.filesAround(options)}
+    )
   },
   
   playlistTemplate: TrimPath.parseTemplate(" \
@@ -132,12 +132,10 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
   },
   
   setPlayingItem: function(file){
-    if (!this.displayOptions || !this.playlist) return;
+    if (!this.displayOptions) return;
     
-    var index = this.playlist.indexOf(file);
-    
-    this.displayOptions.index = index;
-    this.display(this.playlist, this.displayOptions);
+    this.displayOptions.file = file;
+    this.display(this.displayOptions);
 
     if (this.playingItem)
       this.playingItem.removeClassName('playing');

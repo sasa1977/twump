@@ -51,8 +51,10 @@ Twump.Controller.PlaylistMixin = {
   },
   
   redrawPlayList: function(){
-    this.playlistWindow.display(this.playlist, {
-      index: this.currentIndex(), range: 10
+    this.playlistWindow.display({
+      playlist: this.playlist,
+      file: this.currentFile(), 
+      range: 10
     });
   },
   

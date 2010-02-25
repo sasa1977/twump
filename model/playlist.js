@@ -128,7 +128,7 @@ Twump.Model.Playlist.prototype = {
   filesAround: function(options){
     if (this.empty()) return [];
   
-    var start = Math.max(options.index - options.range, 0);
+    var start = Math.max(this.indexOf(options.file) - options.range, 0);
     var end = Math.min(start + 2 * options.range, this.length());
     
     var result = []
