@@ -72,11 +72,11 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
     
     $('playlist').update(this.playlistHtml(playlist, options));
     
-    this.drawPlayingItem();
-      
     $$('.playlistItem').each(function(el){
       el.addEventListener("dragover", this.onPlaylistItemOver.bind(this))
     }.bind(this));
+    
+    this.drawCurrentPlayingItem();
     
     this.playlist = playlist;
   },
@@ -131,49 +131,31 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
     element.getElementsBySelector('.title')[0].update("<nobr>" + file.displayName() + "</nobr>")
   },
   
-  setPlayingItem: function(file, index){
+  setPlayingItem: function(file){
     if (!this.displayOptions || !this.playlist) return;
+    
+    var index = this.playlist.indexOf(file);
     
     this.displayOptions.index = index;
     this.display(this.playlist, this.displayOptions);
-  
-    this.clearPlayingItem();
-    this.setPlayingItemPart('playlistItem', file.id);
-    this.drawPlayingItem();
-    
-    this.showInView(this.playingPart('playlistItem'))
-  },
-  
-  setPlayingItemPart: function(prefix, suffix){
-    this.playingParts[prefix] = suffix;
-  },
-  
-  playingPart: function(prefix){
-    var suffix = this.playingParts[prefix];
-    if (suffix == null) return null;
 
-    return $(prefix + suffix);
+    if (this.playingItem)
+      this.playingItem.removeClassName('playing');
+
+    this.playingFile = file;
+    this.drawCurrentPlayingItem();
   },
   
-  clearPlayingItem: function(){
-    for (prefix in this.playingParts){
-      var element = this.playingPart(prefix);
-      if (!element) return;
-      
-      element.removeClassName('playing');
-      this.setPlayingItemPart(prefix, null);
-    }
-  },
+  drawCurrentPlayingItem: function(){
+    if (!this.playingFile) return;
   
-  drawPlayingItem: function(){
-    for (prefix in this.playingParts){
-      var element = this.playingPart(prefix);
-      if (!element) continue;
+    this.playingItem = $('playlistItem' + this.playingFile.id);
+    if (!this.playingItem) return;
     
-      element.addClassName('playing');
-    }
+    this.playingItem.addClassName('playing')
+    this.showInView(this.playingItem)
   },
-  
+    
   showInView: function(el){
     if (!el) return;
   
@@ -189,9 +171,18 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
   },
   
   onPlaylistItemOver: function(event){
-    var playlistItemEl = event.srcElement.parentElement;
-    if (playlistItemEl.hasClassName('playlistItem')) {
+    var playlistItemEl = this.findItem(event.srcElement, 'playlistItem');
+    if (playlistItemEl) {
       this.itemUnderMouseIndex = playlistItemEl.getAttribute('fileId');
     }
+  },
+  
+  findItem: function(el, htmlClass){
+    el = $(el)
+    
+    if (!el) return null;
+    
+    if (el.hasClassName(htmlClass)) return el;
+    return this.findItem(el.parentElement, htmlClass);
   }
 });

@@ -111,10 +111,11 @@ Twump.Model.Playlist.prototype = {
   
   moveBefore: function(items, id, currentFile){  
     var position = this.indexOf({id: id});
-  
-    var filesToMove = items.inject([], function(memo, id){
-      memo.push(this.file(id));
-      this.files[this.indexOf({id: id})] = null;
+    if (!position) return;
+    
+    var filesToMove = items.inject([], function(memo, itemId){
+      memo.push(this.file(itemId));
+      this.files[this.indexOf({id: itemId})] = null;
       
       return memo;
     }.bind(this))
