@@ -122,6 +122,9 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
         {/for} \
       </tbody> \
      </table> \
+     <div> \
+      Total ${playlist.length()} files \
+     </div> \
   "),
  
   refreshItem: function(file){
