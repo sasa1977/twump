@@ -122,5 +122,19 @@ Twump.Model.Playlist.prototype = {
     this.insertAt(position, filesToMove);
     
     return this.indexOf(currentFile);
+  },
+  
+  filesAround: function(options){
+    if (this.empty()) return [];
+  
+    var start = Math.max(options.index - options.range, 0);
+    var end = Math.min(start + 2 * options.range, this.length());
+    
+    var result = []
+    
+    for (var index = start;index < end;index++)
+      result.push(this.fileAt(index))
+    
+    return result;
   }
 }
