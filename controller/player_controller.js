@@ -57,7 +57,7 @@ Object.extend(Twump.Controller.Player.prototype, {
       }
     }
     
-    this.lastFm = new LastFm(lastFmLoginData, Twump.Api.Logger);
+    this.lastFm = new LastFm(lastFmLoginData, this.logger);
   },
   
   lastFmLogin: function(){
