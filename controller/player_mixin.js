@@ -48,6 +48,8 @@ Twump.Controller.PlayerMixin = {
     
     this.playing = true;
     
+    this.logger.log('playing: ' + this.currentFile().path)
+    
     this.player.play(this.currentFile().path, {
       volume: this.volume,
       onPlayProgress: this.onPlayProgress.bind(this),
