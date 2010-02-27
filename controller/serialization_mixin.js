@@ -12,17 +12,23 @@ Twump.Controller.Serialization.playlist = [
   }
 ]
 
+Twump.Controller.Serialization.playlist.each(function(serializer, index){
+  serializer.version = index;
+})
+
 Twump.Controller.SerializationMixin = {
   playlistSerializer: function(){
     return Twump.Controller.Serialization.playlist.last();
   },
   
   serializePlaylist: function(){
-    var serializationData = this.playlistSerializer().serializeData(
+    var serializer = this.playlistSerializer();
+  
+    var serializationData = serializer.serializeData(
       {playlist: this.playlist, currentIndex: this.currentIndex()}
     );
     
-    serializationData.version = Twump.Controller.Serialization.playlist.length - 1;
+    serializationData.version = serializer.version;
     
     return serializationData;
   },
