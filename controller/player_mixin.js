@@ -40,6 +40,8 @@ Twump.Controller.PlayerMixin = {
     this.stop();
     this.saveCurrentList();
     
+    air.System.gc();
+    
     if (!this.currentFile()) return;
     
     this.playlistWindow.selectItem(this.currentFile().id);
