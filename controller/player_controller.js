@@ -3,6 +3,7 @@ Twump.Controller.Player = Class.create()
 Object.extend(Twump.Controller.Player.prototype, Twump.Controller.Common);
 Object.extend(Twump.Controller.Player.prototype, Twump.Controller.PlaylistMixin);
 Object.extend(Twump.Controller.Player.prototype, Twump.Controller.PlayerMixin);
+Object.extend(Twump.Controller.Player.prototype, Twump.Controller.SerializationMixin);
 
 Object.extend(Twump.Controller.Player.prototype, {
   initialize: function(options){
@@ -22,7 +23,7 @@ Object.extend(Twump.Controller.Player.prototype, {
     this.subscribeToViewEvents(this.playlistWindow, ["scrollChanged", "copyPathToClipboard", "itemSelected"])
     
     this.player = new Twump.PlayerFacade();
-    this.setPlaylist([])
+    this.setPlaylist(new Twump.Model.Playlist())
     this.loadPlayerData();
     this.loadLastList();
 
