@@ -1,16 +1,4 @@
 Twump.Controller.PlayerMixin = {
-  savePlayerData: function(){
-    this.storage.writeAppData('app_data.dat', {
-      volume: this.volume
-    })
-  },
-  
-  loadPlayerData: function(){
-    var data = this.storage.readAppData('app_data.dat');
-    if (!data) return;
-    this.setVolume(data.volume);
-  },
-
   currentFile: function(){
     return this.playlist.fileAt(this.currentIndex());
   },

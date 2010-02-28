@@ -1,4 +1,18 @@
 Twump.Controller.DiskOperationsMixin = {
+  savePlayerData: function(){
+    this.storage.writeAppData('app_data.dat', {
+      volume: this.volume,
+      _lastFolders: this._lastFolders
+    })
+  },
+  
+  loadPlayerData: function(){
+    var data = this.storage.readAppData('app_data.dat');
+    if (!data) return;
+    this.setVolume(data.volume);
+    this._lastFolders = data._lastFolders;
+  },
+
   saveCurrentList: function(){
     this.storage.writeAppData('last_played.twumpl', this.serializePlaylist());
   },
@@ -47,15 +61,35 @@ Twump.Controller.DiskOperationsMixin = {
     this.addFolderSelected(files);
   },
   
+  setLastFolder: function(data){
+    this._lastFolders = this._lastFolders || {};
+    Object.extend(this._lastFolders, data);
+  },
+  
+  getLastFolder: function(key){
+    lf = this._lastFolders
+    return (this._lastFolders || {})[key];
+  },
+  
   onSaveListClick: function(){
-    Twump.Api.browseForSave({onSelect: function(file){
-      this.storage.writeData(file, this.serializePlaylist())
-    }.bind(this)})
+    Twump.Api.browseForSave({
+      startIn: this.getLastFolder("playlist"),
+      onSelect: function(file){
+        this.setLastFolder({playlist: file.nativePath});
+        this.savePlayerData();
+        this.storage.writeData(file, this.serializePlaylist())
+      }.bind(this)
+    })
   },
   
   onLoadListClick: function(){
-    Twump.Api.browseForOpen({onSelect: function(file){
-      this.loadList(this.storage.readData(file));
-    }.bind(this)})
+    Twump.Api.browseForOpen({
+      startIn: this.getLastFolder("playlist"), 
+      onSelect: function(file){
+        this.setLastFolder({playlist: file.nativePath});
+        this.savePlayerData();
+        this.loadList(this.storage.readData(file));
+      }.bind(this)
+    })
   }
 }
