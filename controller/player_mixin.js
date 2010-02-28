@@ -76,47 +76,6 @@ Twump.Controller.PlayerMixin = {
     this.lastFmPlayProgress(completeData);
   },
   
-  lastFmPlayProgress: function(data){
-    if (!this.scrobbleCurrentPossible()) return;
-  
-    if (this.progressStep == 0)
-      this.lastFmNowPlaying();
-
-    this.progressStep = (this.progressStep + 1) % 10;
-    
-    if (!this.startedPlaying)
-        this.startedPlaying = Math.round(new Date().getTime() / 1000);
-    
-    if (this.readyForScrobble(data))
-      this.scrobbleCurrent(data);
-  },
-  
-  lastFmNowPlaying: function(){
-    this.lastFm.nowPlaying(this.currentFile().metadata)
-  },
-  
-  scrobbleCurrent: function(data){
-    var file = this.currentFile();
-    
-    var arg = Object.extend({startedPlaying: this.startedPlaying}, data);
-    Object.extend(arg, this.currentFile().metadata)
-    
-    this.lastFm.pushForScrobble(arg)
-    this.scrobbledCurrent = true;
-  },
-  
-  scrobbleCurrentPossible: function(){
-    var file = this.currentFile();
-    return (file.metadata && file.metadata.name.length > 0 && file.metadata.performer.length > 0);
-  },
-  
-  readyForScrobble: function(playingData){
-    return (
-      this.scrobbleCurrentPossible() && !this.scrobbledCurrent &&
-      (playingData.position > 240 || playingData.position >= playingData.length / 2)
-    )
-  },
-  
   onPlaybackComplete: function(){
     this.stop();
     this.onNextClick();
