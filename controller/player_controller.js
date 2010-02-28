@@ -4,6 +4,7 @@ Object.extend(Twump.Controller.Player.prototype, Twump.Controller.Common);
 Object.extend(Twump.Controller.Player.prototype, Twump.Controller.PlaylistMixin);
 Object.extend(Twump.Controller.Player.prototype, Twump.Controller.PlayerMixin);
 Object.extend(Twump.Controller.Player.prototype, Twump.Controller.SerializationMixin);
+Object.extend(Twump.Controller.Player.prototype, Twump.Controller.DiskOperationsMixin);
 Object.extend(Twump.Controller.Player.prototype, Twump.Controller.LastFmMixin);
 
 Object.extend(Twump.Controller.Player.prototype, {
