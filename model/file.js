@@ -1,7 +1,8 @@
 Twump.Model.File = Class.create();
 Twump.Model.File.prototype = {
   initialize: function(data){
-    Object.extend(this, data)
+    Object.extend(this, data);
+    this.name = Twump.Api.fileName(this.path);
   },
   
   metadataLoaded: function(){
@@ -29,5 +30,20 @@ Twump.Model.File.prototype = {
     if (this.metadataLoaded()) searchParts.push(this.metadata.name, this.metadata.performer);
 
     return searchParts.join(" ").match(regex);
+  },
+  
+  serializeData: function(version){
+    if (version == 1)
+      return {path: this.path, metadata: this.metadata}
+
+    throw new Error("version not supported")
   }
+};
+
+Twump.Model.File.deserialize = function(version, data){
+  if (version == 1){
+    return new Twump.Model.File(data);
+  }
+
+  throw new Error("version not supported")
 }

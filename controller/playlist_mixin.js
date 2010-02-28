@@ -1,15 +1,14 @@
 Twump.Controller.PlaylistMixin = {
   saveCurrentList: function(){
-    this.storage.writeAppData('last_played.twumpl', {
-      list: this.playlist.paths(), current: this.currentIndex()
-    })
+    this.storage.writeAppData('last_played.twumpl', this.serializePlaylist());
   },
   
   loadLastList: function(){
     var data = this.storage.readAppData('last_played.twumpl');
     if (!data) return;
     
-    this.setPlaylist(data.list, data.current);
+    var data = this.deserializePlaylist(data);
+    this.setPlaylist(data.playlist, data.currentIndex);
     this.playCurrent();
   },
 
@@ -27,7 +26,7 @@ Twump.Controller.PlaylistMixin = {
   
   openFolderSelected: function(paths){
     this.stop();
-    this.setPlaylist(paths);
+    this.setPlaylist(new Twump.Model.Playlist(paths));
     this.playCurrent();
   },
   
@@ -44,8 +43,8 @@ Twump.Controller.PlaylistMixin = {
     this.addFolderSelected(files);
   },
   
-  setPlaylist: function(list, index){
-    this.playlist = new Twump.Model.Playlist(list);
+  setPlaylist: function(playlist, index){
+    this.playlist = playlist;
     this.setCurrentIndex(index || 0);
     this.redrawPlayList();
   },
