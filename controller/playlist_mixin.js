@@ -4,9 +4,13 @@ Twump.Controller.PlaylistMixin = {
   },
   
   loadLastList: function(){
-    var data = this.storage.readAppData('last_played.twumpl');
+    this.loadList(this.storage.readAppData('last_played.twumpl'))
+  },
+  
+  loadList: function(data){
     if (!data) return;
-    
+    this.stop();
+        
     var data = this.deserializePlaylist(data);
     this.setPlaylist(data.playlist, data.currentIndex);
     this.playCurrent();
@@ -173,5 +177,17 @@ Twump.Controller.PlaylistMixin = {
         file.loadingMetadata = true;
       }
     }.bind(this))
+  },
+  
+  onSaveListClick: function(){
+    Twump.Api.browseForSave({onSelect: function(file){
+      this.storage.writeData(file, this.serializePlaylist())
+    }.bind(this)})
+  },
+  
+  onLoadListClick: function(){
+    Twump.Api.browseForOpen({onSelect: function(file){
+      this.loadList(this.storage.readData(file));
+    }.bind(this)})
   }
 }
