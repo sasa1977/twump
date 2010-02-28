@@ -9,6 +9,16 @@ Twump.Controller.Serialization.playlist = [
     deserializeData: function(data){
       return {playlist: new Twump.Model.Playlist(data.list), currentIndex: data.current}
     }
+  },
+  
+  {
+    serializeData: function(data){
+      return {listData: data.playlist.serializeData(this.version), current: data.currentIndex}
+    },
+    
+    deserializeData: function(data){
+      return {playlist: Twump.Model.Playlist.deserialize(this.version, data.listData), currentIndex: data.current}
+    }
   }
 ]
 

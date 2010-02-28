@@ -17,15 +17,26 @@ Twump.Model.Playlist.prototype = {
     })
   },
   
+  adjustAndSetFiles: function(files){
+    this.filesIndex = {}
+  
+    files.each(function(file){
+      file.id = this.generateId()
+      this.filesIndex[file.id] = file;
+    }.bind(this));
+    
+    this.setFiles(files);
+  },
+  
   setFiles: function(files){
-    this.files = files;
+    this.files = $A(files);
     this.reindexPositions();
   },
   
   filesFromPaths: function(paths){
     return $A(paths.map(function(path){
       var newFile = new Twump.Model.File({
-        id: this.generateId(), path: path, name: Twump.Api.fileName(path)
+        id: this.generateId(), path: path
       });
       
       this.filesIndex[newFile.id] = newFile;
@@ -122,5 +133,28 @@ Twump.Model.Playlist.prototype = {
     this.insertAt(position, filesToMove);
     
     return this.indexOf(currentFile);
+  },
+  
+  serializeData: function(version){
+    if (version == 1)
+      return $A(this.files.map(function(file){return file.serializeData(version)}))
+
+    throw new Error("version not supported")
   }
+};
+
+Twump.Model.Playlist.deserialize = function(version, data){
+  if (version == 1){
+    var playlist = new Twump.Model.Playlist();
+    
+    var files = $A(data).map(function(fileData){
+      return Twump.Model.File.deserialize(version, fileData)
+    });
+    
+    playlist.adjustAndSetFiles(files);
+    
+    return playlist;
+  }
+
+  throw new Error("version not supported")
 }

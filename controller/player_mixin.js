@@ -41,11 +41,11 @@ Twump.Controller.PlayerMixin = {
     this.saveCurrentList();
     
     air.System.gc();
-    
+       
     if (!this.currentFile()) return;
-    
+
     this.playlistWindow.selectItem(this.currentFile().id);
-    
+
     this.loadMetadata(this.currentFile());
     
     this.playing = true;
