@@ -31,24 +31,6 @@ Object.extend(Twump.Controller.Player.prototype, {
     this.progressStep = 0;
   },
   
-  onItemSelected: function(id){
-    this.play(this.playlist.idToIndex(id))
-  },
-  
-  onCopyPathToClipboard: function(fileId){
-    Twump.Api.copyTextToClipboard(this.playlist.file(fileId).path);
-  },
-  
-  onScrollChanged: function(info){
-    info.ids.each(function(id){
-      var file = this.playlist.file(id);
-      if (file && !file.loadingMetadata) {
-        this.loadMetadata(file);
-        file.loadingMetadata = true;
-      }
-    }.bind(this))
-  },
-  
   onWindowClosing: function(){
     this.closeEditor();
   },
