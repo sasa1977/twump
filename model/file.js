@@ -9,6 +9,11 @@ Twump.Model.File.prototype = {
     return this.metadata != null;
   },
   
+  addMetadata: function(metadata){
+    this.metadata = this.metadata || {}
+    Object.extend(this.metadata, metadata)
+  },
+  
   displayName: function(){
     if (!this.metadata) return this.name;
     
@@ -23,6 +28,11 @@ Twump.Model.File.prototype = {
     if (this.metadata.name.length > 0) parts.push(this.metadata.name)
     
     return parts.join(" - ")
+  },
+  
+  displayLength: function(){
+    if (!this.metadata || !this.metadata.length) return null;
+    return this.metadata.length.secondsToTimeString();
   },
   
   match: function(regex){

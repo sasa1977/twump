@@ -111,12 +111,13 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
             <td>\
               ${playlist.indexOf(file)+1}. \
             </td> \
-            <td width='*'> \
-              <div class='title'> \
-                <nobr> \
-                  ${file.displayName()} \
-                </nobr> \
-              </div>\
+            <td class='title' width='*'> \
+              <nobr> \
+                ${file.displayName()} \
+              </nobr> \
+            </td> \
+            <td class='length'> \
+              ${file.displayLength()}\
             </td> \
           </tr> \
         {/for} \
@@ -132,6 +133,7 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
     if (!element) return;
     
     element.getElementsBySelector('.title')[0].update("<nobr>" + file.displayName() + "</nobr>")
+    element.getElementsBySelector('.length')[0].update(file.displayLength() || "")
   },
   
   setPlayingItem: function(file){
