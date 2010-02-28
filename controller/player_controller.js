@@ -4,6 +4,7 @@ Object.extend(Twump.Controller.Player.prototype, Twump.Controller.Common);
 Object.extend(Twump.Controller.Player.prototype, Twump.Controller.PlaylistMixin);
 Object.extend(Twump.Controller.Player.prototype, Twump.Controller.PlayerMixin);
 Object.extend(Twump.Controller.Player.prototype, Twump.Controller.SerializationMixin);
+Object.extend(Twump.Controller.Player.prototype, Twump.Controller.LastFmMixin);
 
 Object.extend(Twump.Controller.Player.prototype, {
   initialize: function(options){
@@ -36,39 +37,6 @@ Object.extend(Twump.Controller.Player.prototype, {
   
   onCopyPathToClipboard: function(fileId){
     Twump.Api.copyTextToClipboard(this.playlist.file(fileId).path);
-  },
-  
-  lastFmSetup: function(){
-    var lastFmLoginData = null;
-    
-    if(confirm('last.fm?')){
-      var login = Twump.Api.readEncrypted('lastFmLogin'), password = Twump.Api.readEncrypted('lastFmPassword');
-      if (!login)
-        lastFmLoginData = this.lastFmLogin();
-      else {
-        if (confirm(login + '?'))
-          lastFmLoginData = {login: login, password: password};
-        else
-          lastFmLoginData = this.lastFmLogin();
-      }
-      
-      if (lastFmLoginData) {
-        Twump.Api.writeEncrypted('lastFmLogin', lastFmLoginData.login);
-        Twump.Api.writeEncrypted('lastFmPassword', lastFmLoginData.password);
-      }
-    }
-    
-    this.lastFm = new LastFm(lastFmLoginData, this.logger);
-  },
-  
-  lastFmLogin: function(){
-    var login = prompt('login');
-    if (!login) return null;
-    
-    var password = prompt('password');
-    if (!password) return null;
-    
-    return {login: login, password: password}
   },
   
   onScrollChanged: function(info){
