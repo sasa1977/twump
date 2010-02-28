@@ -18,18 +18,6 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
     
     this.list.onDoubleClick = this.onItemDoubleClick.bind(this);
     this.list.onRightClick = this.onItemRightClick.bind(this);
-    
-    
-    Object.extend(this.list, {
-      indexOf: function(item){
-        return this.playlist.idToIndex(item.getAttribute('fileId'))
-      }.bind(this),
-      
-      item: function(index){
-        var id = this.playlist.fileAt(index).id;
-        return $('playlistItem' + id)
-      }.bind(this),
-    });
   },
   
   selectedIds: function(){
@@ -55,7 +43,7 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
   },
   
   scrollWatcher: function(){
-    if (this.playlist.empty()) return;
+    if (!this.displayOptions || this.displayOptions.playlist.empty()) return;
   
     var playlistEl = $('playlist');
     var itemsParent = $('itemsParent');
@@ -79,16 +67,16 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
     return $(item).getAttribute('fileId');
   },
   
-  display: function(playlist){
-    $('playlist').update(this.playlistHtml(playlist));
+  display: function(options){
+    this.displayOptions = options;
     
-    this.drawPlayingItem();
-      
+    $('playlist').update(this.playlistHtml(options));
+    
     $$('.playlistItem').each(function(el){
       el.addEventListener("dragover", this.onPlaylistItemOver.bind(this))
     }.bind(this));
     
-    this.playlist = playlist;
+    this.drawCurrentPlayingItem();
   },
   
   onItemRightClick: function(item, event){
@@ -109,80 +97,66 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
     $('playListContextMenu').hide();
   },
   
-  playlistHtml: function(playlist){
-    return this.playlistTemplate.process({playlist: playlist})
+  playlistHtml: function(options){
+    return this.playlistTemplate.process({playlist: options.playlist, 
+      files: options.playlist.filesAround(options)}
+    )
   },
   
   playlistTemplate: TrimPath.parseTemplate(" \
     <table cellspacing='0' cellpadding='0' border='0'> \
-      <tr>\
-        <td>\
-          {var index = 0}\
-          {for file in playlist.files} \
-            <div id='playlistOrdinal${index}' style='text-align:right'>${index+1}.&nbsp;</div>\
-            {eval}index++{/eval}\
-          {/for} \
-        </td> \
-        <td id='itemsParent'> \
-          {var index = 0}\
-          {for file in playlist.files} \
-            <div class='playlistItem' id='playlistItem${file.id}' fileId='${file.id}'> \
-              <nobr> \
-                ${file.displayName()} \
-              </nobr> \
-            </div>\
-            {eval}index++{/eval}\
-          {/for} \
-        </td> \
-      </tr> \
+      <tbody id='itemsParent'> \
+        {for file in files} \
+          <tr class='playlistItem' id='playlistItem${file.id}' fileId='${file.id}'>\
+            <td>\
+              ${playlist.indexOf(file)+1}. \
+            </td> \
+            <td width='*'> \
+              <div class='title'> \
+                <nobr> \
+                  ${file.displayName()} \
+                </nobr> \
+              </div>\
+            </td> \
+          </tr> \
+        {/for} \
+      </tbody> \
      </table> \
+     <div> \
+      Total ${playlist.length()} files \
+     </div> \
   "),
  
   refreshItem: function(file){
     var element = $('playlistItem' + file.id);
     if (!element) return;
-    element.update("<nobr>" + file.displayName() + "</nobr>")
-  },
-  
-  setPlayingItem: function(file, index){
-    this.clearPlayingItem();
-    this.setPlayingItemPart('playlistItem', file.id);
-    this.setPlayingItemPart('playlistOrdinal', index);
-    this.drawPlayingItem();
     
-    this.showInView(this.playingPart('playlistItem'))
+    element.getElementsBySelector('.title')[0].update("<nobr>" + file.displayName() + "</nobr>")
   },
   
-  setPlayingItemPart: function(prefix, suffix){
-    this.playingParts[prefix] = suffix;
-  },
-  
-  playingPart: function(prefix){
-    var suffix = this.playingParts[prefix];
-    if (suffix == null) return null;
+  setPlayingItem: function(file){
+    if (!this.displayOptions) return;
+    
+    this.displayOptions.file = file;
+    this.display(this.displayOptions);
 
-    return $(prefix + suffix);
+    if (this.playingItem)
+      this.playingItem.removeClassName('playing');
+
+    this.playingFile = file;
+    this.drawCurrentPlayingItem();
   },
   
-  clearPlayingItem: function(){
-    for (prefix in this.playingParts){
-      var element = this.playingPart(prefix);
-      if (!element) return;
-      
-      element.removeClassName('playing');
-      this.setPlayingItemPart(prefix, null);
-    }
-  },
+  drawCurrentPlayingItem: function(){
+    if (!this.playingFile) return;
   
-  drawPlayingItem: function(){
-    for (prefix in this.playingParts){
-      var element = this.playingPart(prefix);
-      if (!element) continue;
+    this.playingItem = $('playlistItem' + this.playingFile.id);
+    if (!this.playingItem) return;
     
-      element.addClassName('playing');
-    }
+    this.playingItem.addClassName('playing')
+    this.showInView(this.playingItem)
   },
-  
+    
   showInView: function(el){
     if (!el) return;
   
@@ -198,23 +172,18 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
   },
   
   onPlaylistItemOver: function(event){
-    var playlistItemEl = event.srcElement.parentElement;
-    if (playlistItemEl.hasClassName('playlistItem')) {
+    var playlistItemEl = this.findItem(event.srcElement, 'playlistItem');
+    if (playlistItemEl) {
       this.itemUnderMouseIndex = playlistItemEl.getAttribute('fileId');
     }
   },
   
-  moveBefore: function(ids){
-    if (!this.itemUnderMouseIndex) return;
+  findItem: function(el, htmlClass){
+    el = $(el)
     
-    var targetElement = $('playlistItem' + this.itemUnderMouseIndex);
-    var parentElement = targetElement.parentElement;
+    if (!el) return null;
     
-    ids.each(function(id){
-      if (id == this.itemUnderMouseIndex) return;
-      var elementToMove = $('playlistItem' + id);
-      
-      parentElement.insertBefore(elementToMove, targetElement)
-    }.bind(this))
+    if (el.hasClassName(htmlClass)) return el;
+    return this.findItem(el.parentElement, htmlClass);
   }
 });

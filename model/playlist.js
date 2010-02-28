@@ -122,10 +122,11 @@ Twump.Model.Playlist.prototype = {
   
   moveBefore: function(items, id, currentFile){  
     var position = this.indexOf({id: id});
-  
-    var filesToMove = items.inject([], function(memo, id){
-      memo.push(this.file(id));
-      this.files[this.indexOf({id: id})] = null;
+    if (!position) return;
+    
+    var filesToMove = items.inject([], function(memo, itemId){
+      memo.push(this.file(itemId));
+      this.files[this.indexOf({id: itemId})] = null;
       
       return memo;
     }.bind(this))
@@ -135,7 +136,22 @@ Twump.Model.Playlist.prototype = {
     return this.indexOf(currentFile);
   },
   
-  serializeData: function(version){
+  filesAround: function(options){
+    if (this.empty()) return [];
+  
+    var start = Math.max(this.indexOf(options.file) - options.range, 0);
+    var end = Math.min(start + 2 * options.range, this.length());
+    var start = Math.max(end - 2 * options.range, 0);
+    
+    var result = []
+    
+    for (var index = start;index < end;index++)
+      result.push(this.fileAt(index))
+    
+    return result;
+  },
+  
+ serializeData: function(version){
     if (version == 1)
       return $A(this.files.map(function(file){return file.serializeData(version)}))
 
