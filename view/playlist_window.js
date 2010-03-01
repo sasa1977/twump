@@ -113,7 +113,7 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
             </td> \
             <td class='title' width='*'> \
               <nobr> \
-                ${file.displayName()} \
+                ${file.displayName} \
               </nobr> \
             </td> \
             <td class='length'> \
@@ -132,7 +132,7 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
     var element = $('playlistItem' + file.id);
     if (!element) return;
     
-    element.getElementsBySelector('.title')[0].update("<nobr>" + file.displayName() + "</nobr>")
+    element.getElementsBySelector('.title')[0].update("<nobr>" + file.displayName + "</nobr>")
     element.getElementsBySelector('.length')[0].update(file.displayLength() || "")
   },
   

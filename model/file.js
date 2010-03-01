@@ -2,7 +2,8 @@ Twump.Model.File = Class.create();
 Twump.Model.File.prototype = {
   initialize: function(data){
     Object.extend(this, data);
-    this.name = Twump.Api.fileName(this.path);
+    if (!this.displayName)
+      this.displayName = Twump.Api.fileName(this.path);
   },
   
   metadataLoaded: function(){
@@ -12,22 +13,18 @@ Twump.Model.File.prototype = {
   addMetadata: function(metadata){
     this.metadata = this.metadata || {}
     Object.extend(this.metadata, metadata)
-  },
-  
-  displayName: function(){
-    if (!this.metadata) return this.name;
     
-    this.metadata.name = this.metadata.name || ""
-    this.metadata.performer = this.metadata.performer || ""
-    
-    if (this.metadata.name.length == 0 && this.metadata.performer.length == 0) return this.name;
-    
-    var parts = []
-    
-    if (this.metadata.performer.length > 0) parts.push(this.metadata.performer)
-    if (this.metadata.name.length > 0) parts.push(this.metadata.name)
-    
-    return parts.join(" - ")
+    $A(["name", "performer"]).each(function(field){
+      var value = (this.metadata[field] || "").strip();
+      if (value.length == 0)
+        this.metadata[field] = null;
+      else
+        this.metadata[field] = value;
+    }.bind(this));
+
+    var displayName = [this.metadata.performer, this.metadata.name].compact().join(" - ");
+    if (displayName.length > 0)
+      this.displayName = displayName; 
   },
   
   displayLength: function(){

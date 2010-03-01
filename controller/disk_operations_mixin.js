@@ -77,9 +77,59 @@ Twump.Controller.DiskOperationsMixin = {
       onSelect: function(file){
         this.setLastFolder({playlist: file.nativePath});
         this.savePlayerData();
-        this.storage.writeData(file, this.serializePlaylist())
+        
+        (new Twump.Storage.Text()).writeData(file, this.toM3u());
       }.bind(this)
     })
+  },
+  
+  toM3u: function(){
+    var m3u = "#EXTM3U\n";
+    
+    this.playlist.files.each(function(file){
+      m3u += "#EXTINF:"
+      
+      if (file.metadata){
+        m3u += parseInt(file.metadata.length || 0) + "," + 
+          [file.metadata.performer, file.metadata.name].compact().join("-");
+      }
+      m3u += "\n" + file.path + "\n"
+    }.bind(this))
+    
+    return m3u;
+  },
+  
+  fromM3u: function(data){
+    var result = {current: 0, listData: [], version: 1}
+    
+    var lines = data.split("\n");
+    
+    var index = 0;
+    var fileData = null, displayName = null;
+    for (var length = lines.length;index < length;index++) {
+      var line = lines[index].strip();
+      if (line.length > 0){
+        if (line == "#EXTM3U") continue;
+        else if (line.startsWith("#EXTINF:")) {
+          var extinf = line.gsub(/^#EXTINF\:/,'');
+          var parts = extinf.split(",");
+          var songLength = parseInt(parts[0]);
+          if (songLength)
+            fileData = {length: songLength}
+
+          var parsedDisplayName = parts.splice(1,parts.length - 1).join(",").strip();
+          if (parsedDisplayName.length > 0)
+            displayName = parsedDisplayName;
+        }
+        else if (!line.startsWith("#")){
+          result.listData.push({metadata: fileData, path: line, displayName: displayName})
+          fileData = null;
+          displayName = null;
+        }
+      }
+    }
+    
+    return result;
   },
   
   onLoadListClick: function(){
@@ -88,7 +138,7 @@ Twump.Controller.DiskOperationsMixin = {
       onSelect: function(file){
         this.setLastFolder({playlist: file.nativePath});
         this.savePlayerData();
-        this.loadList(this.storage.readData(file));
+        this.loadList(this.fromM3u((new Twump.Storage.Text()).readData(file)));
       }.bind(this)
     })
   }

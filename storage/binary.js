@@ -32,3 +32,25 @@ Twump.Storage.Binary.prototype = {
     stream.close();
   }
 }
+
+
+
+Twump.Storage.Text = Class.create();
+Twump.Storage.Text.prototype = {
+  initialize: function(){},
+  
+  writeData: function(file, data){
+    var stream = new air.FileStream();
+    stream.open(file, air.FileMode.WRITE);
+    stream.writeUTFBytes(data);
+    stream.close();
+  },
+  
+  readData: function(file){
+    var stream = new air.FileStream();
+    stream.open(file, air.FileMode.READ);
+    var result = stream.readUTFBytes(stream.bytesAvailable);
+    stream.close();
+    return result;
+  }
+}

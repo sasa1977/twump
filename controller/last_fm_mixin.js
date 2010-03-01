@@ -63,7 +63,10 @@ Twump.Controller.LastFmMixin = {
   
   scrobbleCurrentPossible: function(){
     var file = this.currentFile();
-    return (file.metadata && file.metadata.name.length > 0 && file.metadata.performer.length > 0);
+    return (file.metadata && 
+      file.metadata.name && file.metadata.name.length > 0 && 
+      file.metadata.performer && file.metadata.performer.length > 0
+    );
   },
   
   readyForScrobble: function(playingData){
