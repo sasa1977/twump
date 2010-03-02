@@ -2,15 +2,18 @@ Twump.Controller.DiskOperationsMixin = {
   savePlayerData: function(){
     Twump.Storage.writeObject(Twump.Storage.appStorageFile('app_data.dat'), {
       volume: this.volume,
-      _lastFolders: this._lastFolders
+      _lastFolders: this._lastFolders,
+      lastPlayedIndex: this.currentIndex()
     })
   },
   
   loadPlayerData: function(){
     var data = Twump.Storage.readObject(Twump.Storage.appStorageFile('app_data.dat'));
     if (!data) return;
+    
     this.setVolume(data.volume);
     this._lastFolders = data._lastFolders;
+    this.lastPlayedIndex = data.lastPlayedIndex || 0;
   },
 
   saveCurrentList: function(){
@@ -22,6 +25,9 @@ Twump.Controller.DiskOperationsMixin = {
       var file = Twump.Storage.appStorageFile('last_played.' + ext);
       if (file.exists) {
         this.loadList(file);
+        this.setCurrentIndex(this.lastPlayedIndex);
+        this.redrawPlayList();
+        
         throw $break;
       }
     }.bind(this))
@@ -95,8 +101,7 @@ Twump.Controller.DiskOperationsMixin = {
   loadList: function(file){
     if (!file.exists) return;
     
-    this.setPlaylist(Twump.Repository.playlistEncoder(file).load(), 0);
-    this.playCurrent();
+    this.setPlaylist(Twump.Repository.playlistEncoder(file).load());
   },
   
   saveList: function(file){

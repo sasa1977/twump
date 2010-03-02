@@ -16,6 +16,7 @@ Twump.Controller.PlayerMixin = {
     
     this.current = index;  
     this.setPlaylistPlayingItem();
+    this.savePlayerData();
   },
 
   setVolume: function(volume){

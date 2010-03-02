@@ -1,7 +1,6 @@
 Twump.Controller.PlaylistMixin = {
-  setPlaylist: function(playlist, index){
+  setPlaylist: function(playlist){
     this.playlist = playlist;
-    this.setCurrentIndex(index || 0);
     this.redrawPlayList();
   },
   
