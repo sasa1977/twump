@@ -1,20 +1,11 @@
-Twump.Storage = {}
-Twump.Storage.Binary = Class.create();
-Twump.Storage.Binary.prototype = {
+Twump.Storage = {
   initialize: function(){},
 
-  writeAppData: function(path, object){
-    this.writeData(
-      air.File.applicationStorageDirectory.resolvePath(path),
-      object
-    )
+  appStorageFile: function(path){
+    return air.File.applicationStorageDirectory.resolvePath(path);
   },
   
-  readAppData: function(path, object){
-    return this.readData(air.File.applicationStorageDirectory.resolvePath(path))
-  },
-  
-  readData: function(file, object){
+  readObject: function(file, object){
     if (!file.exists) return;
     
     var stream = new air.FileStream();
@@ -25,28 +16,21 @@ Twump.Storage.Binary.prototype = {
     return result;
   },
   
-  writeData: function(file, object){
+  writeObject: function(file, object){
     var stream = new air.FileStream();
     stream.open(file, air.FileMode.WRITE);
     stream.writeObject(object)
     stream.close();
-  }
-}
-
-
-
-Twump.Storage.Text = Class.create();
-Twump.Storage.Text.prototype = {
-  initialize: function(){},
+  },
   
-  writeData: function(file, data){
+  writeUTF: function(file, data){
     var stream = new air.FileStream();
     stream.open(file, air.FileMode.WRITE);
     stream.writeUTFBytes(data);
     stream.close();
   },
   
-  readData: function(file){
+  readUTF: function(file){
     var stream = new air.FileStream();
     stream.open(file, air.FileMode.READ);
     var result = stream.readUTFBytes(stream.bytesAvailable);

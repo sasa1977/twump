@@ -60,14 +60,13 @@
         Twump.Application = Class.create();
         Twump.Application.prototype = {
           initialize: function(){
-            this.storage = new Twump.Storage.Binary();
             this.playerWindow = new Twump.View.PlayerWindow();
             this.playlistWindow = new Twump.View.PlaylistWindow();
             this.logger = Twump.Api.Logger;
             
             this.controller = new Twump.Controller.Player({
               playerWindow: this.playerWindow, playlistWindow: this.playlistWindow,
-              storage: this.storage, logger: this.logger
+              logger: this.logger
             });
           }
         };

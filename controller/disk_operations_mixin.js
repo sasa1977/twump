@@ -1,24 +1,24 @@
 Twump.Controller.DiskOperationsMixin = {
   savePlayerData: function(){
-    this.storage.writeAppData('app_data.dat', {
+    Twump.Storage.writeObject(Twump.Storage.appStorageFile('app_data.dat'), {
       volume: this.volume,
       _lastFolders: this._lastFolders
     })
   },
   
   loadPlayerData: function(){
-    var data = this.storage.readAppData('app_data.dat');
+    var data = Twump.Storage.readObject(Twump.Storage.appStorageFile('app_data.dat'));
     if (!data) return;
     this.setVolume(data.volume);
     this._lastFolders = data._lastFolders;
   },
 
   saveCurrentList: function(){
-    this.saveListToM3u(air.File.applicationStorageDirectory.resolvePath('last_played.m3u'))
+    this.saveListToM3u(Twump.Storage.appStorageFile('last_played.m3u'))
   },
   
   loadLastList: function(){
-    this.loadListFromM3u(air.File.applicationStorageDirectory.resolvePath('last_played.m3u'))
+    this.loadListFromM3u(Twump.Storage.appStorageFile('last_played.m3u'))
   },
   
   loadList: function(data){
@@ -98,14 +98,14 @@ Twump.Controller.DiskOperationsMixin = {
   loadListFromM3u: function(file){
     if (!file.exists) return;
   
-    var playlist = this.fromM3u((new Twump.Storage.Text()).readData(file));
+    var playlist = this.fromM3u(Twump.Storage.readUTF(file));
 
     this.setPlaylist(playlist, 0);
     this.playCurrent();
   },
   
   saveListToM3u: function(file){
-    (new Twump.Storage.Text()).writeData(file, this.toM3u());
+    Twump.Storage.writeUTF(file, this.toM3u());
   },
   
   toM3u: function(){
