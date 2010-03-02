@@ -129,5 +129,9 @@ Twump.Controller.PlaylistMixin = {
         file.loadingMetadata = true;
       }
     }.bind(this))
+  },
+  
+  jumpTo: function(fileId){
+    this.play(this.playlist.idToIndex(fileId));
   }
 }

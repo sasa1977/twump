@@ -8,7 +8,7 @@ Object.extend(Twump.View.EditorWindow.prototype, {
     this.delayExecute = new Twump.Utils.DelayExecute(1000);
 
     this.addEventListener('filter', 'keydown');
-    this.addEventListener('remove', 'click');
+    this.addEventListeners('click', ['remove', 'jumpTo']);
     
     document.body.addEventListener('click', this.onBodyClick.bind(this))
     
