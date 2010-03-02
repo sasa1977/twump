@@ -14,22 +14,19 @@ Twump.Controller.DiskOperationsMixin = {
   },
 
   saveCurrentList: function(){
-    this.saveListToM3u(Twump.Storage.appStorageFile('last_played.m3u'))
+    this.saveList(Twump.Storage.appStorageFile('last_played.m3u'))
   },
   
   loadLastList: function(){
-    this.loadListFromM3u(Twump.Storage.appStorageFile('last_played.m3u'))
+    ['m3u', 'twumpl'].each(function(ext){
+      var file = Twump.Storage.appStorageFile('last_played.' + ext);
+      if (file.exists) {
+        this.loadList(file);
+        throw $break;
+      }
+    }.bind(this))
   },
   
-  loadList: function(data){
-    if (!data) return;
-    this.stop();
-        
-    var data = this.deserializePlaylist(data);
-    this.setPlaylist(data.playlist, data.currentIndex);
-    this.playCurrent();
-  },
-
   onOpenFolderClick: function(){
     this.openFolder();
   },
@@ -78,7 +75,7 @@ Twump.Controller.DiskOperationsMixin = {
         this.setLastFolder({playlist: file.nativePath});
         this.savePlayerData();
         
-        this.saveListToM3u(file);
+        this.saveList(file);
       }.bind(this)
     })
   },
@@ -90,69 +87,19 @@ Twump.Controller.DiskOperationsMixin = {
         this.setLastFolder({playlist: file.nativePath});
         this.savePlayerData();
 
-        this.loadListFromM3u(file)
+        this.loadList(file)
       }.bind(this)
     })
   },
   
-  loadListFromM3u: function(file){
+  loadList: function(file){
     if (!file.exists) return;
-  
-    var playlist = this.fromM3u(Twump.Storage.readUTF(file));
-
-    this.setPlaylist(playlist, 0);
+    
+    this.setPlaylist(Twump.Repository.playlistEncoder(file).load(), 0);
     this.playCurrent();
   },
   
-  saveListToM3u: function(file){
-    Twump.Storage.writeUTF(file, this.toM3u());
-  },
-  
-  toM3u: function(){
-    var m3u = "#EXTM3U\n";
-    
-    this.playlist.files.each(function(file){
-      m3u += "#EXTINF:"
-      
-      if (file.metadata){
-        m3u += parseInt(file.metadata.length || 0) + "," + file.displayName;
-      }
-      m3u += "\n" + file.path + "\n"
-    }.bind(this))
-    
-    return m3u;
-  },
-  
-  fromM3u: function(data){
-    var listData = [];
-    
-    var lines = data.split("\n");
-    
-    var index = 0;
-    var fileData = null, displayName = null;
-    for (var length = lines.length;index < length;index++) {
-      var line = lines[index].strip();
-      if (line.length > 0){
-        if (line == "#EXTM3U") continue;
-        else if (line.startsWith("#EXTINF:")) {
-          var extinf = line.gsub(/^#EXTINF\:/,'');
-          var parts = extinf.split(",");
-          var songLength = parseInt(parts[0]);
-          if (songLength)
-            fileData = {length: songLength}
-
-          var parsedDisplayName = parts.splice(1,parts.length - 1).join(",").strip();
-          if (parsedDisplayName.length > 0)
-            displayName = parsedDisplayName;
-        }
-        else if (!line.startsWith("#")){
-          listData.push({metadata: fileData, path: line, displayName: displayName})
-          fileData = null;
-          displayName = null;
-        }
-      }
-    }
-    
-    return Twump.Model.Playlist.deserialize(1, listData);
+  saveList: function(file){
+    Twump.Repository.playlistEncoder(file).save(this.playlist)
   }
 }

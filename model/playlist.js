@@ -149,28 +149,17 @@ Twump.Model.Playlist.prototype = {
       result.push(this.fileAt(index))
     
     return result;
-  },
-  
- serializeData: function(version){
-    if (version == 1)
-      return $A(this.files.map(function(file){return file.serializeData(version)}))
-
-    throw new Error("version not supported")
   }
 };
 
-Twump.Model.Playlist.deserialize = function(version, data){
-  if (version == 1){
-    var playlist = new Twump.Model.Playlist();
-    
-    var files = $A(data).map(function(fileData){
-      return Twump.Model.File.deserialize(version, fileData)
-    });
-    
-    playlist.adjustAndSetFiles(files);
-    
-    return playlist;
-  }
-
-  throw new Error("version not supported")
+Twump.Model.Playlist.deserialize = function(data){
+  var playlist = new Twump.Model.Playlist();
+  
+  var files = $A(data).map(function(fileData){
+    return new Twump.Model.File(fileData)
+  });
+  
+  playlist.adjustAndSetFiles(files);
+  
+  return playlist;
 }
