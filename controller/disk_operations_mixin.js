@@ -14,11 +14,11 @@ Twump.Controller.DiskOperationsMixin = {
   },
 
   saveCurrentList: function(){
-    this.storage.writeAppData('last_played.twumpl', this.serializePlaylist());
+    this.saveListToM3u(air.File.applicationStorageDirectory.resolvePath('last_played.m3u'))
   },
   
   loadLastList: function(){
-    this.loadList(this.storage.readAppData('last_played.twumpl'))
+    this.loadListFromM3u(air.File.applicationStorageDirectory.resolvePath('last_played.m3u'))
   },
   
   loadList: function(data){
@@ -78,9 +78,34 @@ Twump.Controller.DiskOperationsMixin = {
         this.setLastFolder({playlist: file.nativePath});
         this.savePlayerData();
         
-        (new Twump.Storage.Text()).writeData(file, this.toM3u());
+        this.saveListToM3u(file);
       }.bind(this)
     })
+  },
+  
+  onLoadListClick: function(){
+    Twump.Api.browseForOpen({
+      startIn: this.getLastFolder("playlist"), 
+      onSelect: function(file){
+        this.setLastFolder({playlist: file.nativePath});
+        this.savePlayerData();
+
+        this.loadListFromM3u(file)
+      }.bind(this)
+    })
+  },
+  
+  loadListFromM3u: function(file){
+    if (!file.exists) return;
+  
+    var playlist = this.fromM3u((new Twump.Storage.Text()).readData(file));
+
+    this.setPlaylist(playlist, 0);
+    this.playCurrent();
+  },
+  
+  saveListToM3u: function(file){
+    (new Twump.Storage.Text()).writeData(file, this.toM3u());
   },
   
   toM3u: function(){
@@ -90,8 +115,7 @@ Twump.Controller.DiskOperationsMixin = {
       m3u += "#EXTINF:"
       
       if (file.metadata){
-        m3u += parseInt(file.metadata.length || 0) + "," + 
-          [file.metadata.performer, file.metadata.name].compact().join("-");
+        m3u += parseInt(file.metadata.length || 0) + "," + file.displayName;
       }
       m3u += "\n" + file.path + "\n"
     }.bind(this))
@@ -100,7 +124,7 @@ Twump.Controller.DiskOperationsMixin = {
   },
   
   fromM3u: function(data){
-    var result = {current: 0, listData: [], version: 1}
+    var listData = [];
     
     var lines = data.split("\n");
     
@@ -122,24 +146,13 @@ Twump.Controller.DiskOperationsMixin = {
             displayName = parsedDisplayName;
         }
         else if (!line.startsWith("#")){
-          result.listData.push({metadata: fileData, path: line, displayName: displayName})
+          listData.push({metadata: fileData, path: line, displayName: displayName})
           fileData = null;
           displayName = null;
         }
       }
     }
     
-    return result;
-  },
-  
-  onLoadListClick: function(){
-    Twump.Api.browseForOpen({
-      startIn: this.getLastFolder("playlist"), 
-      onSelect: function(file){
-        this.setLastFolder({playlist: file.nativePath});
-        this.savePlayerData();
-        this.loadList(this.fromM3u((new Twump.Storage.Text()).readData(file)));
-      }.bind(this)
-    })
+    return Twump.Model.Playlist.deserialize(1, listData);
   }
 }
