@@ -49,7 +49,7 @@ Object.extend(Twump.Controller.Player.prototype, {
     };
     
     var ctrlMap = {
-      69: "editorClick"
+      69: "editorClick", 79: "loadListClick", 83: "saveListClick"
     };
   
     var relevantMap = null;
