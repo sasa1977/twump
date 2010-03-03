@@ -79,6 +79,14 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
       el.addEventListener("dragover", this.onPlaylistItemOver.bind(this))
     }.bind(this));
     
+    $('itemsParent').addEventListener('mouseover', function(event){
+      var playlistItemEl = this.findItem(event.srcElement, 'playlistItem');
+      var file = this.displayOptions.playlist.file(playlistItemEl.getAttribute('fileId'))
+      $('tooltip').update(file.path)
+    }.bind(this));
+    
+    new Tooltip('itemsParent', 'tooltip');
+    
     this.drawCurrentPlayingItem();
   },
   
