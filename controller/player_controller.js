@@ -51,13 +51,17 @@ Object.extend(Twump.Controller.Player.prototype, {
     var ctrlMap = {
       69: "editorClick", 79: "loadListClick", 83: "saveListClick"
     };
+    
+    var altMap = {
+      83: 'shuffleClick', 65: 'shuffleRemainingClick'
+    }
   
     var relevantMap = null;
     
     if (!event.ctrlKey && !event.altKey && !event.shiftKey)
       relevantMap = standardMap;
-    else if (event.ctrlKey)
-      relevantMap = ctrlMap;
+    else if (event.ctrlKey) relevantMap = ctrlMap;
+    else if (event.altKey) relevantMap = altMap;
   
     if (!relevantMap)  return;
     
