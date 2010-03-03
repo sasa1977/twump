@@ -81,7 +81,7 @@ Twump.Controller.DiskOperationsMixin = {
         this.setLastFolder({playlist: file.nativePath});
         this.savePlayerData();
         
-        this.saveList(file);
+        this.saveList(file, {relative: confirm('Use relative path?')});
       }.bind(this)
     })
   },
@@ -104,7 +104,7 @@ Twump.Controller.DiskOperationsMixin = {
     this.setPlaylist(Twump.Repository.playlistEncoder(file).load());
   },
   
-  saveList: function(file){
-    Twump.Repository.playlistEncoder(file).save(this.playlist)
+  saveList: function(file, options){
+    Twump.Repository.playlistEncoder(file).save(this.playlist, options)
   }
 }
