@@ -45,7 +45,7 @@ Object.extend(Twump.Controller.Player.prototype, {
   keyboardDispatcher: function(event){ 
     var standardMap = {
       27: "stopClick", 32: "pauseClick", 33: "previousClick", 34: "nextClick", 13: "playClick",
-      46: "deleteClick", 38: "volumeUp", 40: "volumeDown"
+      46: "deleteClick", 38: "volumeUp", 40: "volumeDown", 39: "moveForward", 37: "moveBackward"
     };
     
     var ctrlMap = {

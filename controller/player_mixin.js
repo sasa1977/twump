@@ -123,5 +123,13 @@ Twump.Controller.PlayerMixin = {
   
   onSetPlayPosition: function(position){
     this.player.setPosition(position);
+  },
+  
+  onMoveForward: function(){
+    this.player.setPosition(Math.min(this.player.playbackPercent() / 100 + 0.05, 1.0));
+  },
+  
+  onMoveBackward: function(){
+    this.player.setPosition(Math.max(this.player.playbackPercent() / 100 - 0.05, 0));
   }
 }
