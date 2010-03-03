@@ -45,7 +45,7 @@ Object.extend(Twump.Controller.Player.prototype, {
   keyboardDispatcher: function(event){ 
     var standardMap = {
       27: "stopClick", 32: "pauseClick", 33: "previousClick", 34: "nextClick", 13: "playClick",
-      46: "deleteClick"
+      46: "deleteClick", 38: "volumeUp", 40: "volumeDown"
     };
     
     var ctrlMap = {
@@ -62,7 +62,9 @@ Object.extend(Twump.Controller.Player.prototype, {
     if (!relevantMap)  return;
     
     var method = this["on" + (relevantMap[event.keyCode] || "").capitalizeEachWord()];
-    if (method)
+    if (method) {
       method.bind(this)();
+      return false;
+    }
   }
 })

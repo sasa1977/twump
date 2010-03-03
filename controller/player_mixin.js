@@ -25,6 +25,19 @@ Twump.Controller.PlayerMixin = {
     this.savePlayerData();
   },
   
+  onVolumeChange: function(volume){
+    this.setVolume(volume);
+    this.player.setVolume(volume);
+  },
+  
+  onVolumeUp: function(){
+    this.onVolumeChange(Math.min(this.volume + 0.05, 1.0))
+  },
+  
+  onVolumeDown: function(){
+    this.onVolumeChange(Math.max(this.volume - 0.05, 0))
+  },
+  
   playCurrent: function(){
     this.stop();
     this.saveCurrentList();
@@ -106,11 +119,6 @@ Twump.Controller.PlayerMixin = {
   
   onPreviousClick: function(){
     this.play(this.currentIndex() - 1);
-  },
-  
-  onVolumeChange: function(volume){
-    this.setVolume(volume);
-    this.player.setVolume(volume);
   },
   
   onSetPlayPosition: function(position){
