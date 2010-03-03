@@ -18,6 +18,7 @@ Object.extend(Twump.View.EditorWindow.prototype, {
     
     this.list.onStartDrag = this.onStartDrag.bind(this);
     this.list.onRightClick = this.onItemRightClick.bind(this);
+    $('filter').activate();
   },
   
   onItemRightClick: function(item, event){
