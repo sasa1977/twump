@@ -13,16 +13,17 @@ Object.extend(Twump.Controller.Player.prototype, {
     
     this.lastFmSetup();
     
-    this.subscribeToViewEvents(this.playerWindow, 
-      [
-        "windowClosing", "previousClick", "nextClick", "pauseClick", "stopClick", "playClick", 
-        "volumeChange", "setPlayPosition", 
-        "openFolderClick", "addFolderClick", "loadListClick", "saveListClick", "shuffleClick", "shuffleRemainingClick", "deleteClick", "clearClick",
-        "editorClick", "drop", "filesDropped"
-      ]
-    );
+    this.subscribeToViewEvents(this.playerWindow, [
+      "windowClosing", "previousClick", "nextClick", "pauseClick", "stopClick", "playClick", 
+      "volumeChange", "setPlayPosition", 
+      "openFolderClick", "addFolderClick", "loadListClick", "saveListClick", "shuffleClick", 
+      "shuffleRemainingClick", "deleteClick", "clearClick",
+      "editorClick", "drop", "filesDropped"
+    ]);
     
-    this.subscribeToViewEvents(this.playlistWindow, ["scrollChanged", "copyPathToClipboard", "itemSelected"])
+    this.subscribeToViewEvents(this.playlistWindow, [
+      "scrollChanged", "copyPathToClipboard", "itemSelected", "deleteClick"
+    ])
     
     this.player = new Twump.PlayerFacade();
     this.setPlaylist(new Twump.Model.Playlist())

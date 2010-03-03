@@ -4,8 +4,7 @@ Object.extend(Twump.View.PlaylistWindow.prototype, Twump.View.Common);
 
 Object.extend(Twump.View.PlaylistWindow.prototype, {
   initialize: function(){
-    this.addEventListener('playlist', 'mouseover');
-    this.addEventListener('copyPathToClipboard', 'click');
+    this.addEventListeners('click', ['copyPathToClipboard', 'deleteContext']);
     
     document.body.addEventListener('click', this.onBodyClick.bind(this))
     
@@ -40,6 +39,10 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
   
   onCopyPathToClipboardClick: function(){
     this.onCopyPathToClipboard(this.relatedContextMenuItem.getAttribute('fileId'));
+  },
+  
+  onDeleteContextClick: function(){
+    this.onDeleteClick();
   },
   
   scrollWatcher: function(){
