@@ -29,7 +29,8 @@ Object.extend(Twump.Controller.Player.prototype, {
     this.setPlaylist(new Twump.Model.Playlist())
     this.loadPlayerData();
     this.loadLastList();
-
+    
+    document.body.addEventListener('keydown', this.keyboardDispatcher.bind(this));
     this.progressStep = 0;
   },
   
@@ -39,5 +40,29 @@ Object.extend(Twump.Controller.Player.prototype, {
   
   onDrop: function(options){
     this[options.action](options);
+  },
+  
+  keyboardDispatcher: function(event){ 
+    var standardMap = {
+      27: "stopClick", 32: "pauseClick", 33: "previousClick", 34: "nextClick", 13: "playClick",
+      46: "deleteClick"
+    };
+    
+    var ctrlMap = {
+      69: "editorClick"
+    };
+  
+    var relevantMap = null;
+    
+    if (!event.ctrlKey && !event.altKey && !event.shiftKey)
+      relevantMap = standardMap;
+    else if (event.ctrlKey)
+      relevantMap = ctrlMap;
+  
+    if (!relevantMap)  return;
+    
+    var method = this["on" + (relevantMap[event.keyCode] || "").capitalizeEachWord()];
+    if (method)
+      method.bind(this)();
   }
 })
