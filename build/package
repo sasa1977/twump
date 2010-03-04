@@ -1,4 +1,3 @@
 cd ../src
 adt -package -storetype pkcs12 -keystore ../build/cert.pfx ../build/twump.air app.xml .
 cd ../build
-cp -p ../src/app.xml .
