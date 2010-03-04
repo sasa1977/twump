@@ -1,1 +1,3 @@
-adt -package -storetype pkcs12 -keystore build/cert.pfx build/twump.air app.xml .
+cd ../src
+adt -package -storetype pkcs12 -keystore ../build/cert.pfx ../build/twump.air app.xml .
+cd ../build
