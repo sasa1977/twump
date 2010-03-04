@@ -19,7 +19,9 @@ Twump.View.Common = {
   insertHeader: function(parentId){
     var html = '<table cellpadding="0" cellspacing="0" border="0" width="100%">' +
       '<tr class="header" id="header">' +
-        '<td width="*">&nbsp;</td>' +
+        '<td width="*">' +
+          '<div id="caption" style="text-align:center;"></div>' +
+        '</td>' +
         '<td width="10px">' +
           '<div id="close">' +
             'close' +
@@ -41,5 +43,9 @@ Twump.View.Common = {
     this.onHeaderMousedown = function(){
       window.nativeWindow.startMove();
     }
+  },
+  
+  setCaption: function(caption){
+    $('caption').update(caption);
   }
 }
