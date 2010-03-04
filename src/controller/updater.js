@@ -5,7 +5,7 @@ Twump.Controller.Updater = {
         var remoteVersion = Twump.Api.parseVersionInfo(response.responseText);
         var currentVersion = Twump.Api.currentApplicationVersion();
 
-        if (remoteVersion != currentVersion || true){
+        if (remoteVersion != currentVersion){
           if (confirm(
             "New version is available.\n" +
             "Current version: " + currentVersion + "\n" +
