@@ -36,5 +36,12 @@ Twump.Storage = {
     var result = stream.readUTFBytes(stream.bytesAvailable);
     stream.close();
     return result;
+  },
+  
+  writeBytes: function(file, data){
+    var stream = new air.FileStream();
+    stream.open(file, air.FileMode.WRITE);
+    stream.writeBytes(data);
+    stream.close();
   }
 }

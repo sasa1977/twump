@@ -104,6 +104,35 @@ Twump.Api = {
   copyTextToClipboard: function(text){
     air.Clipboard.generalClipboard.clear(); 
     air.Clipboard.generalClipboard.setData(air.ClipboardFormats.TEXT_FORMAT, text, false);
+  },
+  
+  parseVersionInfo: function(appXmlString){
+    var appXml = new DOMParser();
+    var xmlObject = appXml.parseFromString(appXmlString, "text/xml");
+    var root = xmlObject.getElementsByTagName('application')[0];
+    var appVersion = root.getElementsByTagName("version")[0];
+    return appVersion.firstChild.data;
+  },
+  
+  applicationDescriptor: function(){
+    return air.NativeApplication.nativeApplication.applicationDescriptor;
+  },
+  
+  currentApplicationVersion: function(){
+    return this.parseVersionInfo(this.applicationDescriptor())
+  },
+  
+  downloadRemoteBinary: function(url, target, callback){
+    var urlStream = new air.URLStream(); 
+
+    urlStream.addEventListener(air.Event.COMPLETE, function(){
+      var bytes = new air.ByteArray();
+      urlStream.readBytes(bytes, 0, urlStream.bytesAvailable)
+      Twump.Storage.writeBytes(target, bytes);
+      callback(target);
+    });
+    
+    urlStream.load(new air.URLRequest(url)); 
   }
 }
 
