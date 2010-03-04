@@ -1,6 +1,6 @@
 Twump.Controller.Updater = {
   shouldUpdate: function(callback){
-    new Ajax.Request('http://github.com/sasa1977/twump/raw/master/build/app.xml',{
+    new Ajax.Request('http://github.com/downloads/sasa1977/twump/app.xml',{
       onSuccess: function(response){
         var remoteVersion = Twump.Api.parseVersionInfo(response.responseText);
         var currentVersion = Twump.Api.currentApplicationVersion();
@@ -21,7 +21,7 @@ Twump.Controller.Updater = {
   
   downloadRemote: function(remoteVersion){
     Twump.Api.downloadRemoteBinary(
-      'http://github.com/sasa1977/twump/raw/master/build/twump.air',
+      'http://github.com/downloads/sasa1977/twump/twump.air',
       Twump.Storage.appStorageFile('twump.air'),
       function(file){
         this.doUpdate(file, remoteVersion)
