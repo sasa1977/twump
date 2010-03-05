@@ -12,7 +12,9 @@
       end
     %>  
   
-  %body{ :ondragover => "event.preventDefault()", :onload => "init();", :ondragenter => "event.preventDefault()", :style => "overflow:hidden;-webkit-user-select:none;" }
+  %body{:ondragover => "event.preventDefault()", :onload => "init();",
+    :ondragenter => "event.preventDefault()", :style => "overflow:hidden;-webkit-user-select:none;"}
+    
     #player
       .playingInfo
         #playing

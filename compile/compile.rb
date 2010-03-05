@@ -76,6 +76,7 @@ class Compiler
   def run
     compile
     
+    puts "\nrunning"
     Dir.chdir(@paths.intermediate_src)
     system("adl app.xml")
   ensure
@@ -85,13 +86,17 @@ class Compiler
 
 private
   def compile
+    puts "compiling"
     init
     process_hamls(get_hamls)
   end
 
   def process_hamls(hamls)
-    hamls.each do |haml_file| 
-      process_haml(haml_file) unless File.basename(haml_file).start_with?("_")
+    hamls.each do |haml_file|
+      unless File.basename(haml_file).start_with?("_")
+        puts "#{haml_file}"
+        process_haml(haml_file)
+      end
     end
     
     hamls.each{|haml_file| FileUtils.rm(haml_file)}
