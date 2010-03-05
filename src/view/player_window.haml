@@ -18,7 +18,8 @@
         #playing
         #playlistPos
         #progress
-      #playProgress.playProgress{ :tabindex => "1" }
+        
+      #playProgress.playProgress
         %input#playProgressInput/
       %br/
       %div
@@ -28,7 +29,7 @@
         =play_window_button('stop', 'O')
         =play_window_button('next', '>|')
         
-        #volume.volume{ :tabindex => "1" }
+        #volume.volume
           %input#volumeInput/
       %br/
       %br/
@@ -49,4 +50,5 @@
         copy full path to clipboard
       #deleteContext
         remove
+
     #tooltip{ :style => "display:none; max-width:300px; background-color: lightYellow" }
