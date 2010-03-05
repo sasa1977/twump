@@ -42,7 +42,7 @@ end
 class CompilingContext
   def javascript_include(*paths)
     includes = paths.map do |path|
-      "<script src='#{path}' type='text/javascript'></script>"
+      "<script src='../#{path}.js' type='text/javascript'></script>"
     end
     
     includes.join("\n")

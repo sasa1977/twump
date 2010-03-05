@@ -8,40 +8,50 @@
     %link{ :href => "css/player_window.css", :rel => "stylesheet", :type => "text/css" }/
     %link{ :href => "css/playlist.css", :rel => "stylesheet", :type => "text/css" }/
     
-    =javascript_include("../lib/air/AIRIntrospector.js", "../lib/air/AIRAliases.js")
+    :javascript
+      Twump = {
+        Model: {}, View: {}, Controller: {}
+      }
     
-    %script{ :src => "../lib/prototype/prototype-1.5.1.2.js", :type => "text/javascript" }
-    %script{ :src => "../lib/trimpath/trimpath-template-1.0.38.js", :type => "text/javascript" }
-    %script{ :src => "../lib/slider/js/range.js", :type => "text/javascript" }
-    %script{ :src => "../lib/slider/js/timer.js", :type => "text/javascript" }
-    %script{ :src => "../lib/slider/js/slider.js", :type => "text/javascript" }
-    %script{ :src => "../lib/jshash-2.2/md5.js", :type => "text/javascript" }
-    %script{ :src => "../lib/tooltip-v0.1.js", :type => "text/javascript" }
-    %script{ :src => "../lib/twump/base.js", :type => "text/javascript" }
-    %script{ :src => "../lib/twump/extensions.js", :type => "text/javascript" }
-    %script{ :src => "../lib/twump/utils.js", :type => "text/javascript" }
-    %script{ :src => "../lib/twump/api.js", :type => "text/javascript" }
-    %script{ :src => "../lib/twump/storage.js", :type => "text/javascript" }
-    %script{ :src => "../lib/twump/player.js", :type => "text/javascript" }
-    %script{ :src => "../lib/twump/last_fm.js", :type => "text/javascript" }
-    %script{ :src => "../lib/twump/list.js", :type => "text/javascript" }
-    %script{ :src => "../lib/twump/repository.js", :type => "text/javascript" }
-    %script
-      Twump.Model = {};
-      Twump.View = {};
-      Twump.Controller = {};
-    %script{ :src => "../model/playlist.js", :type => "text/javascript" }
-    %script{ :src => "../model/file.js", :type => "text/javascript" }
-    %script{ :src => "../controller/common.js", :type => "text/javascript" }
-    %script{ :src => "../controller/updater.js", :type => "text/javascript" }
-    %script{ :src => "../controller/player_mixin.js", :type => "text/javascript" }
-    %script{ :src => "../controller/playlist_mixin.js", :type => "text/javascript" }
-    %script{ :src => "../controller/disk_operations_mixin.js", :type => "text/javascript" }
-    %script{ :src => "../controller/last_fm_mixin.js", :type => "text/javascript" }
-    %script{ :src => "../controller/player_controller.js", :type => "text/javascript" }
-    %script{ :src => "../view/common.js", :type => "text/javascript" }
-    %script{ :src => "../view/player_window.js", :type => "text/javascript" }
-    %script{ :src => "../view/playlist_window.js", :type => "text/javascript" }
+    :erb
+      <%= 
+        javascript_include(
+          "lib/air/AIRIntrospector", 
+          "lib/air/AIRAliases",
+    
+          "lib/prototype/prototype-1.5.1.2",
+          "lib/trimpath/trimpath-template-1.0.38",
+          "lib/slider/js/range",
+          "lib/slider/js/timer",
+          "lib/slider/js/slider",
+          "lib/jshash-2.2/md5",
+          "lib/tooltip-v0.1",
+          
+          "lib/twump/extensions",
+          "lib/twump/utils",
+          "lib/twump/api",
+          "lib/twump/storage",
+          "lib/twump/player",
+          "lib/twump/last_fm",
+          "lib/twump/list",
+          "lib/twump/repository",
+    
+          "model/playlist",
+          "model/file",
+          
+          "controller/common",
+          "controller/updater",
+          "controller/player_mixin",
+          "controller/playlist_mixin",
+          "controller/disk_operations_mixin",
+          "controller/last_fm_mixin",
+          "controller/player_controller",
+          
+          "view/common",
+          "view/player_window",
+          "view/playlist_window"
+        )
+      %>
 
     :javascript
       function init(){
