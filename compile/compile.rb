@@ -47,6 +47,14 @@ class CompilingContext
     
     includes.join("\n")
   end
+  
+  def stylesheet_include(*paths)
+    includes = paths.map do |path|
+      "<link href='../#{path}.css' rel='stylesheet' type='text/css' />"
+    end
+    
+    includes.join("\n")
+  end
 end
 
 

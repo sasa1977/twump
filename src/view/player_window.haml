@@ -3,11 +3,17 @@
     %meta{ :content => "text/html;charset=UTF-8", "http-equiv" => "Content-type" }/
     %title
     
-    %link{ :href => "../lib/slider/css/bluecurve/bluecurve.css", :rel => "StyleSheet", :type => "text/css" }/
-    %link{ :href => "css/common.css", :rel => "stylesheet", :type => "text/css" }/
-    %link{ :href => "css/player_window.css", :rel => "stylesheet", :type => "text/css" }/
-    %link{ :href => "css/playlist.css", :rel => "stylesheet", :type => "text/css" }/
-    
+    :erb
+      <%=
+        stylesheet_include(
+          "lib/slider/css/bluecurve/bluecurve",
+          
+          "view/css/common",
+          "view/css/player_window",
+          "view/css/playlist"
+        )
+      %>
+      
     :javascript
       Twump = {
         Model: {}, View: {}, Controller: {}
