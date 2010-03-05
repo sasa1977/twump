@@ -40,6 +40,10 @@ end
 
 
 class CompilingContext
+  def initialize(file)
+    @file = file
+  end
+
   def javascript_include(*paths)
     includes = paths.map do |path|
       "<script src='../#{path}.js' type='text/javascript'></script>"
@@ -54,6 +58,12 @@ class CompilingContext
     end
     
     includes.join("\n")
+  end
+  
+  def render_partial(relative)
+    partial = "#{File.dirname(@file)}/_#{relative}.haml"
+    engine = Haml::Engine.new(File.read(partial))
+    engine.render(self)
   end
 end
 
@@ -81,9 +91,10 @@ private
 
   def process_hamls(hamls)
     hamls.each do |haml_file| 
-      process_haml(haml_file)
-      FileUtils.rm(haml_file)
+      process_haml(haml_file) unless File.basename(haml_file).start_with?("_")
     end
+    
+    hamls.each{|haml_file| FileUtils.rm(haml_file)}
   end
   
   def process_haml(haml_file)
@@ -100,7 +111,7 @@ private
   
   def html(haml_file)
     engine = Haml::Engine.new(File.read(haml_file))
-    engine.render(CompilingContext.new)
+    engine.render(CompilingContext.new(haml_file))
   end
 
   def get_hamls

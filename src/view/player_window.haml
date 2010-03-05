@@ -2,83 +2,9 @@
   %head
     %meta{ :content => "text/html;charset=UTF-8", "http-equiv" => "Content-type" }/
     %title
+    =render_partial('player_window_includes')
     
-    :erb
-      <%=
-        stylesheet_include(
-          "lib/slider/css/bluecurve/bluecurve",
-          
-          "view/css/common",
-          "view/css/player_window",
-          "view/css/playlist"
-        )
-      %>
-      
-    :javascript
-      Twump = {
-        Model: {}, View: {}, Controller: {}
-      }
     
-    :erb
-      <%= 
-        javascript_include(
-          "lib/air/AIRIntrospector", 
-          "lib/air/AIRAliases",
-    
-          "lib/prototype/prototype-1.5.1.2",
-          "lib/trimpath/trimpath-template-1.0.38",
-          "lib/slider/js/range",
-          "lib/slider/js/timer",
-          "lib/slider/js/slider",
-          "lib/jshash-2.2/md5",
-          "lib/tooltip-v0.1",
-          
-          "lib/twump/extensions",
-          "lib/twump/utils",
-          "lib/twump/api",
-          "lib/twump/storage",
-          "lib/twump/player",
-          "lib/twump/last_fm",
-          "lib/twump/list",
-          "lib/twump/repository",
-    
-          "model/playlist",
-          "model/file",
-          
-          "controller/common",
-          "controller/updater",
-          "controller/player_mixin",
-          "controller/playlist_mixin",
-          "controller/disk_operations_mixin",
-          "controller/last_fm_mixin",
-          "controller/player_controller",
-          
-          "view/common",
-          "view/player_window",
-          "view/playlist_window"
-        )
-      %>
-
-    :javascript
-      function init(){
-        Twump.Controller.Updater.update();
-        
-        Twump.Application = Class.create();
-        Twump.Application.prototype = {
-          initialize: function(){
-            this.playerWindow = new Twump.View.PlayerWindow();
-            this.playlistWindow = new Twump.View.PlaylistWindow();
-            this.logger = Twump.Api.Logger;
-            
-            this.controller = new Twump.Controller.Player({
-            playerWindow: this.playerWindow, playlistWindow: this.playlistWindow,
-            logger: this.logger
-            });
-          }
-        };
-        
-        Twump.application = new Twump.Application();
-      }
   %body{ :ondragover => "event.preventDefault()", :onload => "init();", :ondragenter => "event.preventDefault()", :style => "overflow:hidden;-webkit-user-select:none;" }
     #player
       .playingInfo
