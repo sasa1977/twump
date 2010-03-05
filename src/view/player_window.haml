@@ -2,9 +2,16 @@
   %head
     %meta{ :content => "text/html;charset=UTF-8", "http-equiv" => "Content-type" }/
     %title
+    
     =render_partial('player_window_includes')
-    
-    
+  
+  :erb
+    <%
+      def play_window_button(id, content)
+        "<div class='playWindowButton' id='#{id}'>#{content}</div>"
+      end
+    %>  
+  
   %body{ :ondragover => "event.preventDefault()", :onload => "init();", :ondragenter => "event.preventDefault()", :style => "overflow:hidden;-webkit-user-select:none;" }
     #player
       .playingInfo
@@ -15,40 +22,27 @@
         %input#playProgressInput/
       %br/
       %div
-        #previous.playWindowButton
-          |<
-        #play.playWindowButton
-          >
-        #pause.playWindowButton
-          ||
-        #stop.playWindowButton
-          O
-        #next.playWindowButton
-          >|
-        .playWindowButton
+        =play_window_button('previous', '|<')
+        =play_window_button('play', '>')
+        =play_window_button('pause', '||')
+        =play_window_button('stop', 'O')
+        =play_window_button('next', '>|')
+        
         #volume.volume{ :tabindex => "1" }
           %input#volumeInput/
       %br/
       %br/
       %div
-        #openFolder.playWindowButton
-          Ldf
-        #addFolder.playWindowButton
-          Ld+
-        #loadList.playWindowButton
-          LdL
-        #saveList.playWindowButton
-          Sv
-        #shuffle.playWindowButton
-          Sh
-        #shuffleRemaining.playWindowButton
-          Sh+
-        #delete.playWindowButton
-          Rm
-        #clear.playWindowButton
-          Cl
-        #editor.playWindowButton
-          Ed
+        =play_window_button('openFolder', 'Ldf')
+        =play_window_button('addFolder', 'Ld+')
+        =play_window_button('loadList', 'LdL')
+        =play_window_button('saveList', 'Sv')
+        =play_window_button('shuffle', 'Sh')
+        =play_window_button('shuffleRemaining', 'Sh+')
+        =play_window_button('delete', 'Rm')
+        =play_window_button('clear', 'Cl')
+        =play_window_button('editor', 'Ed')
+        
     #playlist.playlist
     #playListContextMenu{ :style => "display:none" }
       #copyPathToClipboard
