@@ -1,0 +1,38 @@
+%html
+  %head
+    %title
+    %link{ :href => "css/common.css", :rel => "stylesheet", :type => "text/css" }/
+    %link{ :href => "css/editor.css", :rel => "stylesheet", :type => "text/css" }/
+    
+    =render_partial "common_includes"
+    
+    :erb
+      <%= 
+        javascript_include(
+          "controller/common",
+          "controller/editor_controller",
+          "view/common",
+          "view/editor_window"
+        )
+      %>
+    
+   
+    :javascript
+      function init(){
+        controller = new Twump.Controller.Editor({
+          editorWindow: new Twump.View.EditorWindow(),
+          playerController: options.playerController,
+          playlist: options.playlist
+        })
+      }
+      
+  %body{:onload => "init();", :style => "overflow:hidden;-webkit-user-select:none;"}
+    #editor
+      %input#filter{ :type => "text" }/
+      #results{ :style => "width:600;height:330;overflow:auto;" }
+      
+    #editorContextMenu{ :style => "display:none;" }
+      #remove
+        remove
+      #jumpTo
+        jump to
