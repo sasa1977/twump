@@ -23,6 +23,7 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
     
     this.list.onDoubleClick = this.onItemDoubleClick.bind(this);
     this.list.onRightClick = this.onItemRightClick.bind(this);
+    this.list.onStartDrag = this.onStartDrag.bind(this);
   },
   
   onPlaylistMouseover: function(event){
@@ -202,5 +203,9 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
     
     if (el.hasClassName(htmlClass)) return el;
     return this.findItem(el.parentElement, htmlClass);
+  },
+  
+  onStartDrag: function(){
+    Twump.Api.startDrag("twump:relocate");
   }
 });

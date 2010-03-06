@@ -100,6 +100,18 @@ Twump.Controller.PlaylistMixin = {
     this.editor = null;
   },
   
+  relocate: function(options){
+    var newIndex = this.playlist.moveBefore(
+      this.playlistWindow.selectedIds(), 
+      this.playlistWindow.itemUnderMouseIndex,
+      this.currentFile()
+    );
+    
+    this.setCurrentIndex(newIndex);
+    
+    this.redrawPlayList();
+  },
+  
   moveBefore: function(options){
     var newIndex = this.playlist.moveBefore(
       this.editorController().selectedItems(), 
