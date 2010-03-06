@@ -1,16 +1,13 @@
+=render_partial "common_includes"
+
 :erb
   <%=
     stylesheet_include(
-      "lib/slider/css/bluecurve/bluecurve",
-      
-      "view/css/common",
       "view/css/player_window",
       "view/css/playlist"
     )
   %>
   
-=render_partial "common_includes"
-
 :erb
   <%= 
     javascript_include(
