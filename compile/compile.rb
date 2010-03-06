@@ -22,6 +22,14 @@ class Paths
   def intermediate_src
     "#{intermediate}/src"
   end
+  
+  def release
+    "#{root}/release"
+  end
+  
+  def build
+    "#{root}/build"
+  end
 end
 
 
@@ -84,7 +92,8 @@ class Compiler
   def package
     with_compile do
       puts "\npackaging"
-      system("echo 123 | adt -package -storetype pkcs12 -keystore ../../build/cert.pfx ../../build/twump.air app.xml . > /dev/null")
+      system("echo 123 | adt -package -storetype pkcs12 -keystore #{@paths.build}/cert.pfx #{@paths.release}/twump.air app.xml . > /dev/null")
+      FileUtils.cp("#{@paths.src}/app.xml", @paths.release, :preserve => true)
     end
   end
 
