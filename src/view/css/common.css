@@ -1,3 +1,12 @@
 .header td{
   background-color:lightGrey
 }
+
+table {
+  font-size:14px;
+}
+
+.tooltip{
+  background-color: lightYellow;
+  font-size:12px;
+}

@@ -115,59 +115,78 @@ Tooltip.prototype = {
   },
 
   showTooltip: function(event){
-	  Event.stop(event);
+    Event.stop(event);
 	  
 	  // get Mouse position
     var mouse_x = Event.pointerX(event);
 	  var mouse_y = Event.pointerY(event);
+
+	  var maxWidth = 0;
+	  var half = this.getWindowWidth() / 2
+	  
+	  if (mouse_x > half)
+	    maxWidth = mouse_x;
+	  else
+	    maxWidth = this.getWindowWidth() - mouse_x;
+	  
+	  maxWidth -= this.options.delta_x + 20;
+	  
+	  Element.setStyle(this.tool_tip, {maxWidth: maxWidth + "px"});
+	  
+    // decide if wee need to switch sides for the tooltip
+    var dimensions = Element.getDimensions( this.tool_tip );
+    var element_width = dimensions.width;
+    var element_height = dimensions.height;
+
+    if ( (element_width + mouse_x) >= ( this.getWindowWidth() - this.options.delta_x) ){ // too big for X
+	    mouse_x = mouse_x - element_width;
+	    // apply delta to make sure that the mouse is not on the tool-tip
+	    mouse_x = mouse_x - this.options.delta_x;
+    } else {
+	    mouse_x = mouse_x + this.options.delta_x;
+    }
+
+    if ( (element_height + mouse_y) >= ( this.getWindowHeight() - this.options.delta_y) ){ // too big for Y
+	    mouse_y = mouse_y - element_height;
+        // apply delta to make sure that the mouse is not on the tool-tip
+	    mouse_y = mouse_y - this.options.delta_y;
+    } else {
+	    mouse_y = mouse_y + this.options.delta_y;
+    } 
+
+    // now set the right styles
+    this.setStyles(mouse_x, mouse_y);
+
 	
-	
-	  // decide if wee need to switch sides for the tooltip
-	  var dimensions = Element.getDimensions( this.tool_tip );
-	  var element_width = dimensions.width;
-	  var element_height = dimensions.height;
-	
-	  if ( (element_width + mouse_x) >= ( this.getWindowWidth() - this.options.delta_x) ){ // too big for X
-		  mouse_x = mouse_x - element_width;
-		  // apply delta to make sure that the mouse is not on the tool-tip
-		  mouse_x = mouse_x - this.options.delta_x;
-	  } else {
-		  mouse_x = mouse_x + this.options.delta_x;
-	  }
-	
-	  if ( (element_height + mouse_y) >= ( this.getWindowHeight() - this.options.delta_y) ){ // too big for Y
-		  mouse_y = mouse_y - element_height;
-	      // apply delta to make sure that the mouse is not on the tool-tip
-		  mouse_y = mouse_y - this.options.delta_y;
-	  } else {
-		  mouse_y = mouse_y + this.options.delta_y;
-	  } 
-	
-	  // now set the right styles
-	  this.setStyles(mouse_x, mouse_y);
-	
-		
-	  // finally show the Tooltip
-	  //new Effect.Appear(this.tool_tip);
-	  new Element.show(this.tool_tip);
+    // finally show the Tooltip
+    //new Effect.Appear(this.tool_tip);
+    new Element.show(this.tool_tip);
+    
+    // I have to quickly show/hide it, otherwise max width doesn't get correctly updated
+    setTimeout(function(){
+      new Element.hide(this.tool_tip);
+      setTimeout(function(){new Element.show(this.tool_tip);}.bind(this), 1)
+    }.bind(this), 1)
   },
   
   setStyles: function(x, y){
     // set the right styles to position the tool tip
-	Element.setStyle(this.tool_tip, { position:'absolute',
-	 								  top:y + "px",
-	 								  left:x + "px",
-									  zindex:this.options.zindex
-	 								});
+	  Element.setStyle(this.tool_tip, { 
+	    position:'absolute',
+	   	top:y + "px",
+	   	left:x + "px",
+			zindex:this.options.zindex
+    });
 	
-	// apply default theme if wanted
-	if (this.options.default_css){
-	  	Element.setStyle(this.tool_tip, { margin:this.options.margin,
-		 								  padding:this.options.padding,
-		                                  backgroundColor:this.options.backgroundColor,
-										  zindex:this.options.zindex
-		 								});	
-	}	
+	  // apply default theme if wanted
+	  if (this.options.default_css){
+    	Element.setStyle(this.tool_tip, { 
+    	  margin:this.options.margin,
+	   		padding:this.options.padding,
+        backgroundColor:this.options.backgroundColor,
+        zindex:this.options.zindex
+      });	
+    }	
   },
 
   hideTooltip: function(event){

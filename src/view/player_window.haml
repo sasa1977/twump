@@ -22,7 +22,8 @@
     }
   
   %body{:ondragover => "event.preventDefault()", :onload => "init();",
-    :ondragenter => "event.preventDefault()", :style => "overflow:hidden;-webkit-user-select:none;"}
+    :ondragenter => "event.preventDefault()", 
+    :style => "overflow:hidden;-webkit-user-select:none; font-family:verdana;font-size:14px;"}
   
     =render_partial('title_bar')
     
@@ -65,4 +66,4 @@
       #deleteContext
         remove
 
-    #tooltip{ :style => "display:none; max-width:250px; background-color: lightYellow" }
+    #tooltip.tooltip{:style => "display:none"}
