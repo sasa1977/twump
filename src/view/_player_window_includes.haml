@@ -15,6 +15,7 @@
       "model/file",
       
       "controller/updater",
+      "controller/application",
       "controller/player_mixin",
       "controller/playlist_mixin",
       "controller/disk_operations_mixin",
@@ -25,24 +26,3 @@
       "view/playlist_window"
     )
   %>
-
-:javascript
-  function init(){
-    Twump.Controller.Updater.update();
-    
-    Twump.Application = Class.create();
-    Twump.Application.prototype = {
-      initialize: function(){
-        this.playerWindow = new Twump.View.PlayerWindow();
-        this.playlistWindow = new Twump.View.PlaylistWindow();
-        this.logger = Twump.Api.Logger;
-        
-        this.controller = new Twump.Controller.Player({
-        playerWindow: this.playerWindow, playlistWindow: this.playlistWindow,
-        logger: this.logger
-        });
-      }
-    };
-    
-    Twump.application = new Twump.Application();
-  }
