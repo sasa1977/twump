@@ -125,10 +125,12 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
             <td>\
               ${playlist.indexOf(file)+1}. \
             </td> \
-            <td class='title' width='*'> \
-              <nobr> \
-                ${file.displayName} \
-              </nobr> \
+            <td> \
+              <div class='title'> \
+                <nobr> \
+                  ${file.displayName} \
+                </nobr>\
+              </div> \
             </td> \
             <td class='length'> \
               ${file.displayLength()}\

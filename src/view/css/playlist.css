@@ -12,3 +12,10 @@
   color: blue;
 }
 
+.title {
+  width:410px;
+  overflow:hidden;
+  margin-left:5px;
+  margin-right:5px;
+}
+
