@@ -3,6 +3,7 @@ require 'find'
 require 'fileutils'
 require 'haml'
 
+
 class Paths
   def initialize(root)
     @root = root
@@ -74,19 +75,32 @@ class Compiler
   end
   
   def run
+    with_compile do
+      puts "\nrunning"
+      system("adl app.xml")
+    end
+  end
+  
+  def package
+    with_compile do
+      puts "\npackaging"
+      system("echo 123 | adt -package -storetype pkcs12 -keystore ../../build/cert.pfx ../../build/twump.air app.xml . > /dev/null")
+    end
+  end
+
+private
+  def with_compile
+    puts "compiling"
     compile
-    
-    puts "\nrunning"
     Dir.chdir(@paths.intermediate_src)
-    system("adl app.xml")
+    
+    yield
   ensure
     finish
     puts 'finished'
   end
 
-private
   def compile
-    puts "compiling"
     init
     process_hamls(get_hamls)
   end
@@ -137,5 +151,12 @@ private
   end
 end
 
+if ARGV.length == 0
+  puts "\nUsage: ruby compile.rb actions\n"
+  puts "\taction = run | package\n\n"
+end
 
-Compiler.new.run
+ARGV.each do |action|
+  Compiler.new.send(action)
+end
+
