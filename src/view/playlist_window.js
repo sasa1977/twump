@@ -11,12 +11,28 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
     this.playingParts = {};
     new PeriodicalExecuter(this.scrollWatcher.bind(this), 5);
     
+    this.addEventListener('playlist', 'mouseover')
+    new Tooltip('playlist', 'tooltip');
+    
+    this.addEventListener('playlist', "dragover")
+
+    
     this.list = new Twump.List({
       parentElement: $('playlist'), itemClass: 'playlistItem'
     });
     
     this.list.onDoubleClick = this.onItemDoubleClick.bind(this);
     this.list.onRightClick = this.onItemRightClick.bind(this);
+  },
+  
+  onPlaylistMouseover: function(event){
+    var tooltipText = ''
+      
+    var playlistItemEl = this.findItem(event.srcElement, 'playlistItem');
+    if (playlistItemEl)
+      tooltipText = this.displayOptions.playlist.file(playlistItemEl.getAttribute('fileId')).path
+      
+    $('tooltip').update(tooltipText)
   },
   
   selectedIds: function(){
@@ -74,19 +90,6 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
     this.displayOptions = options;
     
     $('playlist').update(this.playlistHtml(options));
-    
-    $$('.playlistItem').each(function(el){
-      el.addEventListener("dragover", this.onPlaylistItemOver.bind(this))
-    }.bind(this));
-    
-    $('itemsParent').addEventListener('mouseover', function(event){
-      var playlistItemEl = this.findItem(event.srcElement, 'playlistItem');
-      var file = this.displayOptions.playlist.file(playlistItemEl.getAttribute('fileId'))
-      $('tooltip').update(file.path)
-    }.bind(this));
-    
-    new Tooltip('itemsParent', 'tooltip');
-    
     this.drawCurrentPlayingItem();
   },
   
@@ -184,17 +187,16 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
     }
   },
   
-  onPlaylistItemOver: function(event){
+  onPlaylistDragover: function(event){
     var playlistItemEl = this.findItem(event.srcElement, 'playlistItem');
-    if (playlistItemEl) {
+    if (playlistItemEl)
       this.itemUnderMouseIndex = playlistItemEl.getAttribute('fileId');
-    }
   },
   
   findItem: function(el, htmlClass){
     el = $(el)
     
-    if (!el) return null;
+    if (!el || !el.hasClassName) return null;
     
     if (el.hasClassName(htmlClass)) return el;
     return this.findItem(el.parentElement, htmlClass);
