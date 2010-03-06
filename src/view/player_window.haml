@@ -9,6 +9,10 @@
     def play_window_button(id, content)
       "<div class='playWindowButton' id='#{id}'>#{content}</div>"
     end
+    
+    def slider(id)
+      "<div id='#{id}' class='#{id}'><input id='#{id}Input'/></div>"
+    end
   
   %body{:ondragover => "event.preventDefault()", :onload => "init();",
     :ondragenter => "event.preventDefault()", :style => "overflow:hidden;-webkit-user-select:none;"}
@@ -20,9 +24,9 @@
         #playing
         #playlistPos
         #progress
-        
-      #playProgress.playProgress
-        %input#playProgressInput/
+      
+      =slider("playProgress")  
+      
       %br/
       %div
         =play_window_button('previous', '|<')
@@ -31,8 +35,8 @@
         =play_window_button('stop', 'O')
         =play_window_button('next', '>|')
         
-        #volume.volume
-          %input#volumeInput/
+        =slider('volume')
+        
       %br/
       %br/
       %div
