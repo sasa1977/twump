@@ -21,8 +21,8 @@ Twump.Controller.Updater = {
   
   downloadRemote: function(remoteVersion){
     Twump.Api.downloadRemoteBinary(
-      'http://github.com/downloads/sasa1977/twump/twump.air',
-      Twump.Storage.appStorageFile('twump.air'),
+      'http://github.com/downloads/sasa1977/twump/twump-' + remoteVersion + '.air',
+      Twump.Storage.appStorageFile('twump-' + remoteVersion + '.air'),
       function(file){
         this.doUpdate(file, remoteVersion)
       }.bind(this)

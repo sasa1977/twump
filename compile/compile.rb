@@ -3,6 +3,7 @@ require 'find'
 require 'fileutils'
 require 'haml'
 
+require 'rexml/document'
 
 class Paths
   def initialize(root)
@@ -92,12 +93,19 @@ class Compiler
   def package
     with_compile do
       puts "\npackaging"
-      system("echo 123 | adt -package -storetype pkcs12 -keystore #{@paths.build}/cert.pfx #{@paths.release}/twump.air app.xml . > /dev/null")
+      system("echo 123 | adt -package -storetype pkcs12 -keystore #{@paths.build}/cert.pfx #{@paths.release}/twump-#{app_version}.air app.xml . > /dev/null")
       FileUtils.cp("#{@paths.src}/app.xml", @paths.release, :preserve => true)
     end
   end
 
 private
+  def app_version
+    REXML::XPath.first(
+      REXML::Document.new(File.read("#{@paths.src}/app.xml")),
+      "//version"
+    ).text
+  end
+
   def with_compile
     puts "compiling"
     compile
