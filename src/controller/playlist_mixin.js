@@ -31,7 +31,7 @@ Twump.Controller.PlaylistMixin = {
   },
   
   onDeleteClick: function(){
-    this.deleteFromPlaylist(this.playlistWindow.selectedIds());
+    this.deleteFromPlaylist(this.playlistWindow.selectedItems());
   },
   
   deleteFromPlaylist: function(ids){
@@ -100,27 +100,23 @@ Twump.Controller.PlaylistMixin = {
     this.editor = null;
   },
   
-  relocate: function(options){
-    var newIndex = this.playlist.moveBefore(
-      this.playlistWindow.selectedIds(), 
-      this.playlistWindow.itemUnderMouseIndex,
-      this.currentFile()
-    );
-    
-    this.setCurrentIndex(newIndex);
-    
-    this.redrawPlayList();
+  reorderFromPlaylist: function(options){
+    this.moveFiles({
+      items: this.playlistWindow.selectedItems(), 
+      before: this.playlistWindow.itemUnderMouseIndex
+    })
   },
   
-  moveBefore: function(options){
-    var newIndex = this.playlist.moveBefore(
-      this.editorController().selectedItems(), 
-      this.playlistWindow.itemUnderMouseIndex,
-      this.currentFile()
-    );
-    
+  reorderFromEditor: function(options){
+    this.moveFiles({
+      items: this.editorController().selectedItems(), 
+      before: this.playlistWindow.itemUnderMouseIndex
+    })
+  },
+  
+  moveFiles: function(options){
+    var newIndex = this.playlist.moveBefore(options.items,  options.before, this.currentFile());
     this.setCurrentIndex(newIndex);
-    
     this.redrawPlayList();
   },
   

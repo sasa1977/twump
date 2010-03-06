@@ -36,7 +36,7 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
     $('tooltip').update(tooltipText)
   },
   
-  selectedIds: function(){
+  selectedItems: function(){
     return this.list.selectedItems.map(function(item){
       return item.getAttribute('fileId');
     }.bind(this))
@@ -206,6 +206,6 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
   },
   
   onStartDrag: function(){
-    Twump.Api.startDrag("twump:relocate");
+    Twump.Api.startDrag("twump:reorderFromPlaylist");
   }
 });

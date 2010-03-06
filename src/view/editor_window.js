@@ -69,7 +69,7 @@ Object.extend(Twump.View.EditorWindow.prototype, {
   "),
   
   onStartDrag: function(){
-    Twump.Api.startDrag("twump:moveBefore");
+    Twump.Api.startDrag("twump:reorderFromEditor");
   },
   
   selectedItems: function(){
