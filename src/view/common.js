@@ -17,21 +17,6 @@ Twump.View.Common = {
   },
   
   insertHeader: function(parentId){
-    var html = '<table cellpadding="0" cellspacing="0" border="0" width="100%">' +
-      '<tr class="header" id="header">' +
-        '<td width="*">' +
-          '<div id="caption" style="text-align:center;"></div>' +
-        '</td>' +
-        '<td width="10px">' +
-          '<div id="close">' +
-            'close' +
-          '</div>' +
-        '</td>' +
-      '</tr>' +
-    '</table>';
-    
-    new Insertion.Top(parentId, html);
-    
     this.addEventListener("close", "click");
     this.onCloseClick = function(){
       if (this.onWindowClosing)

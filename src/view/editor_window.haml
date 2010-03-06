@@ -28,6 +28,8 @@
       }
       
   %body{:onload => "init();", :style => "overflow:hidden;-webkit-user-select:none;"}
+    =render_partial('title_bar')
+  
     #editor
       %input#filter{ :type => "text" }/
       #results{ :style => "width:600;height:330;overflow:auto;" }

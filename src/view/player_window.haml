@@ -12,6 +12,8 @@
   
   %body{:ondragover => "event.preventDefault()", :onload => "init();",
     :ondragenter => "event.preventDefault()", :style => "overflow:hidden;-webkit-user-select:none;"}
+  
+    =render_partial('title_bar')
     
     #player
       .playingInfo
