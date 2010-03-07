@@ -60,16 +60,6 @@ Object.extend(Twump.View.PlayerWindow.prototype, {
     })
   },
   
-  initSlider: function(id, options){
-    var slider = new Slider($(id), $(id + 'Input'), options.direction);
-    
-    slider.onchange = options.onchange;
-    slider.setMinimum(options.min);
-    slider.setMaximum(options.max);
-    
-    return slider;
-  },
-  
   setVolume: function(volume){
     this.volumeSlider.setValue(parseInt(volume * 100));
   },

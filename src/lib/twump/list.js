@@ -12,7 +12,7 @@ Twump.List.prototype = {
   
   onParentDoubleClick: function(event){
     var item = this.findItem(event.srcElement, this.itemClass);
-
+    
     if (this.onDoubleClick){
       this.onDoubleClick(item, event);
     }

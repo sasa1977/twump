@@ -24,6 +24,14 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
     this.list.onDoubleClick = this.onItemDoubleClick.bind(this);
     this.list.onRightClick = this.onItemRightClick.bind(this);
     this.list.onStartDrag = this.onStartDrag.bind(this);
+    
+    this.pageSlider = this.initSlider('pageProgress', {min: 0, max: 100, direction: 'horizontal',
+      onchange: this.onPageSliderChange.bind(this)
+    })
+  },
+  
+  onPageSliderChange: function(){
+    this.drawAround(Math.max(0, this.pageSlider.getValue()))
   },
   
   onPlaylistMouseover: function(event){
@@ -92,6 +100,23 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
     
     $('playlist').update(this.playlistHtml(options));
     this.drawCurrentPlayingItem();
+    this.pageSlider.setMinimum(0);
+    this.pageSlider.setMaximum(options.playlist.length() - 2 * options.range);
+
+    if (this.playingFile) {
+      var page = options.playlist.indexOf(this.playingFile);
+      page = Math.max(0, page -options.range);
+      
+      this.pageSlider.setValue(page);
+    }
+  },
+  
+  drawAround: function(pos){
+    var options = Object.clone(this.displayOptions);
+    options.file = this.displayOptions.playlist.fileAt(pos + this.displayOptions.range);
+    
+    $('playlist').update(this.playlistHtml(options));
+    this.drawCurrentPlayingItem();
   },
   
   onItemRightClick: function(item, event){
@@ -157,17 +182,18 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
     if (!this.displayOptions) return;
     
     this.displayOptions.file = file;
+    this.playingFile = file;
+    
     this.display(this.displayOptions);
 
-    if (this.playingItem)
-      this.playingItem.removeClassName('playing');
-
-    this.playingFile = file;
     this.drawCurrentPlayingItem();
   },
   
   drawCurrentPlayingItem: function(){
     if (!this.playingFile) return;
+    
+    if (this.playingItem)
+      this.playingItem.removeClassName('playing');
   
     this.playingItem = $('playlistItem' + this.playingFile.id);
     if (!this.playingItem) return;

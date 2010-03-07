@@ -85,7 +85,7 @@ Twump.Controller.PlayerMixin = {
   
   play: function(index){
     if (!this.indexOk(index)) return;
-    
+
     this.setCurrentIndex(index);
     this.playCurrent();
   },
@@ -114,7 +114,7 @@ Twump.Controller.PlayerMixin = {
   },
   
   onPlayClick: function(){
-    this.playCurrent();  
+    this.play(this.currentIndex());  
   },
   
   onPreviousClick: function(){

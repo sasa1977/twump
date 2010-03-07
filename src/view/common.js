@@ -32,5 +32,15 @@ Twump.View.Common = {
   
   setCaption: function(caption){
     $('caption').update(caption);
+  },
+  
+  initSlider: function(id, options){
+    var slider = new Slider($(id), $(id + 'Input'), options.direction);
+    
+    slider.onchange = options.onchange;
+    slider.setMinimum(options.min);
+    slider.setMaximum(options.max);
+    
+    return slider;
   }
 }
