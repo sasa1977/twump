@@ -31,7 +31,7 @@ Twump.Controller.PlaylistMixin = {
   },
   
   onDeleteClick: function(){
-    this.deleteFromPlaylist(this.playlistWindow.selectedItems());
+    this.deleteFromPlaylist(this.playlistWindow.selectedIds());
   },
   
   deleteFromPlaylist: function(ids){
@@ -102,7 +102,7 @@ Twump.Controller.PlaylistMixin = {
   
   reorderFromPlaylist: function(options){
     this.moveFiles({
-      items: this.playlistWindow.selectedItems(), 
+      items: this.playlistWindow.selectedIds(), 
       before: this.playlistWindow.itemUnderMouseIndex
     })
   },

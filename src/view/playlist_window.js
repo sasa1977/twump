@@ -17,8 +17,9 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
     this.addEventListener('playlist', "dragover")
 
     
-    this.list = new Twump.List({
-      parentElement: $('playlist'), itemClass: 'playlistItem'
+    this.list = new Twump.LargeList({
+      parentElement: $('playlist'), itemClass: 'playlistItem',
+      template: this.playlistTemplate
     });
     
     this.list.onDoubleClick = this.onItemDoubleClick.bind(this);
@@ -35,27 +36,32 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
   },
   
   onPlaylistMouseover: function(event){
+    
     var tooltipText = ''
       
-    var playlistItemEl = this.findItem(event.srcElement, 'playlistItem');
-    if (playlistItemEl)
-      tooltipText = this.displayOptions.playlist.file(playlistItemEl.getAttribute('fileId')).path
+    var file = this.list.findModel(event.srcElement);
+    if (file)
+      tooltipText = file.path;
       
     $('tooltip').update(tooltipText)
   },
   
   selectedItems: function(){
-    return this.list.selectedItems.map(function(item){
-      return item.getAttribute('fileId');
-    }.bind(this))
+    return this.list.selectedItems;
   },
   
-  selectItem: function(id){
-    this.list.selectItem($('playlistItem' + id))
+  selectedIds: function(){
+    return this.selectedItems().map(function(item){
+      return item.id;
+    })
+  },
+  
+  selectItem: function(file){
+    this.list.selectItem(file)
   },
   
   onItemDoubleClick: function(item, event){
-    this.onItemSelected(item.getAttribute('fileId'));
+    this.onItemSelected(item.id);
   },
   
   onBodyClick: function(event){
@@ -63,7 +69,7 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
   },
   
   onCopyPathToClipboardClick: function(){
-    this.onCopyPathToClipboard(this.relatedContextMenuItem.getAttribute('fileId'));
+    this.onCopyPathToClipboard(this.relatedContextMenuItem.id);
   },
   
   onDeleteContextClick: function(){
@@ -76,7 +82,7 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
     var playlistEl = $('playlist');
     var itemsParent = $('itemsParent');
     
-    if (!itemsParent.children || itemsParent.children.length == 0) return;
+    if (!itemsParent || !itemsParent.children || itemsParent.children.length == 0) return;
     
     var itemHeight = itemsParent.children[0].clientHeight;
     
@@ -97,26 +103,21 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
   
   display: function(options){
     this.displayOptions = options;
-    
-    $('playlist').update(this.playlistHtml(options));
-    this.drawCurrentPlayingItem();
+    this.list.setModel(options.playlist);
+
     this.pageSlider.setMinimum(0);
     this.pageSlider.setMaximum(options.playlist.length() - 2 * options.range);
 
-    if (this.playingFile) {
-      var page = options.playlist.indexOf(this.playingFile);
-      page = Math.max(0, page -options.range);
-      
-      this.pageSlider.setValue(page);
-    }
+    if (!this.playingFile) return;
+
+    var bounds = options.playlist.boundsAround(options);
+    this.list.drawItems(bounds);
+    this.pageSlider.setValue(bounds.start);
   },
   
   drawAround: function(pos){
-    var options = Object.clone(this.displayOptions);
-    options.file = this.displayOptions.playlist.fileAt(pos + this.displayOptions.range);
-    
-    $('playlist').update(this.playlistHtml(options));
-    this.drawCurrentPlayingItem();
+    var bounds = this.displayOptions.playlist.boundsFrom({start: pos, range: this.displayOptions.range});
+    this.list.drawItems(bounds);
   },
   
   onItemRightClick: function(item, event){
@@ -146,10 +147,10 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
   playlistTemplate: TrimPath.parseTemplate(" \
     <table cellspacing='0' cellpadding='0' border='0'> \
       <tbody id='itemsParent'> \
-        {for file in files} \
-          <tr class='playlistItem' id='playlistItem${file.id}' fileId='${file.id}'>\
+        {for file in items} \
+          <tr class='playlistItem' itemId='${file.id}'>\
             <td>\
-              ${playlist.indexOf(file)+1}. \
+              ${model.indexOf(file)+1}. \
             </td> \
             <td> \
               <div class='title'> \
@@ -166,7 +167,7 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
       </tbody> \
      </table> \
      <div> \
-      Total ${playlist.length()} files \
+      Total ${model.length()} files \
      </div> \
   "),
  
@@ -184,24 +185,11 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
     this.displayOptions.file = file;
     this.playingFile = file;
     
+    this.list.removeHtmlClassFromAll('playing');
+    this.list.setItemHtmlClass(file, 'playing');
     this.display(this.displayOptions);
-
-    this.drawCurrentPlayingItem();
   },
   
-  drawCurrentPlayingItem: function(){
-    if (!this.playingFile) return;
-    
-    if (this.playingItem)
-      this.playingItem.removeClassName('playing');
-  
-    this.playingItem = $('playlistItem' + this.playingFile.id);
-    if (!this.playingItem) return;
-    
-    this.playingItem.addClassName('playing')
-    this.showInView(this.playingItem)
-  },
-    
   showInView: function(el){
     if (!el) return;
   
@@ -217,9 +205,7 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
   },
   
   onPlaylistDragover: function(event){
-    var playlistItemEl = this.findItem(event.srcElement, 'playlistItem');
-    if (playlistItemEl)
-      this.itemUnderMouseIndex = playlistItemEl.getAttribute('fileId');
+    this.itemUnderMouseIndex = this.list.findModel(event.srcElement);
   },
   
   findItem: function(el, htmlClass){

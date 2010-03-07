@@ -53,6 +53,14 @@ Twump.Model.Playlist.prototype = {
     return this.filesIndex[id];
   },
   
+  item: function(id){
+    return this.file(id);
+  },
+  
+  itemAt: function(position){
+    return this.fileAt(position);
+  },
+  
   paths: function(){
     return $A(this.files.map(function(file){return file.path}));
   },
@@ -120,8 +128,8 @@ Twump.Model.Playlist.prototype = {
     })
   },
   
-  moveBefore: function(items, id, currentFile){  
-    var position = this.indexOf({id: id});
+  moveBefore: function(items, before, currentFile){  
+    var position = this.indexOf(before);
     if (!position) return;
     
     var filesToMove = items.inject([], function(memo, itemId){
@@ -148,6 +156,34 @@ Twump.Model.Playlist.prototype = {
     for (var index = start;index < end;index++)
       result.push(this.fileAt(index))
     
+    return result;
+  },
+  
+  boundsAround: function(options){
+    if (this.empty()) return {start: 0, end: 0};
+  
+    var start = Math.max(this.indexOf(options.file) - options.range, 0);
+    var end = Math.min(start + 2 * options.range, this.length());
+    start = Math.max(end - 2 * options.range, 0);
+    
+    return {start: start, end: end};
+  },
+  
+  boundsFrom: function(options){
+    if (this.empty()) return {start: 0, end: 0};
+    
+    var start = Math.max(Math.min(options.start, this.length()), 0);
+    var end = Math.min(start + 2 * options.range, this.length()); 
+    start = Math.max(end - 2 * options.range, 0);
+    
+    return {start: start, end: end};
+  },
+  
+  items: function(bounds){
+    var result = []
+    for (var index = bounds.start;index < bounds.end;index++) {
+      result.push(this.fileAt(index));
+    }
     return result;
   }
 };
