@@ -69,16 +69,8 @@ Twump.LargeList.prototype = {
   },
   
   removeHtmlClass: function(item, htmlClass){
-    var itemHtmlClasses = this.getItemHtmlClasses(item);
-    var position = itemHtmlClasses.indexOf(htmlClass);
-    if (position >= 0)
-      itemHtmlClasses.splice(position, 1);
-      
-    var htmlClassItems = this.getHtmlClassItems(htmlClass);
-    position = htmlClassItems.indexOf(item);
-    if (position >= 0)
-      htmlClassItems.splice(position, 1);
-      
+    this.getItemHtmlClasses(item).findAndDelete(htmlClass);
+    this.getHtmlClassItems(htmlClass).findAndDelete(item);
     this.withHtmlItem(item, function(htmlItem){htmlItem.removeClassName(htmlClass)})
   },
   

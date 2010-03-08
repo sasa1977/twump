@@ -50,3 +50,9 @@ Array.prototype.insertArrayAt = function(index, data){
   return firstPart.concat(data).concat(lastPart);
 }
 
+Array.prototype.findAndDelete = function(el){
+  var position = this.indexOf(el);
+  if (position >= 0)
+    this.splice(position, 1);
+}
+
