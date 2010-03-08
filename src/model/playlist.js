@@ -53,14 +53,6 @@ Twump.Model.Playlist.prototype = {
     return this.filesIndex[id];
   },
   
-  item: function(id){
-    return this.file(id);
-  },
-  
-  itemAt: function(position){
-    return this.fileAt(position);
-  },
-  
   paths: function(){
     return $A(this.files.map(function(file){return file.path}));
   },

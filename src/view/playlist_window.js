@@ -103,6 +103,9 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
   
   display: function(options){
     this.displayOptions = options;
+    
+    options.playlist.item = options.playlist.file;
+    options.playlist.itemAt = options.playlist.fileAt;
     this.list.setModel(options.playlist);
 
     this.pageSlider.setMinimum(0);
