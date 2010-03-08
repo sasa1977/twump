@@ -136,7 +136,7 @@ private
   def process_haml(haml_file)
     content = html(haml_file)
     output_name = html_name(haml_file)
-    File.open(output_name, "wt") do |f|
+    File.open(output_name, "w") do |f|
       f.write(content)
     end
   end
