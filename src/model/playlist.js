@@ -112,12 +112,12 @@ Twump.Model.Playlist.prototype = {
   
     regex = new RegExp(regex, "i");
     
-    return this.files.inject([],function(memo, file){
+    return new Twump.Model.Playlist(this.files.inject([],function(memo, file){
       if (file.match(regex))
-        memo.push(file);
+        memo.push(file.path);
       
       return memo;
-    })
+    }));
   },
   
   moveBefore: function(items, before, currentFile){  
@@ -134,21 +134,6 @@ Twump.Model.Playlist.prototype = {
     this.insertAt(position, filesToMove);
     
     return this.indexOf(currentFile);
-  },
-  
-  filesAround: function(options){
-    if (this.empty()) return [];
-  
-    var start = Math.max(this.indexOf(options.file) - options.range, 0);
-    var end = Math.min(start + 2 * options.range, this.length());
-    var start = Math.max(end - 2 * options.range, 0);
-    
-    var result = []
-    
-    for (var index = start;index < end;index++)
-      result.push(this.fileAt(index))
-    
-    return result;
   },
   
   boundsAround: function(options){

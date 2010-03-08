@@ -109,7 +109,7 @@ Twump.Controller.PlaylistMixin = {
   
   reorderFromEditor: function(options){
     this.moveFiles({
-      items: this.editorController().selectedItems(), 
+      items: this.editorController().selectedIds(), 
       before: this.playlistWindow.itemUnderMouseIndex
     })
   },

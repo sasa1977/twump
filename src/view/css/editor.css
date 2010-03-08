@@ -1,3 +1,7 @@
 .result.selected{
   background-color: lightgrey;
 }
+
+.pageProgress{
+  height:330px;
+}

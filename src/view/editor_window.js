@@ -12,13 +12,31 @@ Object.extend(Twump.View.EditorWindow.prototype, {
     
     document.body.addEventListener('click', this.onBodyClick.bind(this))
     
-    this.list = new Twump.List({
-      parentElement: $('results'), itemClass: 'result'
+    this.list = new Twump.LargeList({
+      parentElement: $('results'), itemClass: 'result',
+      template: this.searchResultTemplate
     });
     
     this.list.onStartDrag = this.onStartDrag.bind(this);
     this.list.onRightClick = this.onItemRightClick.bind(this);
     $('filter').activate();
+    
+    this.pageSlider = this.initSlider('pageProgress', {min: 0, max: 0, direction: 'vertical',
+      onchange: this.onPageSliderChange.bind(this)
+    })
+  },
+  
+  onPageSliderChange: function(){
+    if (!this.pageSlider || this.ignorePageSliderChange) return;
+    
+    var page = this.pageSlider.getMaximum() - this.pageSlider.getValue();
+    this.list.drawItems({start: page, end: page + 19});
+  },
+  
+  selectedIds: function(){
+    return this.selectedItems().map(function(item){
+      return item.id;
+    })
   },
   
   onItemRightClick: function(item, event){
@@ -53,19 +71,27 @@ Object.extend(Twump.View.EditorWindow.prototype, {
   renderSearchResults: function(results){
     this.list.deselectAllItems();
     
-    var index = 0, html = results.inject("", function(memo, file){
-      var result = memo + this.searchResultTemplate.process({file: file, index: index});
-      index++;
-      return result;
-    }.bind(this))
-
-    $('results').update(html);
+    results.item = results.file;
+    results.itemAt = results.fileAt;
+    this.list.setModel(results);
+    
+    this.ignorePageSliderChange = true;
+    
+    this.pageSlider.setMinimum(0);
+    this.pageSlider.setMaximum(results.length() - 19);
+    this.pageSlider.setValue(this.pageSlider.getMaximum());
+    
+    this.ignorePageSliderChange = false;
+    
+    this.list.drawItems({start: 0, end: 19});
   },
   
   searchResultTemplate: TrimPath.parseTemplate(" \
-    <div class='result' id='result${index}' value='${file.path}' index='${index}' fileId='${file.id}' style='width:1000'> \
-      ${file.displayName} \
-     </div> \
+    {for file in items}\
+      <div class='result' value='${file.path}' itemId='${file.id}'> \
+        ${file.displayName} \
+       </div> \
+    {/for} \
   "),
   
   onStartDrag: function(){
@@ -73,8 +99,6 @@ Object.extend(Twump.View.EditorWindow.prototype, {
   },
   
   selectedItems: function(){
-    return this.list.selectedItems.map(function(item){
-      return item.getAttribute('fileId');
-    })
+    return this.list.selectedItems;
   }
 });

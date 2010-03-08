@@ -28,7 +28,7 @@ Object.extend(Twump.Controller.Editor.prototype, {
     this.playerController.jumpTo(selectedItem);
   },
   
-  selectedItems: function(){
-    return this.editorWindow.selectedItems();
+  selectedIds: function(){
+    return this.editorWindow.selectedIds();
   }
 })

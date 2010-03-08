@@ -143,12 +143,6 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
     $('playListContextMenu').hide();
   },
   
-  playlistHtml: function(options){
-    return this.playlistTemplate.process({playlist: options.playlist, 
-      files: options.playlist.filesAround(options)}
-    )
-  },
-  
   playlistTemplate: TrimPath.parseTemplate(" \
     <table cellspacing='0' cellpadding='0' border='0'> \
       <tbody id='itemsParent'> \
