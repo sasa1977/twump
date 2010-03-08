@@ -155,7 +155,9 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
         {for file in items} \
           <tr class='playlistItem' itemId='${file.id}'>\
             <td>\
-              ${model.indexOf(file)+1}. \
+              <div class='index'> \
+                ${model.indexOf(file)+1}. \
+              </div> \
             </td> \
             <td> \
               <div class='title'> \

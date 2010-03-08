@@ -13,8 +13,12 @@
   color: blue;
 }
 
+.index {
+  width:40px;
+}
+
 .title {
-  width:390px;
+  width:375px;
   overflow:hidden;
   margin-left:5px;
   margin-right:5px;
