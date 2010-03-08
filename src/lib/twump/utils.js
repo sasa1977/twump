@@ -42,3 +42,12 @@ Twump.Utils.DelayExecute.prototype = {
     return step == this.delayedExecutors.length - 1;
   }
 }
+
+
+
+Twump.Utils.scheduleInChunks = function(jobs, options){
+  options = options || {}
+  jobs.each(function(job, index){
+    setTimeout(function(){job()}, (index + 1) * (options.delay || 100));
+  })
+}

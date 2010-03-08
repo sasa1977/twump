@@ -64,7 +64,7 @@ Twump.Controller.PlayerMixin = {
   loadMetadata: function(file, force){
     if (!force && file.metadataLoaded())
       return;
-      
+    
     Twump.Api.songMetadata(file.path, function(metadata){
       file.addMetadata(metadata);
       this.playlistWindow.refreshItem(file);

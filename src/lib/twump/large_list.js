@@ -33,6 +33,12 @@ Twump.LargeList.prototype = {
     }.bind(this))
   },
   
+  itemsHtml: function(bounds){
+    return this.template.process({model: this.model, 
+      items: this.model.items(bounds)}
+    )
+  },
+  
   modelItem: function(htmlItem){
     return this.model.item(htmlItem.getAttribute('itemId'));
   },
@@ -77,12 +83,6 @@ Twump.LargeList.prototype = {
   getItemHtmlClasses: function(item){
    this.itemsHtmlClasses[item.id] = this.itemsHtmlClasses[item.id] || [];
    return this.itemsHtmlClasses[item.id];
-  },
-  
-  itemsHtml: function(bounds){
-    return this.template.process({model: this.model, 
-      items: this.model.items(bounds)}
-    )
   },
   
   

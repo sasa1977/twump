@@ -128,14 +128,17 @@ Twump.Controller.PlaylistMixin = {
     Twump.Api.copyTextToClipboard(this.playlist.file(fileId).path);
   },
   
-  onScrollChanged: function(info){
-    info.ids.each(function(id){
-      var file = this.playlist.file(id);
-      if (file && !file.loadingMetadata) {
-        this.loadMetadata(file);
-        file.loadingMetadata = true;
-      }
-    }.bind(this))
+  onScrollChanged: function(files){
+    Twump.Utils.scheduleInChunks(    
+      files.map(function(file){
+        return function(){
+          if (file && !file.loadingMetadata) {
+            this.loadMetadata(file);
+            file.loadingMetadata = true;
+          }
+        }.bind(this)
+      }.bind(this)), {delay: 100}
+    )
   },
   
   jumpTo: function(fileId){

@@ -9,7 +9,6 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
     document.body.addEventListener('click', this.onBodyClick.bind(this))
     
     this.playingParts = {};
-    new PeriodicalExecuter(this.scrollWatcher.bind(this), 5);
     
     this.addEventListener('playlist', 'mouseover')
     this.addEventListener('playlist', 'mousewheel')
@@ -82,27 +81,6 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
     this.onDeleteClick();
   },
   
-  scrollWatcher: function(){
-    if (!this.displayOptions || this.displayOptions.playlist.empty()) return;
-  
-    var playlistEl = $('playlist');
-    var itemsParent = $('itemsParent');
-    
-    if (!itemsParent || !itemsParent.children || itemsParent.children.length == 0) return;
-    
-    var itemHeight = itemsParent.children[0].clientHeight;
-    
-    var startIndex = Math.floor(playlistEl.scrollTop / itemHeight);
-    var endIndex = Math.ceil((playlistEl.scrollTop + playlistEl.clientHeight) / itemHeight);
-    endIndex = Math.min(itemsParent.children.length - 1, endIndex);
-
-    var ids = []
-    for (var index = startIndex;index <= endIndex;index++)
-      ids.push(this.itemId(itemsParent.children[index]))
-
-    this.onScrollChanged({ids: ids})
-  },
-  
   itemId: function(item){
     return $(item).getAttribute('fileId');
   },
@@ -113,9 +91,13 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
     options.playlist.item = options.playlist.file;
     options.playlist.itemAt = options.playlist.fileAt;
     this.list.setModel(options.playlist);
-
+    
+    this.ignorePageSliderChange = true;
+    
     this.pageSlider.setMinimum(0);
     this.pageSlider.setMaximum(options.playlist.length() - 2 * options.range);
+    
+    this.ignorePageSliderChange = false;
 
     if (!this.playingFile) return;
 
@@ -123,15 +105,23 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
     this.list.drawItems(bounds);
     
     this.pageSlider.setValue(this.pageSlider.getMaximum() - bounds.start);
+    
+    this.notifyViewportChange(bounds);
   },
   
   drawAround: function(pos){
     var bounds = this.displayOptions.playlist.boundsFrom({start: pos, range: this.displayOptions.range});
     this.list.drawItems(bounds);
+    //this.notifyViewportChange(bounds);
+  },
+  
+  notifyViewportChange: function(bounds){
+    if (this.onScrollChanged)
+      this.onScrollChanged(this.displayOptions.playlist.items(bounds))
   },
   
   onPageSliderChange: function(){
-    if (!this.pageSlider) return;
+    if (!this.pageSlider || this.ignorePageSliderChange) return;
     this.drawAround(Math.max(0, this.pageSlider.getMaximum() - this.pageSlider.getValue()))
   },
   
@@ -184,7 +174,7 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
   "),
  
   refreshItem: function(file){
-    var element = $('playlistItem' + file.id);
+    var element = this.list.htmlItem(file);
     if (!element) return;
     
     element.getElementsBySelector('.title')[0].update("<nobr>" + file.displayName + "</nobr>")
