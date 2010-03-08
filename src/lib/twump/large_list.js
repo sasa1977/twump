@@ -5,6 +5,8 @@ Twump.LargeList.prototype = {
 
     $(this.parentElement).addEventListener('click', this.onParentClick.bind(this))
     $(this.parentElement).addEventListener('mousedown', this.onParentMouseDown.bind(this))
+    $(this.parentElement).addEventListener('mouseup', this.onParentMouseUp.bind(this))
+    $(this.parentElement).addEventListener('mousemove', this.onParentMouseMove.bind(this))
     $(this.parentElement).addEventListener('dblclick', this.onParentDoubleClick.bind(this))
     
     this.selectedItems = [];
@@ -103,6 +105,8 @@ Twump.LargeList.prototype = {
   },
   
   onParentMouseDown: function(event){
+    this.mousePressed = true;
+    
     var item = this.findModel(event.srcElement, this.itemClass);
     if (!item) return;
     
@@ -111,9 +115,10 @@ Twump.LargeList.prototype = {
     
     if (!this.itemSelected(item) && !event.ctrlKey)
       this.onItemClick(item, event);
-    
-    if (this.onStartDrag)
-      this.onStartDrag();
+  },
+  
+  onParentMouseUp: function(event){
+    this.mousePressed = false;
   },
     
   onParentClick: function(event){
@@ -142,6 +147,12 @@ Twump.LargeList.prototype = {
       return this.modelItem(htmlElement);
   },
   
+  onParentMouseMove: function(event){
+    if (this.mousePressed && this.onStartDrag) {
+      this.onStartDrag();
+      this.mousePressed = false;
+    }
+  },
   
   onItemClick: function(item, data){
     if ((!data.shiftKey && !data.ctrlKey) || this.selectionEmpty())
