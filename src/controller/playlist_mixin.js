@@ -8,7 +8,7 @@ Twump.Controller.PlaylistMixin = {
     this.playlistWindow.display({
       playlist: this.playlist,
       file: this.currentFile(), 
-      range: 10
+      range: 9
     });
   },
   

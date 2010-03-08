@@ -1,6 +1,7 @@
 #playlist {
   height:335;
-  background-color:lightgrey;
+  width:470px;
+  background-color:lightGrey;
   overflow:auto;
 }
 
@@ -13,12 +14,12 @@
 }
 
 .title {
-  width:410px;
+  width:390px;
   overflow:hidden;
   margin-left:5px;
   margin-right:5px;
 }
 
 .pageProgress {
-  width: 500px;
+  height: 335px;
 }

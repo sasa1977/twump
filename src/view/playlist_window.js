@@ -12,9 +12,10 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
     new PeriodicalExecuter(this.scrollWatcher.bind(this), 5);
     
     this.addEventListener('playlist', 'mouseover')
-    new Tooltip('playlist', 'tooltip');
-    
+    this.addEventListener('playlist', 'mousewheel')
     this.addEventListener('playlist', "dragover")
+    
+    new Tooltip('playlist', 'tooltip');
 
     
     this.list = new Twump.LargeList({
@@ -26,13 +27,9 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
     this.list.onRightClick = this.onItemRightClick.bind(this);
     this.list.onStartDrag = this.onStartDrag.bind(this);
     
-    this.pageSlider = this.initSlider('pageProgress', {min: 0, max: 100, direction: 'horizontal',
+    this.pageSlider = this.initSlider('pageProgress', {min: 0, max: 0, direction: 'vertical',
       onchange: this.onPageSliderChange.bind(this)
     })
-  },
-  
-  onPageSliderChange: function(){
-    this.drawAround(Math.max(0, this.pageSlider.getValue()))
   },
   
   onPlaylistMouseover: function(event){
@@ -44,6 +41,15 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
       tooltipText = file.path;
       
     $('tooltip').update(tooltipText)
+  },
+  
+  onPlaylistMousewheel: function(event){
+    this.pageSlider.setValue( 
+      Math.min(
+        this.pageSlider.getMaximum(),
+        Math.max(0, this.pageSlider.getValue() + event.wheelDeltaY / 120)
+      )
+    )
   },
   
   selectedItems: function(){
@@ -115,12 +121,18 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
 
     var bounds = options.playlist.boundsAround(options);
     this.list.drawItems(bounds);
-    this.pageSlider.setValue(bounds.start);
+    
+    this.pageSlider.setValue(this.pageSlider.getMaximum() - bounds.start);
   },
   
   drawAround: function(pos){
     var bounds = this.displayOptions.playlist.boundsFrom({start: pos, range: this.displayOptions.range});
     this.list.drawItems(bounds);
+  },
+  
+  onPageSliderChange: function(){
+    if (!this.pageSlider) return;
+    this.drawAround(Math.max(0, this.pageSlider.getMaximum() - this.pageSlider.getValue()))
   },
   
   onItemRightClick: function(item, event){
@@ -169,9 +181,6 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
         {/for} \
       </tbody> \
      </table> \
-     <div> \
-      Total ${model.length()} files \
-     </div> \
   "),
  
   refreshItem: function(file){
@@ -191,20 +200,6 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
     this.list.removeHtmlClassFromAll('playing');
     this.list.setItemHtmlClass(file, 'playing');
     this.display(this.displayOptions);
-  },
-  
-  showInView: function(el){
-    if (!el) return;
-  
-    var viewTop = $('playlist').scrollTop;
-    var viewHeight = $('playlist').clientHeight;
-    var viewBottom = viewTop + viewHeight;
-    var elTop = el.offsetTop;
-    var elBottom = elTop + el.offsetHeight;
-    
-    if (elTop < viewTop || elBottom > viewBottom) {
-      $('playlist').scrollTop = Math.max(elTop - parseInt(viewHeight / 2), 0);
-    }
   },
   
   onPlaylistDragover: function(event){
