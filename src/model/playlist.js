@@ -76,16 +76,14 @@ Twump.Model.Playlist.prototype = {
     this.setFiles([])
   },
   
-  deleteFiles: function(ids, currentIndex){
+  deleteFiles: function(files, currentIndex){
     var newIndex = currentIndex;
     
-    ids.each(function(id){
-      if (!this.file(id)) return;
-    
-      var index = this.idToIndex(id);
+    files.each(function(file){
+      var index = this.indexOf(file);
       
       this.files[index] = null;
-      this.filesIndex[id] = null;
+      this.filesIndex[file.id] = null;
       
       if (index <= currentIndex)
         newIndex--;
@@ -120,18 +118,20 @@ Twump.Model.Playlist.prototype = {
     }));
   },
   
-  moveBefore: function(items, before, currentFile){  
+  moveBefore: function(files, before, currentFile){  
     var position = this.indexOf(before);
     if (!position) return;
     
-    var filesToMove = items.inject([], function(memo, itemId){
-      memo.push(this.file(itemId));
-      this.files[this.indexOf({id: itemId})] = null;
+    var filesToMove = files.inject([], function(memo, file){
+      memo.push(file);
+      this.files[this.indexOf(file)] = null;
       
       return memo;
     }.bind(this))
 
     this.insertAt(position, filesToMove);
+    
+    this.reindexPositions();
     
     return this.indexOf(currentFile);
   },

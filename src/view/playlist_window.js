@@ -42,12 +42,6 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
     return this.list.selectedItems;
   },
   
-  selectedIds: function(){
-    return this.selectedItems().map(function(item){
-      return item.id;
-    })
-  },
-  
   selectItem: function(file){
     this.list.selectItem(file)
   },

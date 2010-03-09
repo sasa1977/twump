@@ -24,13 +24,6 @@ Object.extend(Twump.View.EditorWindow.prototype, {
     $('filter').activate();
   },
   
-  
-  selectedIds: function(){
-    return this.selectedItems().map(function(item){
-      return item.id;
-    })
-  },
-  
   onItemRightClick: function(item, event){
     this.openContextMenu(item, event);
   },
