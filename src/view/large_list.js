@@ -199,7 +199,7 @@ Twump.View.LargeList.prototype = {
     var anchorIndex = this.model.indexOf(this.anchor);
     
     $R(Math.min(anchorIndex, index), Math.max(anchorIndex, index)).each(function(itemIndex){
-      this.addSelectItem(this.model.item(itemIndex))
+      this.addSelectItem(this.model.itemAt(itemIndex))
     }.bind(this))
   },
   

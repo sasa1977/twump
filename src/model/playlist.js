@@ -131,8 +131,6 @@ Twump.Model.Playlist.prototype = {
 
     this.insertAt(position, filesToMove);
     
-    this.reindexPositions();
-    
     return this.indexOf(currentFile);
   },
   
