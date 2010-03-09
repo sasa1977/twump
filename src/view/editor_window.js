@@ -12,26 +12,18 @@ Object.extend(Twump.View.EditorWindow.prototype, {
     
     document.body.addEventListener('click', this.onBodyClick.bind(this))
     
-    this.list = new Twump.LargeList({
+    this.list = new Twump.View.LargeList({
       parentElement: $('results'), itemClass: 'result',
-      template: this.searchResultTemplate
+      template: this.searchResultTemplate,
+      pageScroller: new Twump.View.PageScroller('pageProgress')
     });
     
     this.list.onStartDrag = this.onStartDrag.bind(this);
     this.list.onRightClick = this.onItemRightClick.bind(this);
-    $('filter').activate();
     
-    this.pageSlider = this.initSlider('pageProgress', {min: 0, max: 0, direction: 'vertical',
-      onchange: this.onPageSliderChange.bind(this)
-    })
+    $('filter').activate();
   },
   
-  onPageSliderChange: function(){
-    if (!this.pageSlider || this.ignorePageSliderChange) return;
-    
-    var page = this.pageSlider.getMaximum() - this.pageSlider.getValue();
-    this.list.drawItems({start: page, end: page + 19});
-  },
   
   selectedIds: function(){
     return this.selectedItems().map(function(item){
@@ -74,16 +66,7 @@ Object.extend(Twump.View.EditorWindow.prototype, {
     results.item = results.file;
     results.itemAt = results.fileAt;
     this.list.setModel(results);
-    
-    this.ignorePageSliderChange = true;
-    
-    this.pageSlider.setMinimum(0);
-    this.pageSlider.setMaximum(results.length() - 19);
-    this.pageSlider.setValue(this.pageSlider.getMaximum());
-    
-    this.ignorePageSliderChange = false;
-    
-    this.list.drawItems({start: 0, end: 19});
+    this.list.setPage(0, options.playlist.length() - 19, 19);
   },
   
   searchResultTemplate: TrimPath.parseTemplate(" \

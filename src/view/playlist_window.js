@@ -11,24 +11,20 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
     this.playingParts = {};
     
     this.addEventListener('playlist', 'mouseover')
-    this.addEventListener('playlist', 'mousewheel')
     this.addEventListener('playlist', "dragover")
     
     new Tooltip('playlist', 'tooltip');
 
     
-    this.list = new Twump.LargeList({
+    this.list = new Twump.View.LargeList({
       parentElement: $('playlist'), itemClass: 'playlistItem',
-      template: this.playlistTemplate
+      template: this.playlistTemplate,
+      pageScroller: new Twump.View.PageScroller('pageProgress')
     });
     
     this.list.onDoubleClick = this.onItemDoubleClick.bind(this);
     this.list.onRightClick = this.onItemRightClick.bind(this);
     this.list.onStartDrag = this.onStartDrag.bind(this);
-    
-    this.pageSlider = this.initSlider('pageProgress', {min: 0, max: 0, direction: 'vertical',
-      onchange: this.onPageSliderChange.bind(this)
-    })
   },
   
   onPlaylistMouseover: function(event){
@@ -40,15 +36,6 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
       tooltipText = file.path;
       
     $('tooltip').update(tooltipText)
-  },
-  
-  onPlaylistMousewheel: function(event){
-    this.pageSlider.setValue( 
-      Math.min(
-        this.pageSlider.getMaximum(),
-        Math.max(0, this.pageSlider.getValue() + event.wheelDeltaY / 120)
-      )
-    )
   },
   
   selectedItems: function(){
@@ -92,37 +79,16 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
     options.playlist.itemAt = options.playlist.fileAt;
     this.list.setModel(options.playlist);
     
-    this.ignorePageSliderChange = true;
-    
-    this.pageSlider.setMinimum(0);
-    this.pageSlider.setMaximum(options.playlist.length() - 2 * options.range);
-    
-    this.ignorePageSliderChange = false;
-
     if (!this.playingFile) return;
 
     var bounds = options.playlist.boundsAround(options);
-    this.list.drawItems(bounds);
-    
-    this.pageSlider.setValue(this.pageSlider.getMaximum() - bounds.start);
-    
+    this.list.setPage(bounds.start, options.playlist.length() - 18, 18);
     this.notifyViewportChange(bounds);
-  },
-  
-  drawAround: function(pos){
-    var bounds = this.displayOptions.playlist.boundsFrom({start: pos, range: this.displayOptions.range});
-    this.list.drawItems(bounds);
-    //this.notifyViewportChange(bounds);
   },
   
   notifyViewportChange: function(bounds){
     if (this.onScrollChanged)
       this.onScrollChanged(this.displayOptions.playlist.items(bounds))
-  },
-  
-  onPageSliderChange: function(){
-    if (!this.pageSlider || this.ignorePageSliderChange) return;
-    this.drawAround(Math.max(0, this.pageSlider.getMaximum() - this.pageSlider.getValue()))
   },
   
   onItemRightClick: function(item, event){

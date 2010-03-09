@@ -18,7 +18,7 @@ Object.extend(Twump.Controller.Editor.prototype, {
   },
   
   onRemoveClick: function(){
-    this.playerController.deleteFromPlaylist(this.selectedItems())
+    this.playerController.deleteFromPlaylist(this.selectedIds())
   },
   
   onJumpToClick: function(){

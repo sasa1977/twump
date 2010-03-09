@@ -1,5 +1,5 @@
-Twump.LargeList = Class.create();
-Twump.LargeList.prototype = {
+Twump.View.LargeList = Class.create();
+Twump.View.LargeList.prototype = {
   initialize: function(options){
     Object.extend(this, options);
 
@@ -8,12 +8,28 @@ Twump.LargeList.prototype = {
     $(this.parentElement).addEventListener('mouseup', this.onParentMouseUp.bind(this))
     $(this.parentElement).addEventListener('mousemove', this.onParentMouseMove.bind(this))
     $(this.parentElement).addEventListener('dblclick', this.onParentDoubleClick.bind(this))
+    $(this.parentElement).addEventListener('mousewheel', this.onParentMouseWheel.bind(this))
     
     this.selectedItems = [];
     this.selectedItemsMap = {};
     
     this.itemsHtmlClasses = {};
-    this.htmlClassesItems = {}
+    this.htmlClassesItems = {};
+    
+    this.pageScroller.onPageChange = this.onPageChange.bind(this);
+  },
+  
+  onPageChange: function(page){
+    this.drawItems({start: page, end: page + this.itemsInViewPort});
+  },
+  
+  onParentMouseWheel: function(event){
+    this.pageScroller.incPage(-(event.wheelDeltaY / 120));
+  },
+  
+  setPage: function(page, maximum, itemsInViewPort){
+    this.itemsInViewPort = itemsInViewPort;
+    this.pageScroller.setPage(page, maximum);
   },
   
   setModel: function(model){
@@ -97,7 +113,8 @@ Twump.LargeList.prototype = {
   },
   
   onParentMouseDown: function(event){
-    this.mousePressed = true;
+    if (event.which == 1)
+      this.mousePressed = true;
     
     var item = this.findModel(event.srcElement, this.itemClass);
     if (!item) return;
@@ -110,7 +127,8 @@ Twump.LargeList.prototype = {
   },
   
   onParentMouseUp: function(event){
-    this.mousePressed = false;
+    if (event.which == 1)
+      this.mousePressed = false;
   },
     
   onParentClick: function(event){
