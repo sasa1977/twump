@@ -41,14 +41,14 @@
       %table{:cellpadding => 0, :cellspacing => 0, :border => 0}
         %tr
           %td
-            #results{ :style => "width:550;height:350;overflow-x:auto;" }
+            #songlist{ :style => "width:550;height:350;overflow-x:auto;" }
           %td
             =slider('pageProgress')
-      
-      
-      
-    #editorContextMenu{ :style => "display:none;" }
+
+    #songlistContextMenu{ :style => "display:none;" }
       #remove
         remove
       #jumpTo
         jump to
+        
+    #tooltip.tooltip{:style => "display:none"}

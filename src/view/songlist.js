@@ -43,7 +43,8 @@ Object.extend(Twump.View.Songlist.prototype, {
   },
   
   onItemDoubleClick: function(item, event){
-    this.onItemSelected(item);
+    if (this.onItemSelected)
+      this.onItemSelected(item);
   },
   
   onBodyClick: function(event){

@@ -137,7 +137,7 @@ Twump.Controller.PlaylistMixin = {
     )
   },
   
-  jumpTo: function(fileId){
-    this.play(this.playlist.idToIndex(fileId));
+  jumpTo: function(file){
+    this.play(this.playlist.indexOf(file));
   }
 }

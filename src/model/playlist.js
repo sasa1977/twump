@@ -33,6 +33,13 @@ Twump.Model.Playlist.prototype = {
     this.reindexPositions();
   },
   
+  rescanFilesIndex: function(){
+    this.filesIndex = {}
+    this.files.each(function(file){
+      this.filesIndex[file.id] = file
+    }.bind(this))
+  },
+    
   filesFromPaths: function(paths){
     return $A(paths.map(function(path){
       var newFile = new Twump.Model.File({
@@ -110,12 +117,19 @@ Twump.Model.Playlist.prototype = {
   
     regex = new RegExp(regex, "i");
     
-    return new Twump.Model.Playlist(this.files.inject([],function(memo, file){
+    var result = new Twump.Model.Playlist();
+    
+    var files = (this.files.inject([],function(memo, file){
       if (file.match(regex))
-        memo.push(file.path);
+        memo.push(file);
       
       return memo;
     }));
+    
+    result.setFiles(files);
+    result.rescanFilesIndex();
+    
+    return result;
   },
   
   moveBefore: function(files, before, currentFile){  
