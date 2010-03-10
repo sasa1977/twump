@@ -1,15 +1,15 @@
-#playlist {
+.songlist {
   height:335;
   width:470px;
   background-color:lightGrey;
   overflow:auto;
 }
 
-.playlist .selected {
+.songlist .selected {
   background-color: white;
 }
 
-.playlist .playing {
+.songlist .playing {
   color: blue;
 }
 

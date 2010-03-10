@@ -8,7 +8,7 @@ Twump.Controller.PlaylistMixin = {
     this.playlistWindow.display({
       playlist: this.playlist,
       file: this.currentFile(), 
-      range: 9
+      start: 0
     });
   },
   
@@ -34,11 +34,11 @@ Twump.Controller.PlaylistMixin = {
     this.deleteFromPlaylist(this.playlistWindow.selectedItems());
   },
   
-  deleteFromPlaylist: function(ids){
+  deleteFromPlaylist: function(items){
     if (this.playlist.empty()) return;
   
     var currentFileId = this.currentFile().id;
-    var newCurrentIndex = this.playlist.deleteFiles(ids, this.currentIndex());
+    var newCurrentIndex = this.playlist.deleteFiles(items, this.currentIndex());
 
     var fileStillInList = this.playlist.file(currentFileId);
     
@@ -103,14 +103,14 @@ Twump.Controller.PlaylistMixin = {
   reorderFromPlaylist: function(options){
     this.moveFiles({
       items: this.playlistWindow.selectedItems(), 
-      before: this.playlistWindow.itemUnderMouseIndex
+      before: this.playlistWindow.itemUnderMouseIndex()
     })
   },
   
   reorderFromEditor: function(options){
     this.moveFiles({
       items: this.editorController().selectedItems(), 
-      before: this.playlistWindow.itemUnderMouseIndex
+      before: this.playlistWindow.itemUnderMouseIndex()
     })
   },
   
@@ -120,12 +120,8 @@ Twump.Controller.PlaylistMixin = {
     this.redrawPlayList();
   },
   
-  onItemSelected: function(id){
-    this.play(this.playlist.idToIndex(id))
-  },
-  
-  onCopyPathToClipboard: function(fileId){
-    Twump.Api.copyTextToClipboard(this.playlist.file(fileId).path);
+  onItemSelected: function(item){
+    this.play(this.playlist.indexOf(item))
   },
   
   onScrollChanged: function(files){
