@@ -1,22 +1,24 @@
 Twump.Controller.PlayerMixin = {
   currentFile: function(){
-    return this.playlist.fileAt(this.currentIndex());
+    return this.current;
+  },
+  
+  setCurrentFile: function(file){
+    this.current = file;
+    if (!this.current) return;
+    
+    this.setPlaylistPlayingItem();
+    this.savePlayerData();
   },
   
   currentIndex: function(){
-    return this.current || 0;
-  },
-  
-  indexOk: function(index){
-    return index >= 0 && index < this.playlist.length();
+    if (!this.current) return 0;
+    
+    return this.playlist.indexOf(this.current) || 0;
   },
   
   setCurrentIndex: function(index){
-    if (!this.indexOk(index)) return;
-    
-    this.current = index;  
-    this.setPlaylistPlayingItem();
-    this.savePlayerData();
+    this.setCurrentFile(this.playlist.itemAt(index))
   },
 
   setVolume: function(volume){
@@ -84,10 +86,10 @@ Twump.Controller.PlayerMixin = {
     this.onNextClick();
   },
   
-  play: function(index){
-    if (!this.indexOk(index)) return;
+  play: function(file){
+    if (!file) return;
 
-    this.setCurrentIndex(index);
+    this.setCurrentFile(file);
     this.playCurrent();
   },
    
@@ -103,7 +105,7 @@ Twump.Controller.PlayerMixin = {
   },
   
   onNextClick: function(){
-    this.play(this.currentIndex() + 1);
+    this.play(this.playlist.next(this.currentFile()));
   },
   
   onPauseClick: function(){
@@ -115,11 +117,11 @@ Twump.Controller.PlayerMixin = {
   },
   
   onPlayClick: function(){
-    this.play(this.currentIndex());  
+    this.play(this.currentFile());  
   },
   
   onPreviousClick: function(){
-    this.play(this.currentIndex() - 1);
+    this.play(this.playlist.previous(this.currentFile()));
   },
   
   onSetPlayPosition: function(position){

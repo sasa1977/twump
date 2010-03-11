@@ -41,25 +41,11 @@ Twump.Controller.PlaylistMixin = {
   deleteFromPlaylist: function(items){
     if (this.playlist.empty()) return;
   
-    var currentFileId = this.currentFile().id;
-    var newCurrentIndex = this.playlist.deleteFiles(items, this.currentIndex());
+    var newFile = this.playlist.deleteFiles(items, this.currentFile());
 
-    var fileStillInList = this.playlist.file(currentFileId);
-    
-    this.setCurrentIndex(Math.max(newCurrentIndex, 0));
     this.playlistWindow.refreshCurrentPage();
-
-    if (this.playlist.empty()) return;
-    
-    if (!fileStillInList){
-      newCurrentIndex++;
-      
-      if (newCurrentIndex < 0)
-        newCurrentIndex = 0;
-      else if (newCurrentIndex >= this.playlist.length())
-        newCurrentIndex = this.playlist.length - 1;
-      
-      this.setCurrentIndex(newCurrentIndex);
+    if (newFile != this.currentFile()){ // in this case, we removed currently selected file
+      this.setCurrentFile(newFile);
       
       if (this.playing)
         this.playCurrent();
@@ -119,13 +105,12 @@ Twump.Controller.PlaylistMixin = {
   },
   
   moveFiles: function(options){
-    var newIndex = this.playlist.moveBefore(options.items,  options.before, this.currentFile());
-    this.setCurrentIndex(newIndex);
-    this.redrawPlayList();
+    this.playlist.moveBefore(options.items,  options.before, this.currentFile());
+    this.playlistWindow.refreshCurrentPage();
   },
   
   onItemSelected: function(item){
-    this.play(this.playlist.indexOf(item))
+    this.play(item)
   },
   
   onScrollChanged: function(files){
@@ -142,6 +127,6 @@ Twump.Controller.PlaylistMixin = {
   },
   
   jumpTo: function(file){
-    this.play(this.playlist.indexOf(file));
+    this.play(file);
   }
 }

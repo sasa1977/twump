@@ -24,7 +24,7 @@ Object.extend(Twump.View.EditorWindow.prototype, {
   },
   
   renderSearchResults: function(results){
-    this.songlist.display({playlist: results, start: 0});
+    this.songlist.display(results);
   },
   
   onStartDrag: function(){

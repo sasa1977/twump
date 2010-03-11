@@ -60,6 +60,14 @@ Twump.Model.Playlist.prototype = {
     return this.filesIndex[id];
   },
   
+  next: function(file){
+    return this.fileAt(this.indexOf(file) + 1);
+  },
+  
+  previous: function(file){
+    return this.fileAt(this.indexOf(file) - 1);
+  },
+  
   paths: function(){
     return $A(this.files.map(function(file){return file.path}));
   },
@@ -83,8 +91,8 @@ Twump.Model.Playlist.prototype = {
     this.setFiles([])
   },
   
-  deleteFiles: function(files, currentIndex){
-    var newIndex = currentIndex;
+  deleteFiles: function(files, currentFile){
+    var currentIndex = this.indexOf(currentFile), newIndex = currentIndex;
     
     files.each(function(file){
       var index = this.indexOf(file);
@@ -99,7 +107,11 @@ Twump.Model.Playlist.prototype = {
     this.files = this.files.compact();
     this.reindexPositions();
     
-    return newIndex;
+    var result = this.fileAt(newIndex);
+    if (result != currentFile) // in this case, original file was removed
+      result = this.fileAt(newIndex + 1); // so I return the next one
+      
+    return result;
   },
   
   insertAt: function(at, files){
@@ -142,7 +154,7 @@ Twump.Model.Playlist.prototype = {
       
       return memo;
     }.bind(this))
-
+    
     this.insertAt(position, filesToMove);
     
     return this.indexOf(currentFile);

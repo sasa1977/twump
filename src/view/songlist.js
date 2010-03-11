@@ -79,7 +79,7 @@ Object.extend(Twump.View.Songlist.prototype, {
   },
   
   refreshCurrentPage: function(){
-    this.list.setMaximum(this.list.model.length() - this.pageLength);
+    this.displayPage(this.list.pageScroller.getPage());
   },
   
   notifyViewportChange: function(bounds){
