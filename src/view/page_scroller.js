@@ -13,7 +13,7 @@ Object.extend(Twump.View.PageScroller.prototype, {
     this.ignorePageChange = true;
     
     this.pageSlider.setMinimum(0);
-    this.pageSlider.setMaximum(max);
+    this.setMaximum(max);
     this.pageSlider.setValue(this.pageSlider.getMaximum() - page);
     this.notifyPageChange();
     
@@ -37,5 +37,9 @@ Object.extend(Twump.View.PageScroller.prototype, {
   
   getPage: function(){
     return this.pageSlider.getMaximum() - this.pageSlider.getValue();
+  },
+  
+  setMaximum: function(max){
+    this.pageSlider.setMaximum(max);
   }
 })

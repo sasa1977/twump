@@ -12,10 +12,12 @@ Twump.Controller.PlaylistMixin = {
     });
   },
   
-  setPlaylistPlayingItem: function(){
+  setPlaylistPlayingItem: function(bringToFocus){
     if (this.playlist.empty()) return;
     
     this.playlistWindow.setPlayingItem(this.currentFile());
+    if (bringToFocus)
+      this.playlistWindow.bringPlayingItemToFocus(true);
   },
   
   onShuffleClick: function(){
@@ -43,7 +45,7 @@ Twump.Controller.PlaylistMixin = {
     var fileStillInList = this.playlist.file(currentFileId);
     
     this.setCurrentIndex(Math.max(newCurrentIndex, 0));
-    this.setPlaylistPlayingItem();
+    this.playlistWindow.refreshCurrentPage();
 
     if (this.playlist.empty()) return;
     

@@ -27,9 +27,13 @@ Twump.View.LargeList.prototype = {
     this.pageScroller.incPage(-(event.wheelDeltaY / 120));
   },
   
-  setPage: function(page, maximum, itemsInViewPort){
-    this.itemsInViewPort = itemsInViewPort;
-    this.pageScroller.setPage(page, maximum);
+  setPage: function(options){
+    this.itemsInViewPort = options.itemsInViewPort;
+    this.pageScroller.setPage(options.page, options.maximum);
+  },
+  
+  setMaximum: function(maximum){
+    this.pageScroller.setMaximum(maximum);
   },
   
   setModel: function(model){

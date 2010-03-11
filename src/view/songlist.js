@@ -58,9 +58,16 @@ Object.extend(Twump.View.Songlist.prototype, {
     options.playlist.itemAt = options.playlist.fileAt;
     this.list.setModel(options.playlist);
 
-    var bounds = options.playlist.boundsFrom({start: options.start, range: 9});
-    this.list.setPage(bounds.start, options.playlist.length() - 18, 18);
+    this.displayPage(options.playlist.boundsFrom({start: options.start, range: 9}))
+  },
+  
+  displayPage: function(bounds){
+    this.list.setPage({page: bounds.start, maximum: this.displayOptions.playlist.length() - 18, itemsInViewPort: 18});
     this.notifyViewportChange(bounds);
+  },
+  
+  refreshCurrentPage: function(){
+    this.list.setMaximum(this.displayOptions.playlist.length() - 18);
   },
   
   notifyViewportChange: function(bounds){

@@ -9,7 +9,7 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
   
     this.addEventListeners('click', ['copyPathToClipboard', 'deleteContext']);
     
-    ["selectItem", "selectedItems", "refreshItem"].each(function(passThrough){
+    ["selectItem", "selectedItems", "refreshItem", "refreshCurrentPage"].each(function(passThrough){
       this[passThrough] = this.songlist[passThrough].bind(this.songlist);
     }.bind(this));
   },
@@ -34,6 +34,10 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
   setPlayingItem: function(file){
     this.songlist.list.removeHtmlClassFromAll('playing');
     this.songlist.list.setItemHtmlClass(file, 'playing');
-    this.display({playlist: this.playlist, start: this.playlist.boundsAround({file: file, range: 9}).start})
+    this.playingItem = file
+  },
+  
+  bringPlayingItemToFocus: function(){
+    this.display({playlist: this.playlist, start: this.playlist.boundsAround({file: this.playingItem, range: 9}).start})
   }
 });
