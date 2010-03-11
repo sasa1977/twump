@@ -21,7 +21,8 @@ Object.extend(Twump.View.PageScroller.prototype, {
   },
   
   onPageSliderChange: function(event){
-    this.notifyPageChange()
+    if (!this.ignorePageChange)
+      this.notifyPageChange()
   },
   
   notifyPageChange: function(){
