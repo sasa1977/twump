@@ -26,7 +26,7 @@ Twump.Controller.DiskOperationsMixin = {
       if (file.exists) {
         this.loadList(file);
         this.setCurrentIndex(this.lastPlayedIndex);
-        this.redrawPlayList();
+        this.setPlaylistPlayingItem()
         
         throw $break;
       }
@@ -93,7 +93,9 @@ Twump.Controller.DiskOperationsMixin = {
         this.setLastFolder({playlist: file.nativePath});
         this.savePlayerData();
 
-        this.loadList(file)
+        this.loadList(file);
+        this.setCurrentIndex(0);
+        this.setPlaylistPlayingItem();
       }.bind(this)
     })
   },
