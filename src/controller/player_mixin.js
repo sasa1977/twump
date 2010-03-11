@@ -45,6 +45,9 @@ Twump.Controller.PlayerMixin = {
     air.System.gc();
        
     if (!this.currentFile()) return;
+    
+    if (!this.playlistWindow.displayed(this.currentFile()))
+      this.playlistWindow.bringPlayingItemToFocus();
 
     this.playlistWindow.selectItem(this.currentFile());
 

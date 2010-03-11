@@ -40,11 +40,16 @@ Twump.View.LargeList.prototype = {
     this.model = model;
   },
   
+  displayed: function(modelItem){
+    return this.displayedModelItems[modelItem.id];
+  },
+  
   drawItems: function(bounds){
     this.parentElement.update(this.itemsHtml(bounds));
-    
+    this.displayedModelItems = {}
     this.htmlItems().each(function(item){
       var modelItem = this.modelItem(item);
+      this.displayedModelItems[modelItem.id] = true;
       item.id = "largeListItem" + modelItem.id;
       
       this.getItemHtmlClasses(modelItem).each(function(htmlClass){

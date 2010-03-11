@@ -9,8 +9,8 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
   
     this.addEventListeners('click', ['copyPathToClipboard', 'deleteContext']);
     
-    ["selectItem", "selectedItems", "refreshItem", "refreshCurrentPage"].each(function(passThrough){
-      this[passThrough] = this.songlist[passThrough].bind(this.songlist);
+    ["selectItem", "selectedItems", "refreshItem", "refreshCurrentPage", "displayed"].each(function(passthrough){
+      this[passthrough] = this.songlist[passthrough].bind(this.songlist);
     }.bind(this));
   },
   

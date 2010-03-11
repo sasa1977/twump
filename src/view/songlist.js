@@ -61,6 +61,10 @@ Object.extend(Twump.View.Songlist.prototype, {
     this.displayPage(options.playlist.boundsFrom({start: options.start, range: 9}))
   },
   
+  displayed: function(file){
+    return this.list.displayed(file);
+  },
+  
   displayPage: function(bounds){
     this.list.setPage({page: bounds.start, maximum: this.displayOptions.playlist.length() - 18, itemsInViewPort: 18});
     this.notifyViewportChange(bounds);
