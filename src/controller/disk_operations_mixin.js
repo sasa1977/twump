@@ -57,7 +57,7 @@ Twump.Controller.DiskOperationsMixin = {
   
   addFolderSelected: function(newFiles){
     this.playlist.insertPathsAt(this.currentIndex() + 1, newFiles);
-    this.redrawPlayList();
+    this.refreshCurrentPage();
   },
   
   onFilesDropped: function(files){

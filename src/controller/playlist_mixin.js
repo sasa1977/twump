@@ -8,6 +8,10 @@ Twump.Controller.PlaylistMixin = {
     this.playlistWindow.display(this.playlist);
   },
   
+  refreshCurrentPage: function(){
+    this.playlistWindow.refreshCurrentPage();
+  },
+  
   setPlaylistPlayingItem: function(bringToFocus){
     if (this.playlist.empty()) return;
     
@@ -30,7 +34,7 @@ Twump.Controller.PlaylistMixin = {
   
   onShuffleRemainingClick: function(){
     this.playlist.shuffle(this.currentIndex() + 1);
-    this.redrawPlayList();
+    this.refreshCurrentPage();
     this.saveCurrentList();
   },
   
@@ -43,7 +47,7 @@ Twump.Controller.PlaylistMixin = {
   
     var newFile = this.playlist.deleteFiles(items, this.currentFile());
 
-    this.playlistWindow.refreshCurrentPage();
+    this.refreshCurrentPage();
     if (newFile != this.currentFile()){ // in this case, we removed currently selected file
       this.setCurrentFile(newFile);
       
@@ -106,7 +110,7 @@ Twump.Controller.PlaylistMixin = {
   
   moveFiles: function(options){
     this.playlist.moveBefore(options.items,  options.before, this.currentFile());
-    this.playlistWindow.refreshCurrentPage();
+    this.refreshCurrentPage();
   },
   
   onItemSelected: function(item){
