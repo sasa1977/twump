@@ -21,6 +21,11 @@ Twump.Controller.PlaylistMixin = {
       this.playlistWindow.bringPlayingItemToFocus();
   },
   
+  autofocusCurrentItem: function(){
+    if (!this.playlistWindow.displayed(this.currentFile()))
+      this.playlistWindow.bringPlayingItemToFocus();
+  },
+  
   onShuffleClick: function(){
     this.playlist.shuffle();
     this.redrawPlayList();
