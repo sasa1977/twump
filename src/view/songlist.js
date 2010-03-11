@@ -51,32 +51,40 @@ Object.extend(Twump.View.Songlist.prototype, {
     this.closeContextMenu();
   },
   
-  display: function(options){
-    this.displayOptions = options;
-    
-    options.playlist.item = options.playlist.file;
-    options.playlist.itemAt = options.playlist.fileAt;
-    this.list.setModel(options.playlist);
+  display: function(playlist){
+    playlist.item = playlist.file;
+    playlist.itemAt = playlist.fileAt;
+    this.list.setModel(playlist);
 
-    this.displayPage(options.playlist.boundsFrom({start: options.start, range: 9}))
+    this.displayPage(playlist.page({start: 0, range: this.pageLength}))
   },
   
   displayed: function(file){
     return this.list.displayed(file);
   },
   
-  displayPage: function(bounds){
-    this.list.setPage({page: bounds.start, maximum: this.displayOptions.playlist.length() - 18, itemsInViewPort: 18});
-    this.notifyViewportChange(bounds);
+  pageLength: 18,
+  
+  maxPages: function(){
+    return (this.list.model.length() - this.pageLength);
+  },
+  
+  displayPage: function(page){
+    this.list.setPage({page: page, maximum: this.maxPages(), itemsInViewPort: this.pageLength});
+    this.notifyViewportChange(page);
+  },
+  
+  bringToFocus: function(file){
+    this.displayPage(this.list.model.pageAround({file: file, range: this.pageLength}))
   },
   
   refreshCurrentPage: function(){
-    this.list.setMaximum(this.displayOptions.playlist.length() - 18);
+    this.list.setMaximum(this.list.model.length() - this.pageLength);
   },
   
   notifyViewportChange: function(bounds){
     if (this.onScrollChanged)
-      this.onScrollChanged(this.displayOptions.playlist.items(bounds))
+      this.onScrollChanged(this.list.model.items(bounds))
   },
   
   onItemRightClick: function(item, event){

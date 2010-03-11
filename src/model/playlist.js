@@ -148,24 +148,25 @@ Twump.Model.Playlist.prototype = {
     return this.indexOf(currentFile);
   },
   
-  boundsAround: function(options){
-    if (this.empty()) return {start: 0, end: 0};
-  
-    var start = Math.max(this.indexOf(options.file) - options.range, 0);
-    var end = Math.min(start + 2 * options.range, this.length());
-    start = Math.max(end - 2 * options.range, 0);
+  pageAround: function(options){
+    if (this.empty()) return 0;
     
-    return {start: start, end: end};
+    var before = parseInt(options.range/2);
+  
+    var start = Math.max(this.indexOf(options.file) - before, 0);
+    var end = Math.min(start + options.range, this.length());
+    start = Math.max(end - options.range, 0);
+    
+    return start;
   },
   
-  boundsFrom: function(options){
-    if (this.empty()) return {start: 0, end: 0};
+  page: function(options){
+    if (this.empty()) return 0;
     
-    var start = Math.max(Math.min(options.start, this.length()), 0);
-    var end = Math.min(start + 2 * options.range, this.length()); 
-    start = Math.max(end - 2 * options.range, 0);
+    var start = Math.max(Math.min(options.start, this.length() - 1), 0);
+    var end = Math.min(start + options.range, this.length()); 
     
-    return {start: start, end: end};
+    return start;
   },
   
   items: function(bounds){

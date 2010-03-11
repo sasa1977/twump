@@ -5,11 +5,7 @@ Twump.Controller.PlaylistMixin = {
   },
   
   redrawPlayList: function(){
-    this.playlistWindow.display({
-      playlist: this.playlist,
-      file: this.currentFile(), 
-      start: 0
-    });
+    this.playlistWindow.display(this.playlist);
   },
   
   setPlaylistPlayingItem: function(bringToFocus){

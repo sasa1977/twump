@@ -26,9 +26,9 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
     this.onDeleteClick();
   },
   
-  display: function(options){
-    this.playlist = options.playlist;
-    this.songlist.display(options);
+  display: function(playlist){
+    this.playlist = playlist;
+    this.songlist.display(playlist);
   },
   
   setPlayingItem: function(file){
@@ -38,6 +38,6 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
   },
   
   bringPlayingItemToFocus: function(){
-    this.display({playlist: this.playlist, start: this.playlist.boundsAround({file: this.playingItem, range: 9}).start})
+    this.songlist.bringToFocus(this.playingItem);
   }
 });
