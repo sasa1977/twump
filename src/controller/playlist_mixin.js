@@ -43,7 +43,7 @@ Twump.Controller.PlaylistMixin = {
     var fileStillInList = this.playlist.file(currentFileId);
     
     this.setCurrentIndex(Math.max(newCurrentIndex, 0));
-    this.redrawPlayList();
+    this.setPlaylistPlayingItem();
 
     if (this.playlist.empty()) return;
     
