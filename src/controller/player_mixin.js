@@ -48,9 +48,6 @@ Twump.Controller.PlayerMixin = {
        
     if (!this.currentFile()) return;
     
-    this.playlistWindow.selectItem(this.currentFile());
-    this.autofocusCurrentItem();
-
     this.loadMetadata(this.currentFile(), true);
     
     this.playing = true;

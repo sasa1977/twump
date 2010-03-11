@@ -12,13 +12,13 @@ Twump.Controller.PlaylistMixin = {
     this.playlistWindow.refreshCurrentPage();
   },
   
-  setPlaylistPlayingItem: function(bringToFocus){
+  setPlaylistPlayingItem: function(){
     if (this.playlist.empty()) return;
     
     this.playlistWindow.setPlayingItem(this.currentFile());
-
-    if (bringToFocus)
-      this.playlistWindow.bringPlayingItemToFocus();
+    this.playlistWindow.selectItem(this.currentFile());
+    
+    this.playlistWindow.bringPlayingItemToFocus();
   },
   
   autofocusCurrentItem: function(){
@@ -61,7 +61,6 @@ Twump.Controller.PlaylistMixin = {
     this.stop();
     this.playlist.clear();
     this.setCurrentIndex(0);
-    this.redrawPlayList();
   },
   
   editorOpened: function(){
