@@ -1,20 +1,18 @@
 Twump.Controller.PlayerMixin = {
   currentFile: function(){
-    return this.current;
+    return this.playlist.currentFile();
   },
   
   setCurrentFile: function(file){
-    this.current = file;
-    if (!this.current) return;
+    this.playlist.setCurrentFile(file);
+    if (!file) return;
     
     this.setPlaylistPlayingItem();
     this.savePlayerData();
   },
   
   currentIndex: function(){
-    if (!this.current) return 0;
-    
-    return this.playlist.indexOf(this.current) || 0;
+    return this.playlist.currentIndex();
   },
   
   setCurrentIndex: function(index){
@@ -46,15 +44,15 @@ Twump.Controller.PlayerMixin = {
     
     air.System.gc();
        
-    if (!this.currentFile()) return;
+    if (!this.playlist.currentFile()) return;
     
-    this.loadMetadata(this.currentFile(), true);
+    this.loadMetadata(this.playlist.currentFile(), true);
     
     this.playing = true;
     
-    this.logger.log('playing: ' + this.currentFile().path)
+    this.logger.log('playing: ' + this.playlist.currentFile().path)
     
-    this.player.play(this.currentFile().path, {
+    this.player.play(this.playlist.currentFile().path, {
       volume: this.volume,
       onPlayProgress: this.onPlayProgress.bind(this),
       onPlaybackComplete: this.onPlaybackComplete.bind(this)
@@ -72,7 +70,7 @@ Twump.Controller.PlayerMixin = {
   },
   
   onPlayProgress: function(data){
-    var completeData = Object.extend(data, {file: this.currentFile().displayName});
+    var completeData = Object.extend(data, {file: this.playlist.currentFile().displayName});
   
     this.playerWindow.displayPlayProgress(completeData);
     this.lastFmPlayProgress(completeData);
@@ -102,7 +100,7 @@ Twump.Controller.PlayerMixin = {
   },
   
   onNextClick: function(){
-    this.play(this.playlist.next(this.currentFile()));
+    this.play(this.playlist.next(this.playlist.currentFile()));
   },
   
   onPauseClick: function(){
@@ -114,11 +112,11 @@ Twump.Controller.PlayerMixin = {
   },
   
   onPlayClick: function(){
-    this.play(this.currentFile());  
+    this.play(this.playlist.currentFile());  
   },
   
   onPreviousClick: function(){
-    this.play(this.playlist.previous(this.currentFile()));
+    this.play(this.playlist.previous(this.playlist.currentFile()));
   },
   
   onSetPlayPosition: function(position){

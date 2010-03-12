@@ -3,7 +3,7 @@ Twump.Controller.DiskOperationsMixin = {
     Twump.Storage.writeObject(Twump.Storage.appStorageFile('app_data.dat'), {
       volume: this.volume,
       _lastFolders: this._lastFolders,
-      lastPlayedIndex: this.currentIndex()
+      lastPlayedIndex: this.playlist.currentIndex()
     })
   },
   

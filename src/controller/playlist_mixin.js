@@ -15,14 +15,14 @@ Twump.Controller.PlaylistMixin = {
   setPlaylistPlayingItem: function(){
     if (this.playlist.empty()) return;
     
-    this.playlistWindow.setPlayingItem(this.currentFile());
-    this.playlistWindow.selectItem(this.currentFile());
+    this.playlistWindow.setPlayingItem(this.playlist.currentFile());
+    this.playlistWindow.selectItem(this.playlist.currentFile());
     
     this.autofocusCurrentItem();
   },
   
   autofocusCurrentItem: function(){
-    if (!this.playlistWindow.displayed(this.currentFile()))
+    if (!this.playlistWindow.displayed(this.playlist.currentFile()))
       this.playlistWindow.bringPlayingItemToFocus();
   },
   
@@ -45,10 +45,10 @@ Twump.Controller.PlaylistMixin = {
   deleteFromPlaylist: function(items){
     if (this.playlist.empty()) return;
   
-    var newFile = this.playlist.deleteFiles(items, this.currentFile());
+    var newFile = this.playlist.deleteFiles(items, this.playlist.currentFile());
 
     this.refreshCurrentPage();
-    if (newFile != this.currentFile()){ // in this case, we removed currently selected file
+    if (newFile != this.playlist.currentFile()){ // in this case, we removed currently selected file
       this.setCurrentFile(newFile);
       
       if (this.playing)
@@ -61,6 +61,7 @@ Twump.Controller.PlaylistMixin = {
     this.stop();
     this.playlist.clear();
     this.setCurrentIndex(0);
+    this.redrawPlayList();
   },
   
   editorOpened: function(){
@@ -108,7 +109,7 @@ Twump.Controller.PlaylistMixin = {
   },
   
   moveFiles: function(options){
-    this.playlist.moveBefore(options.items,  options.before, this.currentFile());
+    this.playlist.moveBefore(options.items,  options.before, this.playlist.currentFile());
     this.refreshCurrentPage();
   },
   

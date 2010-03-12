@@ -83,17 +83,3 @@ Twump.Repository.Playlists.M3u.prototype = {
     return Twump.Model.Playlist.deserialize(listData);
   }
 }
-
-
-
-Twump.Repository.Playlists.Twumpl = Class.create();
-Twump.Repository.Playlists.Twumpl.extensions = ["twumpl"];
-Twump.Repository.Playlists.Twumpl.prototype = {
-  initialize: function(file){
-    this.file = file;
-  },
-  
-  load: function(){
-    return Twump.Model.Playlist.deserialize(Twump.Storage.readObject(this.file).listData);
-  }
-}

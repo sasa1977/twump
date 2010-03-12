@@ -48,21 +48,21 @@ Twump.Controller.LastFmMixin = {
   },
   
   lastFmNowPlaying: function(){
-    this.lastFm.nowPlaying(this.currentFile().metadata)
+    this.lastFm.nowPlaying(this.playlist.currentFile().metadata)
   },
   
   scrobbleCurrent: function(data){
-    var file = this.currentFile();
+    var file = this.playlist.currentFile();
     
     var arg = Object.extend({startedPlaying: this.startedPlaying}, data);
-    Object.extend(arg, this.currentFile().metadata)
+    Object.extend(arg, this.playlist.currentFile().metadata)
     
     this.lastFm.pushForScrobble(arg)
     this.scrobbledCurrent = true;
   },
   
   scrobbleCurrentPossible: function(){
-    var file = this.currentFile();
+    var file = this.playlist.currentFile();
     return (file.metadata && 
       file.metadata.name && file.metadata.name.length > 0 && 
       file.metadata.performer && file.metadata.performer.length > 0
