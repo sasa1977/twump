@@ -29,6 +29,19 @@ Object.extend(Twump.Model.Playlist.prototype, {
   previous: function(file){
     if (!this.currentFile()) return;
     return this.fileAt(this.indexOf(this.currentFile()) - 1);
+  },
+  
+  remove: function(files){
+    if (!this.currentFile()) return;
+    
+    var newFile = this.deleteFiles(files, this.currentFile());
+
+    if (newFile != this.currentFile()){ // in this case, we removed currently selected file
+      this.setCurrentFile(newFile);
+      return {removedCurrent: true};
+    }
+    
+    return {removedCurrent: false};
   }
 });
 

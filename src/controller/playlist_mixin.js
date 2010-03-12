@@ -45,11 +45,11 @@ Twump.Controller.PlaylistMixin = {
   deleteFromPlaylist: function(items){
     if (this.playlist.empty()) return;
   
-    var newFile = this.playlist.deleteFiles(items, this.playlist.currentFile());
+    var result = this.playlist.remove(items);
 
     this.refreshCurrentPage();
-    if (newFile != this.playlist.currentFile()){ // in this case, we removed currently selected file
-      this.setCurrentFile(newFile);
+    if (result.removedCurrent) {
+      this.setPlaylistPlayingItem();
       
       if (this.playing)
         this.playCurrent();
@@ -109,7 +109,7 @@ Twump.Controller.PlaylistMixin = {
   },
   
   moveFiles: function(options){
-    this.playlist.moveBefore(options.items,  options.before, this.playlist.currentFile());
+    this.playlist.moveBefore(options.items,  options.before);
     this.refreshCurrentPage();
   },
   

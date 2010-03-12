@@ -136,7 +136,7 @@ Twump.Model.Songlist.prototype = {
     return result;
   },
   
-  moveBefore: function(files, before, currentFile){  
+  moveBefore: function(files, before){  
     var position = this.indexOf(before);
     if (!position) return;
     
@@ -148,8 +148,6 @@ Twump.Model.Songlist.prototype = {
     }.bind(this))
     
     this.insertAt(position, filesToMove);
-    
-    return this.indexOf(currentFile);
   },
   
   pageAround: function(options){
