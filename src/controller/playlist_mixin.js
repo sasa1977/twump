@@ -18,7 +18,7 @@ Twump.Controller.PlaylistMixin = {
     this.playlistWindow.setPlayingItem(this.currentFile());
     this.playlistWindow.selectItem(this.currentFile());
     
-    this.playlistWindow.bringPlayingItemToFocus();
+    this.autofocusCurrentItem();
   },
   
   autofocusCurrentItem: function(){
