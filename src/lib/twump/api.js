@@ -80,11 +80,13 @@ Twump.Api = {
     
     this._addEventListener(sound, air.Event.ID3, function(event){
       callback({name: event.target.id3.TIT2, performer: event.target.id3.TPE1});
+      air.System.gc();
     })
     
     this._addEventListener(sound, air.Event.COMPLETE, function(event){
       callback({length: sound.length / 1000});
       sound = null;
+      air.System.gc();
     })
   },
   

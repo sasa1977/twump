@@ -117,7 +117,7 @@ Twump.Controller.PlaylistMixin = {
     this.play(item)
   },
   
-  onScrollChanged: function(files){
+  onPageChanged: function(files){
     Twump.Utils.scheduleInChunks(    
       files.map(function(file){
         return function(){

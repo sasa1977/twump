@@ -17,10 +17,27 @@ Twump.View.LargeList.prototype = {
     this.htmlClassesItems = {};
     
     this.pageScroller.onPageChange = this.onPageChange.bind(this);
+    this.delayExecute = new Twump.Utils.DelayExecute(5000);
   },
   
   onPageChange: function(page){
     this.drawItems({start: page, end: page + this.itemsInViewPort});
+    
+    if (this.onPageChanged) {
+      this.delayExecute.cancel();
+      this.delayExecute.schedule(function(){
+        this.onPageChanged(this.displayedModelItems())
+      }.bind(this))
+    }
+  },
+  
+  displayedModelItems: function(){
+    var result = []
+    for (var id in this.displayedModelIds){
+      result.push(this.model.item(id))
+    }
+    
+    return result;
   },
   
   onParentMouseWheel: function(event){
@@ -41,15 +58,15 @@ Twump.View.LargeList.prototype = {
   },
   
   displayed: function(modelItem){
-    return this.displayedModelItems[modelItem.id];
+    return this.displayedModelIds[modelItem.id];
   },
   
   drawItems: function(bounds){
     this.parentElement.update(this.itemsHtml(bounds));
-    this.displayedModelItems = {}
+    this.displayedModelIds = {}
     this.htmlItems().each(function(item){
       var modelItem = this.modelItem(item);
-      this.displayedModelItems[modelItem.id] = true;
+      this.displayedModelIds[modelItem.id] = true;
       item.id = "largeListItem" + modelItem.id;
       
       this.getItemHtmlClasses(modelItem).each(function(htmlClass){

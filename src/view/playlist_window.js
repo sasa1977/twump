@@ -5,7 +5,8 @@ Object.extend(Twump.View.PlaylistWindow.prototype, Twump.View.Common);
 Object.extend(Twump.View.PlaylistWindow.prototype, {
   initialize: function(){
     this.songlist = new Twump.View.Songlist({dragCode: "reorderFromPlaylist"});
-    this.songlist.onItemSelected = function(item){this.onItemSelected(item)}.bind(this)
+    this.songlist.onItemSelected = function(item){this.onItemSelected(item)}.bind(this);
+    this.songlist.onPageChanged = function(files){this.onPageChanged(files)}.bind(this);
   
     this.addEventListeners('click', ['copyPathToClipboard', 'deleteContext']);
     

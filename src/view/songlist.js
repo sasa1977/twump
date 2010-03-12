@@ -22,6 +22,7 @@ Object.extend(Twump.View.Songlist.prototype, {
     this.list.onDoubleClick = this.onItemDoubleClick.bind(this);
     this.list.onRightClick = this.onItemRightClick.bind(this);
     this.list.onStartDrag = this.onStartDrag.bind(this);
+    this.list.onPageChanged = function(files){this.onPageChanged(files)}.bind(this);
   },
   
   onSonglistMouseover: function(event){
