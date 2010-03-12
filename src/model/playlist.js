@@ -19,6 +19,16 @@ Object.extend(Twump.Model.Playlist.prototype, {
   
   setCurrentIndex: function(index){
     this.setCurrentFile(this.itemAt(index))
+  },
+  
+  next: function(){
+    if (!this.currentFile()) return;
+    return this.fileAt(this.indexOf(this.currentFile()) + 1);
+  },
+  
+  previous: function(file){
+    if (!this.currentFile()) return;
+    return this.fileAt(this.indexOf(this.currentFile()) - 1);
   }
 });
 

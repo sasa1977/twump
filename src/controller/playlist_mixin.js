@@ -33,7 +33,7 @@ Twump.Controller.PlaylistMixin = {
   },
   
   onShuffleRemainingClick: function(){
-    this.playlist.shuffle(this.currentIndex() + 1);
+    this.playlist.shuffle(this.playlist.currentIndex() + 1);
     this.refreshCurrentPage();
     this.saveCurrentList();
   },

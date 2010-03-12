@@ -60,14 +60,6 @@ Twump.Model.Songlist.prototype = {
     return this.filesIndex[id];
   },
   
-  next: function(file){
-    return this.fileAt(this.indexOf(file) + 1);
-  },
-  
-  previous: function(file){
-    return this.fileAt(this.indexOf(file) - 1);
-  },
-  
   paths: function(){
     return $A(this.files.map(function(file){return file.path}));
   },

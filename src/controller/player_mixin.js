@@ -1,18 +1,10 @@
 Twump.Controller.PlayerMixin = {
-  currentFile: function(){
-    return this.playlist.currentFile();
-  },
-  
   setCurrentFile: function(file){
     this.playlist.setCurrentFile(file);
     if (!file) return;
     
     this.setPlaylistPlayingItem();
     this.savePlayerData();
-  },
-  
-  currentIndex: function(){
-    return this.playlist.currentIndex();
   },
   
   setCurrentIndex: function(index){
@@ -100,7 +92,7 @@ Twump.Controller.PlayerMixin = {
   },
   
   onNextClick: function(){
-    this.play(this.playlist.next(this.playlist.currentFile()));
+    this.play(this.playlist.next());
   },
   
   onPauseClick: function(){
@@ -116,7 +108,7 @@ Twump.Controller.PlayerMixin = {
   },
   
   onPreviousClick: function(){
-    this.play(this.playlist.previous(this.playlist.currentFile()));
+    this.play(this.playlist.previous());
   },
   
   onSetPlayPosition: function(position){
