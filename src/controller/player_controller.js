@@ -13,6 +13,8 @@ Object.extend(Twump.Controller.Player.prototype, {
     
     this.lastFmSetup();
     
+    this.subscribeToViewEvents(this.mainWindow, ["resized"]);
+    
     this.subscribeToViewEvents(this.playerWindow, [
       "windowClosing", "previousClick", "nextClick", "pauseClick", "stopClick", "playClick", 
       "volumeChange", "setPlayPosition", 

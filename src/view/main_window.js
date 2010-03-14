@@ -4,30 +4,13 @@ Object.extend(Twump.View.MainWindow.prototype, {
   initialize: function(options){
     Object.extend(this, options);
     
-    this.addEventListener("resize", "mousedown");
+    this.initResize();
     this.normalizeWindowHeight(window.nativeWindow.height)
   },
   
-  onResizeMousedown: function(){
-    this.resizeMouseMove = this.onResizeMousemove.bind(this);
-    document.addEventListener("mousemove", this.resizeMouseMove);
-    
-    this.resizeMouseUp = this.onResizeMouseup.bind(this);
-    document.addEventListener("mouseup", this.resizeMouseUp);
-  },
-  
-  onResizeMouseup: function(){
-    if (this.resizeMouseMove){
-      document.removeEventListener("mousemove", this.resizeMouseMove);
-      this.resizeMouseMove = null;
-      
-      document.removeEventListener("mouseup", this.resizeMouseUp);
-      this.resizeMouseUp = null;
-    }
-  },
-  
-  onResizeMousemove: function(event){
-    this.normalizeWindowHeight(event.screenY - window.nativeWindow.y)
+  onResize: function(height){
+    this.normalizeWindowHeight(height);
+    this.onResized();
   },
   
   dimensions: function(){

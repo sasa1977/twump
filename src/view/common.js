@@ -34,6 +34,34 @@ Twump.View.Common = {
     $('caption').update(caption);
   },
   
+  initResize: function(){
+    this.addEventListener("resize", "mousedown");
+  },
+  
+  onResizeMousedown: function(){
+    this.resizeMouseMove = this.onResizeMousemove.bind(this);
+    document.addEventListener("mousemove", this.resizeMouseMove);
+    
+    this.resizeMouseUp = this.onResizeMouseup.bind(this);
+    document.addEventListener("mouseup", this.resizeMouseUp);
+  },
+  
+  onResizeMouseup: function(){
+    if (this.resizeMouseMove){
+      document.removeEventListener("mousemove", this.resizeMouseMove);
+      this.resizeMouseMove = null;
+      
+      document.removeEventListener("mouseup", this.resizeMouseUp);
+      this.resizeMouseUp = null;
+    }
+  },
+  
+  onResizeMousemove: function(event){
+    if (this.onResize)
+      this.onResize(event.screenY - window.nativeWindow.y)
+  },
+  
+  
   initSlider: function(id, options){
     var slider = new Slider($(id), $(id + 'Input'), options.direction);
     

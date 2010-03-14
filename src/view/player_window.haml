@@ -68,7 +68,7 @@
         %td
           =slider('pageProgress')
     
-    #resize{:style => "height:10px;background-color:grey"}
+    =render_partial('resize')
     
     #songlistContextMenu{:style => "display:none;background-color:cyan" }
       #copyPathToClipboard
@@ -76,4 +76,4 @@
       #deleteContext
         remove
     
-    #tooltip.tooltip{:style => "display:none"}
+    =render_partial('tooltip')
