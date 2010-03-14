@@ -64,13 +64,29 @@ Object.extend(Twump.View.Songlist.prototype, {
     return this.list.displayed(file);
   },
   
+  itemHeight: 18,
+  
+  normalizedHeight: function(requestedHeight){
+    return parseInt(requestedHeight / this.itemHeight) * this.itemHeight;
+  },
+  
   pageLength: 18,
   
   maxPages: function(){
     return (this.list.model.length() - this.pageLength);
   },
   
+  onWindowSizeChanged: function(songlistHeight){
+    $('songlist').style.height = songlistHeight.toString() + "px";
+    $('pageProgress').style.height = songlistHeight.toString() + "px";
+    
+    this.pageLength = parseInt(songlistHeight / this.itemHeight);
+    this.refreshCurrentPage();
+  },
+  
   displayPage: function(page){
+    if (!this.list.model) return;
+    
     this.list.setPage({page: page, maximum: this.maxPages(), itemsInViewPort: this.pageLength});
     this.notifyViewportChange(page);
   },
