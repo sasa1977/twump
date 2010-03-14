@@ -10,16 +10,16 @@ Object.extend(Twump.View.PlayerWindow.prototype, {
     this.addEventListeners("click", 
       [
         "previous", "next", "pause", "stop", "play",
-        "openFolder", "addFolder", "loadList", "saveList", "shuffle", "shuffleRemaining", "delete", "clear", "editor"
+        "openFolder", "addFolder", "loadList", "saveList", "shuffle", "shuffleRemaining", "delete", "clear", 
+        "editor"
       ]
-     );
+    );
      
-    this.initSliders();
+     this.initSliders();
      
     window.htmlLoader.addEventListener("nativeDragDrop", this.onNativeDragDrop.bind(this));
   },
-  
-  
+    
   onNativeDragDrop: function(event){ 
     var data = event.clipboard.getData(air.ClipboardFormats.TEXT_FORMAT);
     if (data && data.match(/^twump\:/)){
