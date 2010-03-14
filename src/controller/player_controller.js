@@ -50,6 +50,7 @@ Object.extend(Twump.Controller.Player.prototype, {
   },
   
   onDrop: function(options){
+    this.playlistWindow.onDragFinished();
     this[options.action](options);
   },
   

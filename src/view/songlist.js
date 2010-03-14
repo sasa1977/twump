@@ -9,7 +9,7 @@ Object.extend(Twump.View.Songlist.prototype, {
     document.body.addEventListener('click', this.onBodyClick.bind(this))
     
     this.addEventListener('songlist', 'mouseover')
-    this.addEventListener('songlist', "dragover")
+    this.addEventListener('songlist', 'dragover')
     
     new Tooltip('songlist', 'tooltip');
     
@@ -22,6 +22,7 @@ Object.extend(Twump.View.Songlist.prototype, {
     this.list.onDoubleClick = this.onItemDoubleClick.bind(this);
     this.list.onRightClick = this.onItemRightClick.bind(this);
     this.list.onStartDrag = this.onStartDrag.bind(this);
+    this.list.onDragFinished = this.onDragFinished.bind(this);
     this.list.onPageChanged = function(files){
       if (this.onPageChanged)
         this.onPageChanged(files)
@@ -161,6 +162,14 @@ Object.extend(Twump.View.Songlist.prototype, {
   
   onSonglistDragover: function(event){
     this.itemUnderMouseIndex = this.list.findModel(event.srcElement);
+    if (this.itemUnderMouseIndex) {
+      this.list.removeHtmlClassFromAll('dropBefore')
+      this.list.setItemHtmlClass(this.itemUnderMouseIndex, 'dropBefore');
+    }
+  },
+  
+  onDragFinished: function(){
+    this.list.removeHtmlClassFromAll('dropBefore')
   },
   
   onStartDrag: function(){

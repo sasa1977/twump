@@ -5,6 +5,10 @@
   overflow:hidden;
 }
 
+.songlist .dropBefore td {
+  border-top: 1px solid green;
+}
+
 .songlist .selected {
   background-color: white;
 }

@@ -155,6 +155,9 @@ Twump.View.LargeList.prototype = {
   onParentMouseUp: function(event){
     if (event.which == 1)
       this.mousePressed = false;
+    
+    if (this.onDragFinished)
+      this.onDragFinished();
   },
     
   onParentClick: function(event){

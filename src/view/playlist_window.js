@@ -12,7 +12,7 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
     
     [
       "selectItem", "selectedItems", "refreshItem", "refreshCurrentPage", "displayed", "normalizedHeight",
-      "onWindowSizeChanged"
+      "onWindowSizeChanged", "onDragFinished"
     ].each(function(passthrough){
       this[passthrough] = this.songlist[passthrough].bind(this.songlist);
     }.bind(this));
