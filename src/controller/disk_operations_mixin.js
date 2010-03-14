@@ -4,7 +4,7 @@ Twump.Controller.DiskOperationsMixin = {
       volume: this.volume,
       _lastFolders: this._lastFolders,
       lastPlayedIndex: this.playlist.currentIndex(),
-      playerWindowDimensions: this.playlistWindow.dimensions()
+      mainWindowDimensions: this.mainWindow.dimensions()
     })
   },
   
@@ -16,8 +16,8 @@ Twump.Controller.DiskOperationsMixin = {
     this._lastFolders = data._lastFolders;
     this.lastPlayedIndex = data.lastPlayedIndex || 0;
     
-    if (data.playerWindowDimensions)
-      this.playlistWindow.setDimensions(data.playerWindowDimensions);
+    if (data.mainWindowDimensions)
+      this.mainWindow.setDimensions(data.mainWindowDimensions);
   },
 
   saveCurrentList: function(){

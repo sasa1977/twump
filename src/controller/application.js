@@ -1,13 +1,15 @@
 Twump.Application = Class.create();
 Twump.Application.prototype = {
   initialize: function(){
-    this.playerWindow = new Twump.View.PlayerWindow();
-    this.playlistWindow = new Twump.View.PlaylistWindow();
-    this.logger = Twump.Api.Logger;
-    
+    var playerWindow = new Twump.View.PlayerWindow();
+    var playlistWindow = new Twump.View.PlaylistWindow();
+    var mainWindow = new Twump.View.MainWindow({playerWindow: playerWindow, playlistWindow: playlistWindow})
+  
     this.controller = new Twump.Controller.Player({
-      playerWindow: this.playerWindow, playlistWindow: this.playlistWindow,
-      logger: this.logger
+      mainWindow: mainWindow,
+      playerWindow: playerWindow, 
+      playlistWindow: playlistWindow,
+      logger: Twump.Api.Logger
     });
   }
 };
