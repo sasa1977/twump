@@ -6,11 +6,13 @@ Object.extend(Twump.View.MainWindow.prototype, {
     
     this.initResize();
     this.normalizeWindowHeight(window.nativeWindow.height)
+    
+    window.nativeWindow.addEventListener("move", function(){this.onWindowResized()}.bind(this))
   },
   
   onResize: function(height){
     this.normalizeWindowHeight(height);
-    this.onResized();
+    setTimeout(this.onWindowResized, 10); // so that window dimension really get updated
   },
   
   dimensions: function(){

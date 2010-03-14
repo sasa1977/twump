@@ -9,11 +9,13 @@ Object.extend(Twump.Controller.Player.prototype, Twump.Controller.LastFmMixin);
 
 Object.extend(Twump.Controller.Player.prototype, {
   initialize: function(options){
+    this.initializing = true;
+  
     Object.extend(this, options);
     
     this.lastFmSetup();
     
-    this.subscribeToViewEvents(this.mainWindow, ["resized"]);
+    this.subscribeToViewEvents(this.mainWindow, ["windowResized"]);
     
     this.subscribeToViewEvents(this.playerWindow, [
       "windowClosing", "previousClick", "nextClick", "pauseClick", "stopClick", "playClick", 
@@ -25,7 +27,7 @@ Object.extend(Twump.Controller.Player.prototype, {
     
     this.subscribeToViewEvents(this.playlistWindow, [
       "pageChanged", "copyPathToClipboard", "itemSelected", "deleteClick"
-    ])
+    ]);
     
     this.player = new Twump.PlayerFacade();
     this.setPlaylist(new Twump.Model.Playlist())
@@ -34,6 +36,13 @@ Object.extend(Twump.Controller.Player.prototype, {
     
     document.body.addEventListener('keydown', this.keyboardDispatcher.bind(this));
     this.progressStep = 0;
+    
+    this.initializing = false;
+    setTimeout(this.savePlayerData.bind(this), 1000);
+  },
+  
+  onWindowResized: function(){
+    this.savePlayerData();
   },
   
   onWindowClosing: function(){

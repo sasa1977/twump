@@ -1,5 +1,7 @@
 Twump.Controller.DiskOperationsMixin = {
   savePlayerData: function(){
+    if (this.initializing) return;
+  
     Twump.Storage.writeObject(Twump.Storage.appStorageFile('app_data.dat'), {
       volume: this.volume,
       _lastFolders: this._lastFolders,
