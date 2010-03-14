@@ -114,7 +114,10 @@ Twump.Model.Songlist.prototype = {
   },
   
   insertPathsAt: function(item, paths){
-    this.insertAt(this.indexOf(item), this.filesFromPaths(paths));
+    if (!item)
+      this.addPaths(paths)
+    else      
+      this.insertAt(this.indexOf(item), this.filesFromPaths(paths));
   },
   
   addPaths: function(paths){
