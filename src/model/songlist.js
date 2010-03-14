@@ -102,7 +102,10 @@ Twump.Model.Songlist.prototype = {
     var result = this.fileAt(newIndex);
     if (result != currentFile) // in this case, original file was removed
       result = this.fileAt(newIndex + 1); // so I return the next one
-      
+    
+    if (!result)
+      result = this.files.last();
+    
     return result;
   },
   
