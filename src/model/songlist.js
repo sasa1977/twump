@@ -146,9 +146,10 @@ Twump.Model.Songlist.prototype = {
     return result;
   },
   
-  moveBefore: function(files, before){  
-    var position = this.indexOf(before);
-    if (!position) return;
+  moveBefore: function(files, before){
+    var position = this.length();
+    
+    if (before) position = this.indexOf(before);
     
     var filesToMove = files.inject([], function(memo, file){
       memo.push(file);

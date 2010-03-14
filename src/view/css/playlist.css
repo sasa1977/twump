@@ -9,6 +9,10 @@
   border-top: 1px solid green;
 }
 
+.songlist .dropAfter td {
+  border-bottom: 1px solid green;
+}
+
 .songlist .selected {
   background-color: white;
 }

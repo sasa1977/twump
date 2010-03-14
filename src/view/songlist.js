@@ -162,18 +162,26 @@ Object.extend(Twump.View.Songlist.prototype, {
   
   onSonglistDragover: function(event){
     this.itemUnderMouseIndex = this.list.findModel(event.srcElement);
-    if (this.itemUnderMouseIndex) {
-      this.list.removeHtmlClassFromAll('dropBefore')
+    
+    this.list.removeHtmlClassFromAll('dropBefore')
+    this.list.removeHtmlClassFromAll('dropAfter')
+    
+    if (this.itemUnderMouseIndex)
       this.list.setItemHtmlClass(this.itemUnderMouseIndex, 'dropBefore');
+    else {
+      var last = this.list.model.files.last();
+      if (last)
+        this.list.setItemHtmlClass(last, 'dropAfter');
     }
   },
   
   onDragFinished: function(){
+    this.list.removeHtmlClassFromAll('dropAfter')
     this.list.removeHtmlClassFromAll('dropBefore')
   },
   
   onStartDrag: function(){
-    if (this.dragCode)
+    if (this.dragCode && this.selectedItems().length)
       Twump.Api.startDrag("twump:" + this.dragCode);
   }
 });
