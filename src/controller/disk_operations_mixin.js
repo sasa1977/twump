@@ -61,12 +61,14 @@ Twump.Controller.DiskOperationsMixin = {
   },
   
   addFolderSelected: function(newFiles){
-    this.playlist.insertPathsAt(this.playlist.currentIndex() + 1, newFiles);
+    this.playlist.addPaths(newFiles);
     this.refreshCurrentPage();
   },
   
   onFilesDropped: function(files){
-    this.addFolderSelected(files);
+    this.playlist.insertPathsAt(this.playlistWindow.itemUnderMouseIndex(), files);
+    this.refreshCurrentPage();
+    this.playlistWindow.onDragFinished();
   },
   
   setLastFolder: function(data){
