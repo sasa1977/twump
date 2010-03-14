@@ -41,6 +41,21 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
     this.normalizeWindowHeight(event.screenY - window.nativeWindow.y)
   },
   
+  dimensions: function(){
+    return ["x", "y", "height", "width"].inject({}, function(memo, property){
+      memo[property] = window.nativeWindow[property];
+      return memo;
+    })
+  },
+  
+  setDimensions: function(dimensions){
+    for (property in dimensions)
+      window.nativeWindow[property] = dimensions[property];
+
+    if (dimensions.height)    
+      this.normalizeWindowHeight(dimensions.height)
+  },
+  
   normalizeWindowHeight: function(desiredWindowHeight){
     var fixedHeight = ['player', 'header', 'resize'].inject(0, function(memo, id){
       return memo + $(id).clientHeight;

@@ -2,7 +2,7 @@
   height:335;
   width:470px;
   background-color:lightGrey;
-  overflow:auto;
+  overflow:hidden;
 }
 
 .songlist .selected {
