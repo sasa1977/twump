@@ -182,6 +182,12 @@ Object.extend(Twump.View.Songlist.prototype, {
   
   onStartDrag: function(){
     if (this.dragCode && this.selectedItems().length)
-      Twump.Api.startDrag("twump:" + this.dragCode);
+      Twump.Api.startDrag({text: "twump:" + this.dragCode, files: this.selectedFiles()});
+  },
+  
+  selectedFiles: function(){
+    return this.selectedItems().map(function(file){
+      return file.path;
+    })
   }
 });

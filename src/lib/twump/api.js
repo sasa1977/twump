@@ -59,8 +59,24 @@ Twump.Api = {
   
   startDrag: function(data){
     var clipboard = new air.Clipboard();
-    clipboard.setData(air.ClipboardFormats.TEXT_FORMAT, data)
-    air.NativeDragManager.doDrag(window.htmlLoader, clipboard);
+
+    if (data.text)
+      clipboard.setData(air.ClipboardFormats.TEXT_FORMAT, data.text)
+      
+    if (data.files){
+      var files = data.files.inject(new runtime.Array(), function(memo, path){
+        memo.push(new air.File(path));
+        return memo;
+      });
+      
+      clipboard.setData(air.ClipboardFormats.FILE_LIST_FORMAT, files);
+    }
+    
+    var dragOptions = new air.NativeDragOptions();
+    dragOptions.allowCopy = true;
+    dragOptions.allowMove = false;
+      
+    air.NativeDragManager.doDrag(window.htmlLoader, clipboard, null, null, dragOptions);
   },
   
   getDropData: function(event){

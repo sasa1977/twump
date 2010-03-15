@@ -27,10 +27,6 @@ Object.extend(Twump.View.EditorWindow.prototype, {
     this.songlist.display(results);
   },
   
-  onStartDrag: function(){
-    Twump.Api.startDrag("twump:reorderFromEditor");
-  },
-  
   selectedItems: function(){
     return this.songlist.selectedItems();
   },
