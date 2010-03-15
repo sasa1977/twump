@@ -17,7 +17,7 @@
   :javascript
 
     function init(){
-      Twump.Controller.Updater.update();
+      if (Twump.Controller.Updater.update()) return;
       Twump.application = new Twump.Application();
     }
   

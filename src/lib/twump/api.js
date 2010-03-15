@@ -22,10 +22,14 @@ Twump.Api = {
     var file = new air.File(); 
     file.addEventListener(air.Event.SELECT, function(event){
       file.removeEventListener(air.Event.SELECT, arguments.callee);
-      options.onSelect(this.collectMusicPaths(air.File.getFilesRecursive(event.target.nativePath)))
+      options.onSelect(this.collectMusicPaths(this.getFilesRecursive(event.target.nativePath)))
     }.bind(this));
     
     file.browseForDirectory('Select folder');
+  },
+  
+  getFilesRecursive: function(paths){
+    return air.File.getFilesRecursive(paths);
   },
   
   browseForSave: function(options){
@@ -151,6 +155,14 @@ Twump.Api = {
     });
     
     urlStream.load(new air.URLRequest(url)); 
+  },
+  
+  update: function(path, version){
+    new air.Updater().update(new air.File(path), version)
+  },
+  
+  deleteFile: function(path){
+    new air.File(path).deleteFile();
   }
 }
 
