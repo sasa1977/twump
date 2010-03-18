@@ -59,16 +59,5 @@ Twump.View.Common = {
   onResizeMousemove: function(event){
     if (this.onResize)
       this.onResize(event.screenY - window.nativeWindow.y)
-  },
-  
-  
-  initSlider: function(id, options){
-    var slider = new Slider($(id), $(id + 'Input'), options.direction);
-    
-    slider.onchange = options.onchange;
-    slider.setMinimum(options.min);
-    slider.setMaximum(options.max);
-    
-    return slider;
   }
 }
