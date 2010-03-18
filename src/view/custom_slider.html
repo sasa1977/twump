@@ -57,7 +57,6 @@
           if (!this.sliderElement) {
             this.sliderElement = document.createElement('div');
             this.sliderElement.style.backgroundColor = "lightblue";
-            this.setSliderDimensions();
             document.body.appendChild(this.sliderElement);
             Position.absolutize(this.sliderElement);
             this.sliderElement = $(this.sliderElement);
@@ -67,10 +66,10 @@
         },
         
         setValue: function(value){
-          if (!this.max) return 0;
+          if (!this.max) return;
 
-          this.value = value;
-          this.drawSlider(this.computeCoordinates(value));
+          this.value = Math.max(0, Math.min(value, this.max - 1));
+          this.drawSlider(this.computeCoordinates(this.value));
         },
         
         fireChange: function(){
@@ -86,8 +85,7 @@
         sliderHeight: 30,
         
         setSliderDimensions: function(){
-          this.sliderElement.style.height = this.sliderHeight.toString() + "px"
-          this.sliderElement.style.width = "10px"
+          
         },
     
         drawSlider: function(pos){
@@ -95,6 +93,8 @@
         
           this.slider().style.top = (barPos[1] + pos).toString() + "px";
           this.slider().style.left = barPos[0];
+          this.slider().style.height = this.sliderHeight.toString() + "px"
+          this.slider().style.width = this.bar.offsetWidth.toString() + "px"
         },
         
         normalizeCoordinate: function(coordinate){
@@ -112,12 +112,51 @@
         }
       });
       
+      
+      Twump.HorizontalSlider = Class.create();
+      Object.extend(Twump.HorizontalSlider.prototype, Twump.SliderBase);
+      Object.extend(Twump.HorizontalSlider.prototype, {
+        sliderWidth: 30,
+        
+        setSliderDimensions: function(){
+          
+        },
+    
+        drawSlider: function(pos){
+          var barPos = Position.cumulativeOffset(this.bar)
+        
+          this.slider().style.left = (barPos[0] + pos).toString() + "px";
+          this.slider().style.top = barPos[1];
+          this.slider().style.height = this.bar.offsetHeight,toString() + "px"
+          this.slider().style.width = this.sliderWidth.toString() + "px"
+        },
+        
+        normalizeCoordinate: function(coordinate){
+          return Math.max(0,Math.min(coordinate.clientX - Position.cumulativeOffset(this.bar)[0], this.bar.offsetWidth));
+        },
+      
+        computeCoordinates: function(value){
+          return Math.round(value * (this.bar.offsetWidth - this.sliderWidth) / (this.max - 1))
+        },
+      
+        coordinateToValue: function(pos){
+          if (!this.max) return 0;
+        
+          return Math.round((this.max - 1) * pos / this.bar.offsetWidth);
+        }
+      });
+      
+      
       function onLoad(){
-        var slider = new Twump.VerticalSlider('verticalSlider');
+        slider = new Twump.VerticalSlider('verticalSlider');
         slider.setMaximum(100);
         slider.onChange = function(sl){
           console.log(sl.value)
         }
+        
+        hslider = new Twump.HorizontalSlider('horizontalSlider');
+        hslider.setMaximum(100);
+        hslider.onChange = function(sl){console.log(sl.value)}
       }
     </script>
   </head>
@@ -128,7 +167,13 @@
       <tr height="200px;">
         <td>sdfdsfds</td>
         <td>
-          <div id="verticalSlider" style="width:10px;height:100%;background-color:grey"></div>
+          <div id="verticalSlider" style="width:10px;height:100%;background-color:grey;"></div>
+        </td>
+      </tr>
+      <tr>
+        <td></td>
+        <td>
+          <div id="horizontalSlider" style="width:200px;height:10px;background-color:grey;">
         </td>
       </tr>
     </table>

@@ -77,7 +77,7 @@ Object.extend(Twump.View.Songlist.prototype, {
   pageLength: 18,
   
   maxPages: function(){
-    return (this.list.model.length() - this.pageLength);
+    return (this.list.model.length() - this.pageLength + 1);
   },
   
   onWindowSizeChanged: function(songlistHeight){
