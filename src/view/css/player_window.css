@@ -14,16 +14,17 @@
 }
 
 .playProgress {
-  float:left;
   width: 500px;
-}
-
-.playProgress input {
-  display:none;
+  height:10px;
+  background-color:white;
+  float:left;
 }
 
 .volume {
   float:left;
+  height:10px;
+  width:100px;
+  background-color:white;
 }
 
 .volume input {

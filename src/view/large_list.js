@@ -76,6 +76,8 @@ Twump.View.LargeList.prototype = {
   },
   
   itemsHtml: function(bounds){
+    if (!this.model) return;
+  
     return this.template.process({model: this.model, 
       items: this.model.items(bounds)}
     )

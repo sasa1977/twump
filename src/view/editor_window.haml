@@ -27,11 +27,6 @@
         })
       }
       
-  :ruby
-    def slider(id)
-      "<div id='#{id}' class='#{id}'><input id='#{id}Input'/></div>"
-    end
-      
   %body{:onload => "init();", :style => "overflow:hidden;-webkit-user-select:none;"}
     =render_partial('title_bar')
   
@@ -43,7 +38,7 @@
           %td
             #songlist{ :style => "width:550;height:350;overflow-x:auto;" }
           %td
-            =slider('pageProgress')
+            #pageProgress.pageProgress
 
     #songlistContextMenu{ :style => "display:none;" }
       #remove

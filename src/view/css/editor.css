@@ -3,5 +3,7 @@
 }
 
 .pageProgress{
-  height:330px;
+  height:337px;
+  width:10px;
+  background-color:grey;
 }
