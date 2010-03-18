@@ -1,5 +1,7 @@
 Twump.SliderBase = {
-  initialize: function(bar){
+  initialize: function(bar, options){
+    Object.extend(this, options || {})
+  
     this.bar = $(bar);
     this.drawSlider(0)
     this.bar.addEventListener('click', this.onSliderClick.bind(this), false);

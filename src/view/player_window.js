@@ -51,13 +51,8 @@ Object.extend(Twump.View.PlayerWindow.prototype, {
   },
   
   initSliders: function(){
-    this.volumeSlider = new Twump.HorizontalSlider('volume');
-    this.volumeSlider.setMaximum(100);
-    this.volumeSlider.onChange = this.onVolumeSliderChange.bind(this);
-    
-    this.playProgress = new Twump.HorizontalSlider('playProgress');
-    this.playProgress.setMaximum(100);
-    this.playProgress.onChange = this.onPlayProgressChange.bind(this);
+    this.volumeSlider = new Twump.HorizontalSlider('volume', {max: 100, onChange: this.onVolumeSliderChange.bind(this)});
+    this.playProgress = new Twump.HorizontalSlider('playProgress', {max: 100, onChange: this.onPlayProgressChange.bind(this)});
   },
   
   setVolume: function(volume){

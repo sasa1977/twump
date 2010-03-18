@@ -4,8 +4,7 @@ Object.extend(Twump.View.PageScroller.prototype, Twump.View.Common);
 
 Object.extend(Twump.View.PageScroller.prototype, {
   initialize: function(id){
-    this.pageSlider = new Twump.VerticalSlider(id);
-    this.pageSlider.onChange = this.onPageSliderChange.bind(this);
+    this.pageSlider = new Twump.VerticalSlider(id, {onChange: this.onPageSliderChange.bind(this)});
   },
   
   setPage: function(page, max){
