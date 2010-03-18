@@ -1,0 +1,111 @@
+<html>
+  <head>
+    <script src="../lib/prototype/prototype-1.5.1.2.js"></script>
+    
+    <script>
+      Twump = {}
+      Twump.Slider = Class.create();
+      Twump.Slider.prototype = {
+        initialize: function(bar){
+          this.bar = $(bar);
+          this.max = 100;
+          this.sliderHeight = 30;
+          this.position = 0;
+          this.drawSlider(0)
+          this.bar.addEventListener('click', this.onSliderClick.bind(this), false);
+          this.slider().addEventListener('mousedown', this.onStartSlide.bind(this), false);
+        },
+        
+        onStartSlide: function(event){
+          this.sliderDrag = this.onSliderDrag.bind(this);
+          document.addEventListener('mousemove', this.sliderDrag, false);
+          
+          this.stopSliderDrag = this.onStopSliderDrag.bind(this);
+          document.addEventListener('mouseup', this.stopSliderDrag, false);
+          
+          Event.stop(event)
+        },
+        
+        onSliderClick: function(event){
+          this.setValueFromCoordinate(event)
+        },
+        
+        onSliderDrag: function(event){
+          this.setValueFromCoordinate(event);
+        },
+        
+        setValueFromCoordinate: function(coordinate){
+          if (!this.max) return 0;
+          this.setValue(this.coordinateToValue(this.normalizeCoordinate(coordinate)))
+        },
+        
+        onStopSliderDrag: function(){
+          document.removeEventListener('mousemove', this.sliderDrag, false);
+          document.removeEventListener('mouseup', this.stopSliderDrag, false);
+        },
+    
+        slider: function(){
+          if (!this.sliderElement) {
+            this.sliderElement = document.createElement('div');
+            this.sliderElement.style.backgroundColor = "lightblue";
+            this.setSliderDimensions();
+            document.body.appendChild(this.sliderElement);
+            Position.absolutize(this.sliderElement);
+            this.sliderElement = $(this.sliderElement);
+          }
+        
+          return this.sliderElement;
+        },
+        
+        setValue: function(value){
+          if (!this.max) return 0;
+
+          this.value = value;
+          this.drawSlider(this.computeCoordinates(value));
+        },
+        
+        setSliderDimensions: function(){
+          this.sliderElement.style.height = this.sliderHeight.toString() + "px"
+          this.sliderElement.style.width = "10px"
+        },
+    
+        drawSlider: function(pos){
+          var barPos = Position.cumulativeOffset(this.bar)
+        
+          this.slider().style.top = (barPos[1] + pos).toString() + "px";
+          this.slider().style.left = barPos[0];
+        },
+        
+        normalizeCoordinate: function(coordinate){
+          return Math.max(0,Math.min(coordinate.clientY - Position.cumulativeOffset(this.bar)[1], this.bar.offsetHeight));
+        },
+      
+        computeCoordinates: function(value){
+          return Math.round(value * (this.bar.offsetHeight - this.sliderHeight) / (this.max - 1))
+        },
+      
+        coordinateToValue: function(pos){
+          if (!this.max) return 0;
+        
+          return Math.round((this.max - 1) * pos / this.bar.offsetHeight);
+        }        
+      }
+      
+      function onLoad(){
+        new Twump.Slider('verticalSlider');
+      }
+    </script>
+  </head>
+  
+  <body onload='onLoad()'>
+    <div>sdsds</div>
+    <table>
+      <tr height="200px;">
+        <td>sdfdsfds</td>
+        <td>
+          <div id="verticalSlider" style="width:10px;height:100%;background-color:grey"></div>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>
