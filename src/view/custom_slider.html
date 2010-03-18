@@ -8,12 +8,22 @@
       Twump.Slider.prototype = {
         initialize: function(bar){
           this.bar = $(bar);
-          this.max = 100;
+          this.max = 0;
+          this.value = 0;
           this.sliderHeight = 30;
           this.position = 0;
           this.drawSlider(0)
           this.bar.addEventListener('click', this.onSliderClick.bind(this), false);
           this.slider().addEventListener('mousedown', this.onStartSlide.bind(this), false);
+        },
+        
+        refresh: function(){
+          this.setValue(this.value);
+        },
+        
+        setMaximum: function(max){
+          this.max = max;
+          this.refresh();
         },
         
         onStartSlide: function(event){
@@ -28,10 +38,12 @@
         
         onSliderClick: function(event){
           this.setValueFromCoordinate(event)
+          this.fireChange();
         },
         
         onSliderDrag: function(event){
           this.setValueFromCoordinate(event);
+          this.fireChange();
         },
         
         setValueFromCoordinate: function(coordinate){
@@ -88,11 +100,20 @@
           if (!this.max) return 0;
         
           return Math.round((this.max - 1) * pos / this.bar.offsetHeight);
-        }        
+        },
+        
+        fireChange: function(){
+          if (this.onChange)
+            this.onChange(this);
+        }
       }
       
       function onLoad(){
-        new Twump.Slider('verticalSlider');
+        var slider = new Twump.Slider('verticalSlider');
+        slider.setMaximum(100);
+        slider.onChange = function(sl){
+          console.log(sl.value)
+        }
       }
     </script>
   </head>
