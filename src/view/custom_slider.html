@@ -4,18 +4,15 @@
     
     <script>
       Twump = {}
-      Twump.Slider = Class.create();
-      Twump.Slider.prototype = {
+      Twump.SliderBase = {
         initialize: function(bar){
           this.bar = $(bar);
-          this.max = 0;
-          this.value = 0;
-          this.sliderHeight = 30;
-          this.position = 0;
           this.drawSlider(0)
           this.bar.addEventListener('click', this.onSliderClick.bind(this), false);
           this.slider().addEventListener('mousedown', this.onStartSlide.bind(this), false);
         },
+        
+        max: 0, value: 0, position: 0,
         
         refresh: function(){
           this.setValue(this.value);
@@ -76,6 +73,18 @@
           this.drawSlider(this.computeCoordinates(value));
         },
         
+        fireChange: function(){
+          if (this.onChange)
+            this.onChange(this);
+        }
+      }
+      
+      
+      Twump.VerticalSlider = Class.create();
+      Object.extend(Twump.VerticalSlider.prototype, Twump.SliderBase);
+      Object.extend(Twump.VerticalSlider.prototype, {
+        sliderHeight: 30,
+        
         setSliderDimensions: function(){
           this.sliderElement.style.height = this.sliderHeight.toString() + "px"
           this.sliderElement.style.width = "10px"
@@ -100,16 +109,11 @@
           if (!this.max) return 0;
         
           return Math.round((this.max - 1) * pos / this.bar.offsetHeight);
-        },
-        
-        fireChange: function(){
-          if (this.onChange)
-            this.onChange(this);
         }
-      }
+      });
       
       function onLoad(){
-        var slider = new Twump.Slider('verticalSlider');
+        var slider = new Twump.VerticalSlider('verticalSlider');
         slider.setMaximum(100);
         slider.onChange = function(sl){
           console.log(sl.value)
