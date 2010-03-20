@@ -15,3 +15,21 @@ table {
   clear:both;
   height:0px;
 }
+
+.resize {
+  height:10px;
+  background-color:grey;
+  cursor:move;
+}
+
+#caption {
+  cursor:move;
+}
+
+#close {
+  cursor:pointer;
+}
+
+#close:hover {
+  background-color:white;
+}

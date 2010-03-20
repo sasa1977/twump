@@ -3,6 +3,7 @@ Twump.SliderBase = {
     Object.extend(this, options || {})
   
     this.bar = $(bar);
+    this.bar.style.cursor = "pointer";
     this.drawSlider(0)
     this.bar.addEventListener('click', this.onSliderClick.bind(this), false);
     this.slider().addEventListener('mousedown', this.onStartSlide.bind(this), false);
@@ -54,11 +55,12 @@ Twump.SliderBase = {
 
   slider: function(){
     if (!this.sliderElement) {
-      this.sliderElement = document.createElement('div');
+      this.sliderElement = $(document.createElement('div'));
       this.sliderElement.style.backgroundColor = "lightblue";
-      document.body.appendChild(this.sliderElement);
+      this.sliderElement.style.cursor = "move"
+      
+      this.bar.appendChild(this.sliderElement);
       Position.absolutize(this.sliderElement);
-      this.sliderElement = $(this.sliderElement);
     }
   
     return this.sliderElement;

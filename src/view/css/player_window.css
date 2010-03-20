@@ -1,5 +1,4 @@
 #player {
-  height:157px;
   width:500;
   background-color:darkgrey;
 }
@@ -12,6 +11,11 @@
 .buttonGroup {
   padding-right:20px;
   float:left;
+}
+
+.rightButtonGroup {
+  float:right;
+  padding-right:50px;
 }
 
 .playWindowButton{
@@ -28,21 +32,25 @@
 }
 
 .playProgress {
-  width: 500px;
+  width: 440px;
   height:10px;
   background-color:white;
   float:left;
 }
 
+.playProgressContainer {
+  padding-left:30px;
+  padding-bottom:10px;
+}
+
 .volumeContainer {
-  float:left;
   padding-top:10px;
-  padding-left:60px;
+  width:100px;
 }
 
 .volume {
   height:8px;
-  width:100px;
+  width:100%;
   background-color:white;
   vertical-align:middle;
 }

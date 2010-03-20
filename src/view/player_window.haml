@@ -31,16 +31,17 @@
         #playlistPos
         #progress
       
-      #playProgress.playProgress
-      
-      %br/
+      .buttonList.playProgressContainer
+        #playProgress.playProgress
+        .clear
+        
       .buttonList
         =play_window_button('previous', 'previous')
         =play_window_button('play', 'play')
         =play_window_button('pause', 'pause')
         =play_window_button('stop', 'stop')
         =play_window_button('next', 'next')
-        .volumeContainer
+        .volumeContainer.rightButtonGroup
           #volume.volume
         .clear
         
@@ -56,7 +57,7 @@
           =play_window_button('shuffle', 'shuffle')
           =play_window_button('shuffleRemaining', 'shuffle remaining')
           
-        .buttonGroup
+        .rightButtonGroup
           =play_window_button('editor', 'search')
           =play_window_button('delete', 'delete')
           =play_window_button('clear', 'clear list')
