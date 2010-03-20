@@ -37,8 +37,8 @@ Object.extend(Twump.View.PlayerWindow.prototype, {
   displayPlayProgress: function(data){
     this.inDisplayPlayProgress = true;
     
-    $('playing').update(data.file);
-    $('progress').update((data.length - data.position).secondsToTimeString());
+    $('playing').update('<nobr>' + data.file + '</nobr>');
+    $('remaining').update((data.length - data.position).secondsToTimeString());
     this.playProgress.setValue(data.playbackPercent);
     
     this.inDisplayPlayProgress = false;
@@ -46,8 +46,8 @@ Object.extend(Twump.View.PlayerWindow.prototype, {
   
   clearPlayProgress: function(){
     $('playing').update();
-    $('playlistPos').update();
-    $('progress').update()
+    $('remaining').update();
+    this.playProgress.setValue(0);
   },
   
   initSliders: function(){
@@ -62,7 +62,6 @@ Object.extend(Twump.View.PlayerWindow.prototype, {
   onVolumeSliderChange: function(){this.onVolumeChange(this.volumeSlider.getValue() / 100);},
   
   onPlayProgressChange: function(){
-    if(this.inDisplayPlayProgress) return;
     this.onSetPlayPosition(this.playProgress.getValue() / 100);
   }
 });
