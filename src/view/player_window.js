@@ -10,7 +10,7 @@ Object.extend(Twump.View.PlayerWindow.prototype, {
     this.addEventListeners("click", 
       [
         "previous", "next", "pause", "stop", "play",
-        "openFolder", "addFolder", "loadList", "saveList", "shuffle", "shuffleRemaining", "delete", "clear", 
+        "openFolder", "loadList", "saveList", "shuffle", "shuffleRemaining", "delete", "clear", 
         "editor"
       ]
     );

@@ -10,3 +10,8 @@ table {
   background-color: lightYellow;
   font-size:12px;
 }
+
+.clear {
+  clear:both;
+  height:0px;
+}

@@ -1,13 +1,25 @@
 #player {
-  height:147;
+  height:157px;
   width:500;
   background-color:darkgrey;
+}
+
+.buttonList {
+  padding-left:20px;
+  width: 500px;
+}
+
+.buttonGroup {
+  padding-right:20px;
+  float:left;
 }
 
 .playWindowButton{
   float:left;
   cursor:pointer;
   padding:5px;
+  padding-left:10px;
+  padding-right:10px;
 }
 .playWindowButton:hover{background-color:white}
 
@@ -22,11 +34,17 @@
   float:left;
 }
 
-.volume {
+.volumeContainer {
   float:left;
-  height:10px;
+  padding-top:10px;
+  padding-left:60px;
+}
+
+.volume {
+  height:8px;
   width:100px;
   background-color:white;
+  vertical-align:middle;
 }
 
 .volume input {
