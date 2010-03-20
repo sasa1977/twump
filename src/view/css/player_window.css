@@ -5,9 +5,11 @@
 }
 
 .playWindowButton{
-  float: left;
-  width: 40px;
+  float:left;
+  cursor:pointer;
+  padding:5px;
 }
+.playWindowButton:hover{background-color:white}
 
 .playingInfo {
   height:50px;

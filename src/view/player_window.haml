@@ -7,7 +7,9 @@
   
   :ruby
     def play_window_button(id, content)
-      "<div class='playWindowButton' id='#{id}'>#{content}</div>"
+      <<-eos
+        <div class='playWindowButton' id='#{id}'>#{content}</div>
+      eos
     end
     
   :javascript
@@ -33,30 +35,27 @@
       
       %br/
       %div
-        =play_window_button('previous', '|<')
-        =play_window_button('play', '>')
-        =play_window_button('pause', '||')
-        =play_window_button('stop', 'O')
-        =play_window_button('next', '>|')
-        
+        =play_window_button('previous', 'previous')
+        =play_window_button('play', 'play')
+        =play_window_button('pause', 'pause')
+        =play_window_button('stop', 'stop')
+        =play_window_button('next', 'next')
         #volume.volume
+        %div{:style => "clear:both;height:0px;"}
         
-      %br/
-      %br/
-      %div &nbsp;
-      
       %div
-        =play_window_button('openFolder', 'Ldf')
-        =play_window_button('addFolder', 'Ld+')
-        =play_window_button('loadList', 'LdL')
-        =play_window_button('saveList', 'Sv')
-        =play_window_button('shuffle', 'Sh')
-        =play_window_button('shuffleRemaining', 'Sh+')
-        =play_window_button('delete', 'Rm')
-        =play_window_button('clear', 'Cl')
-        =play_window_button('editor', 'Ed')
-      %br/
-    
+        %div
+          =play_window_button('openFolder', 'Ldf')
+          =play_window_button('addFolder', 'Ld+')
+          =play_window_button('loadList', 'LdL')
+          =play_window_button('saveList', 'Sv')
+          =play_window_button('shuffle', 'Sh')
+          =play_window_button('shuffleRemaining', 'Sh+')
+          =play_window_button('delete', 'Rm')
+          =play_window_button('clear', 'Cl')
+          =play_window_button('editor', 'Ed')
+          %div{:style => "clear:both;height:0px;"}
+        
     %table{:cellpadding => 0, :cellspacing => 0, :border => 0}
       %tr
         %td
