@@ -24,6 +24,11 @@ Twump.View.Common = {
       close();
     }
     
+    this.addEventListener("close", "mousedown");
+    this.onCloseMousedown = function(event){
+      Event.stop(event);
+    }
+    
     this.addEventListener("header", "mousedown");
     this.onHeaderMousedown = function(){
       window.nativeWindow.startMove();
