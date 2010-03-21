@@ -1,7 +1,7 @@
 Twump.View.EditorWindow = Class.create();
 
 Object.extend(Twump.View.EditorWindow.prototype, Twump.View.Common);
-
+Object.extend(Twump.View.EditorWindow.prototype, Twump.View.ResizeableSonglist);
 Object.extend(Twump.View.EditorWindow.prototype, {
   initialize: function(){
     this.insertHeader('editor');
@@ -12,6 +12,8 @@ Object.extend(Twump.View.EditorWindow.prototype, {
     
     this.songlist = new Twump.View.Songlist({dragCode: "reorderFromEditor"});
     this.songlist.onItemSelected = this.onItemSelected.bind(this);
+    
+    this.initResizeableSonglist(this.songlist, ['filter', 'header', 'resize']);
     
     $('filter').activate();
   },

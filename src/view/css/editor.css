@@ -1,9 +1,22 @@
+#editor table {
+  width:100%
+}
+
+.songlist {
+  width:100%;
+  overflow:hidden;
+}
+
+.pageProgressColumn {
+  width:10px;
+}
+
 .songlistItem.selected{
   background-color: lightgrey;
 }
 
 .pageProgress{
-  height:350px;
+  height:340px;
   width:10px;
   background-color:grey;
 }

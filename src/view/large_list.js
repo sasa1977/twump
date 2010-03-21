@@ -176,7 +176,7 @@ Twump.View.LargeList.prototype = {
   findItem: function(el, htmlClass){
     el = $(el)
     
-    if (!el || el == this.parentElement) return null;
+    if (!el || el == this.parentElement || !el.hasClassName) return null;
     
     if (el.hasClassName(htmlClass)) return el;
     return this.findItem(el.parentElement, htmlClass);

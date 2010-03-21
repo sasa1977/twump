@@ -35,10 +35,11 @@
       
       %table{:cellpadding => 0, :cellspacing => 0, :border => 0}
         %tr
-          %td
-            #songlist{ :style => "width:550;height:350;overflow-x:auto;" }
-          %td
+          %td.songlistColumn
+            #songlist
+          %td.pageProgressColumn
             #pageProgress.pageProgress
+      =render_partial('resize')
 
     #songlistContextMenu{ :style => "display:none;" }
       #remove
