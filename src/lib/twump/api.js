@@ -7,7 +7,7 @@ Twump.Api = {
     windowOptions.type = "lightweight";
     windowOptions.transparent = false;
     
-    var windowBounds = new air.Rectangle(200,250,600,400);
+    var windowBounds = new air.Rectangle(200,250,500,400);
     
     var newHTMLLoader = air.HTMLLoader.createRootWindow(
        true, windowOptions, true, windowBounds);

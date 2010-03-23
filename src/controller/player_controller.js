@@ -15,10 +15,10 @@ Object.extend(Twump.Controller.Player.prototype, {
     
     this.lastFmSetup();
     
-    this.subscribeToViewEvents(this.mainWindow, ["windowResized"]);
+    this.subscribeToViewEvents(this.mainWindow, ["windowResized", "windowClosing"]);
     
     this.subscribeToViewEvents(this.playerWindow, [
-      "windowClosing", "previousClick", "nextClick", "pauseClick", "stopClick", "playClick", 
+      "previousClick", "nextClick", "pauseClick", "stopClick", "playClick", 
       "volumeChange", "setPlayPosition", 
       "openFolderClick", "loadListClick", "saveListClick", "shuffleClick", 
       "shuffleRemainingClick", "deleteClick", "clearClick",

@@ -7,7 +7,9 @@ Object.extend(Twump.Controller.Editor.prototype, {
     Object.extend(this, options);
     
     this.onWindowClosing = this.playerController.onEditorClosing.bind(this.playerController);
-    this.subscribeToViewEvents(this.editorWindow, ["windowClosing", "filterChanged", "removeClick", "jumpToClick"]);
+    this.subscribeToViewEvents(this.editorWindow, ["windowClosing", "filterChanged", "removeClick", "jumpToClick", "windowResized"]);
+    
+    this.editorWindow.setDimensions(this.playerController.options.editorWindowDimensions);
   },
   
   onFilterChanged: function(filter){
@@ -30,5 +32,13 @@ Object.extend(Twump.Controller.Editor.prototype, {
   
   selectedItems: function(){
     return this.editorWindow.selectedItems();
+  },
+  
+  onWindowResized: function(){
+    this.playerController.savePlayerData();
+  },
+  
+  nativeWindowDimensions: function(){
+    return this.editorWindow.nativeWindowDimensions();
   }
 })

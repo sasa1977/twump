@@ -4,7 +4,6 @@ Object.extend(Twump.View.PlayerWindow.prototype, Twump.View.Common);
 
 Object.extend(Twump.View.PlayerWindow.prototype, {
   initialize: function(){
-    this.insertHeader('player');
     this.setCaption('twump v' + Twump.Api.currentApplicationVersion())
     
     this.addEventListeners("click", 

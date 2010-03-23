@@ -33,6 +33,11 @@ Twump.View.Common = {
     this.onHeaderMousedown = function(){
       window.nativeWindow.startMove();
     }
+    
+    window.nativeWindow.addEventListener("move", function(){
+      if (this.onWindowResized)
+        this.onWindowResized()
+    }.bind(this))
   },
   
   setCaption: function(caption){
@@ -64,5 +69,12 @@ Twump.View.Common = {
   onResizeMousemove: function(event){
     if (this.onResize)
       this.onResize(event.screenY - window.nativeWindow.y)
+  },
+  
+  nativeWindowDimensions: function(){
+    return ["x", "y", "height", "width"].inject({}, function(memo, property){
+      memo[property] = window.nativeWindow[property];
+      return memo;
+    })
   }
 }

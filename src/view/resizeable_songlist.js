@@ -12,6 +12,16 @@ Twump.View.ResizeableSonglist = {
     setTimeout(this.onWindowResized, 10); // so that window dimension really get updated
   },
   
+  setDimensions: function(dimensions){
+    if (!dimensions) return;
+    
+    for (property in dimensions)
+      window.nativeWindow[property] = dimensions[property];
+
+    if (dimensions.height)    
+      this.normalizeWindowHeight(dimensions.height)
+  },
+  
   normalizeWindowHeight: function(desiredWindowHeight){
     var fixedHeight = this.fixedElements.inject(0, function(memo, id){
       return memo + $(id).clientHeight;

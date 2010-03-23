@@ -1,25 +1,33 @@
 Twump.Controller.DiskOperationsMixin = {
+  options: {},
+  
   savePlayerData: function(){
     if (this.initializing) return;
-  
-    Twump.Storage.writeObject(Twump.Storage.appStorageFile('app_data.dat'), {
+    
+    Object.extend(this.options, {
       volume: this.volume,
       _lastFolders: this._lastFolders,
       lastPlayedIndex: this.playlist.currentIndex(),
-      mainWindowDimensions: this.mainWindow.dimensions()
+      mainWindowDimensions: this.mainWindow.nativeWindowDimensions()
     })
+    
+    if (this.editorController())
+      this.options.editorWindowDimensions = this.editorController().nativeWindowDimensions();
+    
+    Twump.Storage.writeObject(Twump.Storage.appStorageFile('app_data.dat'), this.options)
   },
   
   loadPlayerData: function(){
     var data = Twump.Storage.readObject(Twump.Storage.appStorageFile('app_data.dat'));
     if (!data) return;
     
+    this.options = data;
+    
     this.setVolume(data.volume);
     this._lastFolders = data._lastFolders;
     this.lastPlayedIndex = data.lastPlayedIndex || 0;
     
-    if (data.mainWindowDimensions)
-      this.mainWindow.setDimensions(data.mainWindowDimensions);
+    this.mainWindow.setDimensions(data.mainWindowDimensions);
   },
 
   saveCurrentList: function(){
