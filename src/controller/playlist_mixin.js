@@ -93,8 +93,7 @@ Twump.Controller.PlaylistMixin = {
   onEditorClosing: function(){
     // Dirty fix: editor window dimensions doesn't survive after the editor window is closed
     // probably because it gets garbage collected. Therefore, I reload it from disk.
-    var data = Twump.Storage.readObject(Twump.Storage.appStorageFile('app_data.dat'));
-    this.options.editorWindowDimensions = data.editorWindowDimensions;
+    this.restoreEditorWindowDimensions();
     
     this.editor = null;
   },

@@ -18,16 +18,27 @@ Twump.Controller.DiskOperationsMixin = {
   },
   
   loadPlayerData: function(){
+    this.withAppData(function(data){
+      this.options = data;
+    
+      this.setVolume(data.volume);
+      this._lastFolders = data._lastFolders;
+      this.lastPlayedIndex = data.lastPlayedIndex || 0;
+    
+      this.mainWindow.setDimensions(data.mainWindowDimensions);
+    }.bind(this));
+  },
+  
+  restoreEditorWindowDimensions: function(){
+    this.withAppData(function(data){
+      this.options.editorWindowDimensions = data.editorWindowDimensions;
+    }.bind(this))
+  },
+  
+  withAppData: function(callback){
     var data = Twump.Storage.readObject(Twump.Storage.appStorageFile('app_data.dat'));
-    if (!data) return;
-    
-    this.options = data;
-    
-    this.setVolume(data.volume);
-    this._lastFolders = data._lastFolders;
-    this.lastPlayedIndex = data.lastPlayedIndex || 0;
-    
-    this.mainWindow.setDimensions(data.mainWindowDimensions);
+    if (data)
+      callback(data);
   },
 
   saveCurrentList: function(){
