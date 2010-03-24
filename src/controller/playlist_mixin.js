@@ -64,34 +64,10 @@ Twump.Controller.PlaylistMixin = {
     this.redrawPlayList();
   },
   
-  editorOpened: function(){
-    return (this.editor != null)
-  },
-  
-  editorController: function(){
-    if (!this.editorOpened()) return null;
-    return this.editor.window.controller;
-  },
-  
-  closeEditor: function(){
-    if (!this.editorOpened()) return;
-    this.editor.window.close();
-    this.editor = null;
-  },
-  
-  openEditor: function(){
-    if (this.editorOpened()) return;
-    this.editor = Twump.Api.newWindow({url: "editor_window.html", 
-      playerController: this, playlist: this.playlist
-    })
-  },
-  
   onEditorClick: function(){
-    (this.editorOpened()) ? this.closeEditor() : this.openEditor();
-  },
-  
-  onEditorClosing: function(){
-    this.editor = null;
+    this.openOrCloseChildWindow('editor', {url: "editor_window.html", 
+      playerController: this, playlist: this.playlist
+    });
   },
   
   reorderFromPlaylist: function(options){
@@ -103,7 +79,7 @@ Twump.Controller.PlaylistMixin = {
   
   reorderFromEditor: function(options){
     this.moveFiles({
-      items: this.editorController().selectedItems(), 
+      items: this.childController('editor').selectedItems(), 
       before: this.playlistWindow.itemUnderMouseIndex()
     })
   },

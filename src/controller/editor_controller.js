@@ -6,8 +6,7 @@ Object.extend(Twump.Controller.Editor.prototype, {
   initialize: function(options){
     Object.extend(this, options);
     
-    this.onWindowClosing = this.playerController.onEditorClosing.bind(this.playerController);
-    this.subscribeToViewEvents(this.editorWindow, ["windowClosing", "filterChanged", "removeClick", "jumpToClick", "windowResized"]);
+    this.subscribeToViewEvents(this.editorWindow, ["filterChanged", "removeClick", "jumpToClick", "windowResized"]);
 
     this.editorWindow.setDimensions(this.playerController.options.editorWindowDimensions);
   },

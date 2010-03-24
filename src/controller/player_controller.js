@@ -6,6 +6,7 @@ Object.extend(Twump.Controller.Player.prototype, Twump.Controller.PlayerMixin);
 Object.extend(Twump.Controller.Player.prototype, Twump.Controller.SerializationMixin);
 Object.extend(Twump.Controller.Player.prototype, Twump.Controller.DiskOperationsMixin);
 Object.extend(Twump.Controller.Player.prototype, Twump.Controller.LastFmMixin);
+Object.extend(Twump.Controller.Player.prototype, Twump.Controller.ChildWindowsMixin);
 
 Object.extend(Twump.Controller.Player.prototype, {
   initialize: function(options){
@@ -46,7 +47,7 @@ Object.extend(Twump.Controller.Player.prototype, {
   },
   
   onWindowClosing: function(){
-    this.closeEditor();
+    this.closeChildWindow('editor');
   },
   
   onDrop: function(options){
