@@ -11,9 +11,21 @@ Twump.Controller.DiskOperationsMixin = {
       mainWindowDimensions: this.mainWindow.nativeWindowDimensions()
     })
     
-    if (this.editorController())
-      this.options.editorWindowDimensions = this.editorController().nativeWindowDimensions();
+    if (this.editorController()) {
+      setTimeout(function(){
+        // If I don't invoke this from the timer, I get internal error when I try to read editorWindowDimensions
+        // after editor window is closed. It seems it is related to the fact that I am transferring data between
+        // two windows, from move operation.
+        // Since I couldn't resolve it in any other way, I use this hack.
+        this.options.editorWindowDimensions = this.editorController().nativeWindowDimensions();
+        this.savePlayerDataToDisk();
+      }.bind(this), 10)
+    }
     
+    this.savePlayerDataToDisk();
+  },
+  
+  savePlayerDataToDisk: function(){
     Twump.Storage.writeObject(Twump.Storage.appStorageFile('app_data.dat'), this.options)
   },
   
