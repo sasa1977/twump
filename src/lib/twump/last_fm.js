@@ -14,6 +14,10 @@ LastFm.prototype = {
     })
   },
   
+  connected: function(){
+    return (this.sessionData != null);
+  },
+  
   handshake: function(options){
     if (!this.userData) return;
 
@@ -25,7 +29,7 @@ LastFm.prototype = {
       hs: true, p: "1.2.1", c: "twm", v: "0.1", u: this.userData.login, t: timestamp
     }
     authParams.a = hex_md5(hex_md5(this.userData.password) + timestamp)
-    
+
     new Ajax.Request('http://post.audioscrobbler.com',{
       method: 'get',
       parameters: authParams,

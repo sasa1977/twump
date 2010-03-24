@@ -9,9 +9,12 @@
     
     :ruby
       haml_concat javascript_include(
+        "lib/twump/last_fm",
+        
         "controller/common",
         "controller/options_controller",
         "controller/options_view",
+        
         "view/common",
         "view/options_window"
       )
@@ -27,4 +30,14 @@
       
   %body{:onload => "init();", :style => "overflow:hidden;-webkit-user-select:none;"}
     =render_partial('title_bar')
-  
+    
+    last.fm
+    %br/
+    login
+    %input{:id => "login", :type => "text"}
+    %br/
+        
+    password
+    %input{:id => "password", :type => "password"}
+    
+    #testLastFm.optionsButton test
