@@ -10,10 +10,16 @@ Twump.Api = {
     var windowBounds = new air.Rectangle(200,250,500,400);
     
     var newHTMLLoader = air.HTMLLoader.createRootWindow(
-       true, windowOptions, true, windowBounds);
+       false, windowOptions, true, windowBounds);
        
     newHTMLLoader.load(new air.URLRequest(options.url));
     newHTMLLoader.window.options = options;
+    
+    newHTMLLoader.addEventListener("complete", function(){
+      newHTMLLoader.removeEventListener("complete", arguments.callee);
+      newHTMLLoader.window.nativeWindow.visible = true;
+      newHTMLLoader.window.nativeWindow.activate();
+    })
     
     return newHTMLLoader;
   },
