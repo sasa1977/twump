@@ -24,6 +24,11 @@ Twump.View.Common = {
       close();
     }
     
+    window.nativeWindow.addEventListener('closing', function(){
+      if (this.onWindowClosing)
+        this.onWindowClosing();
+    }.bind(this))
+    
     this.addEventListener("close", "mousedown");
     this.onCloseMousedown = function(event){
       Event.stop(event);
