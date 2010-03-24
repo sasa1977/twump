@@ -47,7 +47,7 @@ Object.extend(Twump.Controller.Player.prototype, {
   },
   
   onWindowClosing: function(){
-    this.closeChildWindow('editor');
+    this.closeAllChildWindows();
   },
   
   onDrop: function(options){

@@ -38,5 +38,19 @@ Twump.Controller.ChildWindowsMixin = {
   
   openOrCloseChildWindow: function(id, options){
     this.windowOpened(id) ? this.closeChildWindow(id) : this.openChildWindow(id, options);
+  },
+  
+  childWindows: function(){
+    return Object.keys(this.openedWindows).inject([], function(memo, id){
+      if (this.windowOpened(id))
+        memo.push({id: id, handle: this.windowHandle(id)});
+      return memo;
+    }.bind(this))
+  },
+  
+  closeAllChildWindows: function(){
+    this.childWindows().each(function(windowDescriptor){
+      this.closeChildWindow(windowDescriptor.id)
+    }.bind(this))
   }
 }
