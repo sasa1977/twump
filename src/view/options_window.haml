@@ -1,0 +1,30 @@
+%html
+  %head
+    %title
+    
+    =render_partial "common_includes"
+    
+    :ruby
+      haml_concat stylesheet_include("view/css/options")
+    
+    :ruby
+      haml_concat javascript_include(
+        "controller/common",
+        "controller/options_controller",
+        "controller/options_view",
+        "view/common",
+        "view/options_window"
+      )
+    
+   
+    :javascript
+      function init(){
+        controller = new Twump.Controller.Options({
+          editorWindow: new Twump.View.OptionsWindow(),
+          playerController: options.playerController
+        })
+      }
+      
+  %body{:onload => "init();", :style => "overflow:hidden;-webkit-user-select:none;"}
+    =render_partial('title_bar')
+  
