@@ -10,7 +10,7 @@ Object.extend(Twump.View.PlayerWindow.prototype, {
       [
         "previous", "next", "pause", "stop", "play",
         "openFolder", "loadList", "saveList", "shuffle", "shuffleRemaining", "delete", "clear", 
-        "editor"
+        "editor", "options"
       ]
     );
      

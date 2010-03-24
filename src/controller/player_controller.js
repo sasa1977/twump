@@ -23,7 +23,7 @@ Object.extend(Twump.Controller.Player.prototype, {
       "volumeChange", "setPlayPosition", 
       "openFolderClick", "loadListClick", "saveListClick", "shuffleClick", 
       "shuffleRemainingClick", "deleteClick", "clearClick",
-      "editorClick", "drop", "filesDropped"
+      "editorClick", "drop", "filesDropped", "optionsClick"
     ]);
     
     this.subscribeToViewEvents(this.playlistWindow, [
@@ -50,6 +50,12 @@ Object.extend(Twump.Controller.Player.prototype, {
     this.closeAllChildWindows();
   },
   
+  onOptionsClick: function(){
+    this.openOrCloseChildWindow('options', {url: "options_window.html", 
+      playerController: this
+    });
+  },
+  
   onDrop: function(options){
     this.playlistWindow.onDragFinished();
     this[options.action](options);
@@ -62,7 +68,7 @@ Object.extend(Twump.Controller.Player.prototype, {
     };
     
     var ctrlMap = {
-      69: "editorClick", 79: "loadListClick", 83: "saveListClick"
+      69: "editorClick", 79: "loadListClick", 83: "saveListClick", 79: "optionsClick"
     };
     
     var altMap = {
