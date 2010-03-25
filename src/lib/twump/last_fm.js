@@ -61,7 +61,7 @@ LastFm.prototype = {
   },
   
   scrobbleQueued: function(){ 
-    if (!this.sessionData || !this.scrobbleLength) return;
+    if (!this.sessionData || !this.scrobbleQueue.length) return;
     
     if (this.scrobbledAt != null && (new Date() - this.scrobbledAt) / 1000 < 60) {
       this.logger.log("skipping scrobbling")
@@ -71,15 +71,18 @@ LastFm.prototype = {
     this.scrobbledAt = new Date();
     
     var params = ""
-    for (param in this.scrobbleParameters){
-      params += param + "=" + this.scrobbleParameters[param].toString() + "\n";
+    
+    var scrobbleParameters = this.makeScrobbleParams();
+    
+    for (param in scrobbleParameters){
+      params += param + "=" + scrobbleParameters[param].toString() + "\n";
     }
     
     this.logger.log("scrobbling\n" + params);
     
     req = new Ajax.Request(this.sessionData.submissionUrl, {
       method: 'post',
-      parameters: Object.extend({s: this.sessionData.sessionId}, this.scrobbleParameters),
+      parameters: Object.extend({s: this.sessionData.sessionId}, scrobbleParameters),
       
       onSuccess: function(response){
         this.scrobbledAt = null;
@@ -88,8 +91,7 @@ LastFm.prototype = {
         
         var responseParts = response.responseText.split("\n");
         if (responseParts[0] == "OK"){
-          this.scrobbleLength = 0;
-          this.scrobbleParameters = {};
+          this.scrobbleQueue = [];
           
           this.logger.log("scrobbled");
         }
@@ -101,39 +103,41 @@ LastFm.prototype = {
     })
   },
   
+  scrobbleQueue: [],
+  
   pushForScrobble: function(data){
     if (!this.sessionData) return;
     
-    this.scrobbleLength = this.scrobbleLength || 0;
-    if (this.scrobbleLength == 50) {
-      this.scrobbleLength = 0;
-      this.scrobbleParameters = {};
-    }
+    this.scrobbleQueue.push(data);
     
-    var scrobbleRow = {
-      a: data.performer, t: data.name,i: data.startedPlaying, o: "P", l: parseInt(data.length), 
-      r: "", b: "", n: "", m: ""
-    };
+    this.logger.log("queued for scrobble " + data.performer + " - " + data.name + "\nscrobble length = " + this.scrobbleQueue.length);
     
-    this.scrobbleParameters = Object.extend(this.scrobbleParameters || {}, this.mapForScrobble(scrobbleRow))
-    
-    this.scrobbleLength++;
-    
-    this.logger.log("queued for scrobble " + data.performer + " - " + data.name + "\nscrobble length = " + this.scrobbleLength);
-    
-    if ((this.scrobbleLength % 3) == 0)
+    if ((this.scrobbleQueue.length % 3) == 0)
       this.initializeConnection();
   },
   
   mapForScrobble: function(data){
+    return {
+      a: data.performer, t: data.name,i: data.startedPlaying, o: "P", l: parseInt(data.length), 
+      r: "", b: "", n: "", m: ""
+    }
+  },
+  
+  adjustPropertyNames: function(data, index){
     var result = {}
     
     for (var sourceProperty in data){
-      var targetProperty = sourceProperty + "[" + this.scrobbleLength + "]";
+      var targetProperty = sourceProperty + "[" + index + "]";
       result[targetProperty] = data[sourceProperty];
     }
     
     return result;
+  },
+  
+  makeScrobbleParams: function(){
+    return this.scrobbleQueue.inject({}, function(memo, data, index){
+      return Object.extend(memo, this.adjustPropertyNames(this.mapForScrobble(data), index));
+    }.bind(this))
   },
   
   notify: function(event) {
