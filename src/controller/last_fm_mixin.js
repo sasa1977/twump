@@ -15,6 +15,8 @@ Twump.Controller.LastFmMixin = {
     Twump.Api.writeEncrypted('lastFmLogin', loginData ? loginData.login : "");
     Twump.Api.writeEncrypted('lastFmPassword', loginData ? loginData.password : "");
     this.lastFm = new LastFm(loginData, this.logger);
+    this.lastFm.onHandshaked = this.onLastFmHandshaked.bind(this);
+    this.mainWindow.clearLastFmLogin();
   },
   
   lastFmLoginData: function(){
@@ -37,7 +39,7 @@ Twump.Controller.LastFmMixin = {
   },
   
   lastFmNowPlaying: function(){
-    this.lastFm.nowPlaying(this.playlist.currentFile().metadata)
+    this.lastFm.nowPlaying(this.playlist.currentFile().metadata);
   },
   
   scrobbleCurrent: function(data){
@@ -63,5 +65,9 @@ Twump.Controller.LastFmMixin = {
       this.scrobbleCurrentPossible() && !this.scrobbledCurrent &&
       (playingData.position > 240 || playingData.position >= playingData.length / 2)
     )
+  },
+  
+  onLastFmHandshaked: function(){
+    this.mainWindow.showLastFmLogin(this.lastFmLoginData().login)
   }
 }

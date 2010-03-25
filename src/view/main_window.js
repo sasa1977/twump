@@ -6,6 +6,14 @@ Object.extend(Twump.View.MainWindow.prototype, {
     Object.extend(this, options);
     
     this.insertHeader('player');
-    this.initResizeableSonglist(this.playlistWindow, ['player', 'header', 'resize']);
+    this.initResizeableSonglist(this.playlistWindow, ['player', 'header', 'resize', 'statusBar']);
+  },
+  
+  showLastFmLogin: function(login){
+    $('lastFmStatus').update('Scrobbling as ' + login)
+  },
+  
+  clearLastFmLogin: function(){
+    $('lastFmStatus').update();
   }
 })

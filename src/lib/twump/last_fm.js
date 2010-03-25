@@ -42,6 +42,8 @@ LastFm.prototype = {
             submissionUrl: responseParts[3]
           })
           
+          this.notify('Handshaked');
+          
           this.logger.log("handshaked")
         }
       }.bind(this)
@@ -132,5 +134,11 @@ LastFm.prototype = {
     }
     
     return result;
+  },
+  
+  notify: function(event) {
+    var handler = this["on" + event];
+    if (handler)
+      handler();
   }
 }
