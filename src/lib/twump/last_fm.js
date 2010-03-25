@@ -64,16 +64,17 @@ LastFm.prototype = {
     if (!this.sessionData || !this.scrobbleQueue.length) return;
     
     if (this.scrobbledAt != null && (new Date() - this.scrobbledAt) / 1000 < 60) {
+      // no scrobbling in next 60 seconds unless scrobble succeeded
       this.logger.log("skipping scrobbling")
       return;
     }
       
     this.scrobbledAt = new Date();
     
-    var params = ""
-    
     var scrobbleParameters = this.makeScrobbleParams();
+    var scrobbleQueue = this.scrobbleQueue.clone(); // make local copy for subsequent removing from queue
     
+    var params = ""
     for (param in scrobbleParameters){
       params += param + "=" + scrobbleParameters[param].toString() + "\n";
     }
@@ -91,7 +92,9 @@ LastFm.prototype = {
         
         var responseParts = response.responseText.split("\n");
         if (responseParts[0] == "OK"){
-          this.scrobbleQueue = [];
+          scrobbleQueue.each(function(element){
+            this.scrobbleQueue.findAndDelete(element);
+          }.bind(this))
           
           this.logger.log("scrobbled");
         }
