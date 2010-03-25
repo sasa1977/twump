@@ -94,7 +94,9 @@ LastFm.prototype = {
         if (responseParts[0] == "OK"){
           scrobbleQueue.each(function(element){
             this.scrobbleQueue.findAndDelete(element);
-          }.bind(this))
+          }.bind(this));
+          
+          this.addLastScrobbled(scrobbleQueue);
           
           this.logger.log("scrobbled");
         }
@@ -141,6 +143,12 @@ LastFm.prototype = {
     return this.scrobbleQueue.inject({}, function(memo, data, index){
       return Object.extend(memo, this.adjustPropertyNames(this.mapForScrobble(data), index));
     }.bind(this))
+  },
+  
+  lastScrobbled: [],
+  addLastScrobbled: function(justScrobbled){
+    this.lastScrobbled = justScrobbled.reverse().concat(this.lastScrobbled);
+    this.lastScrobbled.splice(5);
   },
   
   notify: function(event) {
