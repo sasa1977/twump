@@ -1,35 +1,24 @@
 Twump.Controller.LastFmMixin = {
-  lastFmSetup: function(){
+  initLastFm: function(){
     var lastFmLoginData = null;
     
-    if(confirm('last.fm?')){
-      var login = Twump.Api.readEncrypted('lastFmLogin'), password = Twump.Api.readEncrypted('lastFmPassword');
-      if (!login)
-        lastFmLoginData = this.lastFmLogin();
-      else {
-        if (confirm(login + '?'))
-          lastFmLoginData = {login: login, password: password};
-        else
-          lastFmLoginData = this.lastFmLogin();
-      }
-      
-      if (lastFmLoginData) {
-        Twump.Api.writeEncrypted('lastFmLogin', lastFmLoginData.login);
-        Twump.Api.writeEncrypted('lastFmPassword', lastFmLoginData.password);
-      }
-    }
+    var login = Twump.Api.readEncrypted('lastFmLogin'), password = Twump.Api.readEncrypted('lastFmPassword');
     
-    this.lastFm = new LastFm(lastFmLoginData, this.logger);
+    loginData = (login && login.length && password && password.length) ?
+      {login: login || "", password: password || ""} :
+      null;
+    
+    this.setLastFmLogin(loginData)
   },
   
-  lastFmLogin: function(){
-    var login = prompt('login');
-    if (!login) return null;
-    
-    var password = prompt('password');
-    if (!password) return null;
-    
-    return {login: login, password: password}
+  setLastFmLogin: function(loginData){
+    Twump.Api.writeEncrypted('lastFmLogin', loginData ? loginData.login : "");
+    Twump.Api.writeEncrypted('lastFmPassword', loginData ? loginData.password : "");
+    this.lastFm = new LastFm(loginData, this.logger);
+  },
+  
+  lastFmLoginData: function(){
+    return this.lastFm.userData;
   },
   
   lastFmPlayProgress: function(data){

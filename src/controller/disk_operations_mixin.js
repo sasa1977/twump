@@ -39,6 +39,8 @@ Twump.Controller.DiskOperationsMixin = {
     
       this.mainWindow.setDimensions(data.mainWindowDimensions);
     }.bind(this));
+    
+    this.initLastFm();
   },
   
   restoreEditorWindowDimensions: function(){

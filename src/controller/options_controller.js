@@ -6,7 +6,9 @@ Object.extend(Twump.Controller.Options.prototype, {
   initialize: function(options){
     Object.extend(this, options);
     
-    this.subscribeToViewEvents(this.editorWindow, ["testLastFmClick"]);
+    this.subscribeToViewEvents(this.optionsWindow, ["testLastFmClick", "applyLastFm"]);
+    
+    this.optionsWindow.setLastFmData(this.playerController.lastFmLoginData());
   },
   
   onTestLastFmClick: function(){
@@ -17,5 +19,9 @@ Object.extend(Twump.Controller.Options.prototype, {
       else
         alert('failed');
     }.bind(this), 10000)
+  },
+  
+  onApplyLastFm: function(loginData){
+    this.playerController.setLastFmLogin(loginData);
   }
 })

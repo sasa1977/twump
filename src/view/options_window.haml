@@ -23,7 +23,7 @@
     :javascript
       function init(){
         controller = new Twump.Controller.Options({
-          editorWindow: new Twump.View.OptionsWindow(),
+          optionsWindow: new Twump.View.OptionsWindow(),
           playerController: options.playerController
         })
       }
@@ -41,3 +41,4 @@
     %input{:id => "password", :type => "password"}
     
     #testLastFm.optionsButton test
+    #applyLastFm.optionsButton apply
