@@ -22,7 +22,8 @@ Object.extend(Twump.Controller.Player.prototype, {
       "addFolderAtEnd", "addFolderAfterCurrent",
       "loadListClick", "saveListClick", "shuffleClick", 
       "shuffleRemainingClick", "deleteClick", "clearClick",
-      "editorClick", "drop", "filesDropped", "optionsClick"
+      "editorClick", "drop", "filesDropped", "optionsClick",
+      "repeatClick"
     ]);
     
     this.subscribeToViewEvents(this.playlistWindow, [

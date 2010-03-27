@@ -10,7 +10,7 @@ Object.extend(Twump.View.PlayerWindow.prototype, {
       [
         "previous", "next", "pause", "stop", "play",
         "openFolder", "loadList", "saveList", "shuffle", "shuffleRemaining", "delete", "clear", 
-        "editor", "options"
+        "editor", "options", "repeat"
       ]
     );
      
@@ -79,5 +79,12 @@ Object.extend(Twump.View.PlayerWindow.prototype, {
   
   onPlayProgressChange: function(){
     this.onSetPlayPosition(this.playProgress.getValue() / 100);
+  },
+  
+  showPlaylistState: function(playlist){
+    if (playlist.repeat)
+      $('repeat').addClassName('toggled')
+    else
+      $('repeat').removeClassName('toggled')
   }
 });

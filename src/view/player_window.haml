@@ -78,7 +78,11 @@
           #pageProgress.pageProgress
 
     #statusBar.statusBar
-      #lastFmStatus
+      .buttonList
+        #lastFmStatus{:style => "float:left"}
+        .rightButtonGroup
+          =play_window_button('repeat', 'repeat')
+    .clear
 
     =render_partial('resize')
     =render_partial('tooltip')

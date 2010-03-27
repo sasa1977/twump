@@ -1,11 +1,13 @@
 Twump.Controller.PlaylistMixin = {
   setPlaylist: function(playlist){
     this.playlist = playlist;
+    this.playlist.repeat = this.options.playlistRepeat;
     this.redrawPlayList();
   },
   
   redrawPlayList: function(){
     this.playlistWindow.display(this.playlist);
+    this.playerWindow.showPlaylistState(this.playlist);
   },
   
   refreshCurrentPage: function(){

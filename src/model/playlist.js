@@ -26,9 +26,27 @@ Object.extend(Twump.Model.Playlist.prototype, {
     return this.fileAt(this.indexOf(this.currentFile()) + 1);
   },
   
-  previous: function(file){
+  nextPlaying: function(){
+    if (!this.currentFile()) return;
+    
+    if (this.repeat && this.currentFile() == this.last())
+      return this.first();
+      
+    return this.next();
+  },
+  
+  previous: function(){
     if (!this.currentFile()) return;
     return this.fileAt(this.indexOf(this.currentFile()) - 1);
+  },
+  
+  previousPlaying: function(){
+    if (!this.currentFile()) return;
+    
+    if (this.repeat && this.currentFile() == this.first())
+      return this.last();
+    
+    return this.previous();
   },
   
   remove: function(files){

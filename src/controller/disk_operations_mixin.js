@@ -8,7 +8,8 @@ Twump.Controller.DiskOperationsMixin = {
       volume: this.volume,
       _lastFolders: this._lastFolders,
       lastPlayedIndex: this.playlist.currentIndex(),
-      mainWindowDimensions: this.mainWindow.nativeWindowDimensions()
+      mainWindowDimensions: this.mainWindow.nativeWindowDimensions(),
+      playlistRepeat: this.playlist.repeat,
     })
     
     if (this.windowOpened('editor')) {
@@ -36,6 +37,7 @@ Twump.Controller.DiskOperationsMixin = {
       this.setVolume(data.volume);
       this._lastFolders = data._lastFolders;
       this.lastPlayedIndex = data.lastPlayedIndex || 0;
+      this.playlist.repeat = data.playlistRepeat;
     
       this.mainWindow.setDimensions(data.mainWindowDimensions);
     }.bind(this));

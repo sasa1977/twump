@@ -72,6 +72,14 @@ Twump.Model.Songlist.prototype = {
     return this.indexOf(this.file(id))
   },
   
+  last: function(){
+    return this.files.last();
+  },
+  
+  first: function(){
+    return this.files.first();
+  },
+  
   length: function(){return this.files.length},
   empty: function(){return this.files.length == 0},
   
