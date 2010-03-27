@@ -92,7 +92,11 @@ Twump.Controller.PlayerMixin = {
   },
   
   onNextClick: function(){
-    this.play(this.playlist.nextPlaying());
+    var playingInfo = this.playlist.nextPlaying();
+    this.play(playingInfo.file);
+
+    if (playingInfo.reshuffled)
+      this.redrawPlayList();
   },
   
   onPauseClick: function(){

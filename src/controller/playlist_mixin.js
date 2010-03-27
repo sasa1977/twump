@@ -31,7 +31,7 @@ Twump.Controller.PlaylistMixin = {
   onShuffleClick: function(){
     this.playlist.shuffle();
     this.redrawPlayList();
-    this.play(0);
+    this.play(this.playlist.first());
   },
   
   onShuffleRemainingClick: function(){
