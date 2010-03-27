@@ -31,8 +31,10 @@ Object.extend(Twump.Model.Playlist.prototype, {
     
     var result = {file: this.next()};
     
-    if (this.hasRepeatPattern())
+    if (this.hasRepeatPattern()) {
+      result.reshuffled = this.willReshuffleRepeatPattern();
       result.file = this.nextFromRepeatPattern();
+    }
     else if (this.repeats() && this.currentFile() == this.last()){
       if (this.shuffles()) {
         this.shuffle();
@@ -46,26 +48,36 @@ Object.extend(Twump.Model.Playlist.prototype, {
     return result;
   },
   
-  setRepeatPattern: function(files){
+  setRepeatPattern: function(files, reshuffle){
     this.repeatPattern = files.clone();
-    this.repeatIndex = 0;
+    this.repeatIndex = -1;
+    this.reshuffleRepeatPattern = reshuffle;
+  },
+  
+  willReshuffleRepeatPattern: function(){
+    return this.hasRepeatPattern() && this.reshuffleRepeatPattern &&
+     (this.repeatIndex >= this.repeatPattern.length - 1);
   },
   
   nextFromRepeatPattern: function(){
+    this.cleanupRepeatPattern();
     if (!this.hasRepeatPattern()) return null;
     
-    var result = this.repeatPattern[this.repeatIndex];
+    if (this.willReshuffleRepeatPattern()) {
+      this.shuffleFiles(this.repeatPattern);
+      this.sortRepeatPattern();
+    }
+    
     this.repeatIndex = (this.repeatIndex + 1) % this.repeatPattern.length;
-    return result;
+    return this.repeatPattern[this.repeatIndex];
   },
   
   hasRepeatPattern: function(){
-    this.cleanupRepeatPattern();
     return this.repeatPattern && this.repeatPattern.length > 0
   },
   
   cleanupRepeatPattern: function(){
-    if (!this.repeatPattern) return;
+    if (!this.hasRepeatPattern()) return;
     
     this.repeatPattern.each(function(file, index){
       if (!this.include(file))
@@ -73,6 +85,15 @@ Object.extend(Twump.Model.Playlist.prototype, {
     }.bind(this))
     
     this.repeatPattern = this.repeatPattern.compact();
+    this.sortRepeatPattern();
+  },
+  
+  sortRepeatPattern: function(){
+    if (!this.hasRepeatPattern()) return;
+    
+    this.repeatPattern = this.repeatPattern.sortBy(function(file){
+      return this.indexOf(file)
+    }.bind(this))
   },
   
   previous: function(){

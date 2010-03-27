@@ -113,8 +113,8 @@ Twump.Controller.PlaylistMixin = {
     this.play(file);
   },
   
-  onSetRepeatPattern: function(files){
-    this.playlist.setRepeatPattern(files || []);
+  onSetRepeatPattern: function(files, reshuffle){
+    this.playlist.setRepeatPattern(files || [], reshuffle);
     this.playlistWindow.setRepeatPattern(files || [])
   },
   

@@ -10,6 +10,7 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
         {id: 'deleteContext', title: 'remove from playlist', onClick: this.onDeleteContextClick.bind(this)},
         {id: 'shuffleSelection', title: 'shuffle selection', onClick: this.onShuffleSelectionClick.bind(this)},
         {id: 'repeatPattern', title: 'repeat selection', onClick: this.onSetRepeatPatternClick.bind(this)},
+        {id: 'repeatShufflePattern', title: 'repeat and reshuffle selection', onClick: this.onSetRepeatPatternWithShuffleClick.bind(this)},
         {id: 'clearRepeatPattern', title: 'clear repeat selection', onClick: this.onClearRepeatPatternClick.bind(this)},
       ]
     });
@@ -64,6 +65,10 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
   
   onClearRepeatPatternClick: function(){
     this.onSetRepeatPattern([]);
+  },
+  
+  onSetRepeatPatternWithShuffleClick: function(){
+    this.onSetRepeatPattern(this.selectedItems(), true)
   },
   
   setRepeatPattern: function(files){
