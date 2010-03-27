@@ -75,8 +75,12 @@ Twump.Controller.DiskOperationsMixin = {
     this.openFolder();
   },
   
-  onAddFolderClick: function(){
+  onAddFolderAtEnd: function(){
    (this.playlist.empty()) ? this.openFolder() : this.addFolder();
+  },
+  
+  onAddFolderAfterCurrent: function(){
+    (this.playlist.empty()) ? this.openFolder() : this.addFolderAfterCurrent();
   },
 
   openFolder: function(){
@@ -95,6 +99,15 @@ Twump.Controller.DiskOperationsMixin = {
   
   addFolderSelected: function(newFiles){
     this.playlist.addPaths(newFiles);
+    this.refreshCurrentPage();
+  },
+  
+  addFolderAfterCurrent: function(){
+    Twump.Api.openFolder({onSelect: this.addFolderAfterCurrentSelected.bind(this)})
+  },
+  
+  addFolderAfterCurrentSelected: function(newFiles){
+    this.playlist.insertPathsAt(this.playlist.next(), newFiles);
     this.refreshCurrentPage();
   },
   

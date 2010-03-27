@@ -18,6 +18,23 @@ Object.extend(Twump.View.PlayerWindow.prototype, {
      
     window.htmlLoader.addEventListener("nativeDragDrop", this.onNativeDragDrop.bind(this));
   },
+  
+  onOpenFolderClick: function(event){
+    this.openContextMenu(event, [
+      {id: 'addFolderAtEnd', title: 'add folder at the end', onClick: this.onAddFolderAtEndClick.bind(this)},
+      {id: 'addFolderAfterCurrent', title: 'add folder after current', onClick: this.onAddFolderAfterCurrentClick.bind(this)}
+    ]);
+    
+    Event.stop(event)
+  },
+  
+  onAddFolderAfterCurrentClick: function(){
+    this.onAddFolderAfterCurrent();
+  },
+  
+  onAddFolderAtEndClick: function(){
+    this.onAddFolderAtEnd();
+  },
     
   onNativeDragDrop: function(event){ 
     var data = event.clipboard.getData(air.ClipboardFormats.TEXT_FORMAT);
