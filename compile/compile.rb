@@ -92,6 +92,7 @@ class Compiler
   
   def package
     with_compile do
+      FileUtils.mkdir(@paths.release)
       puts "\npackaging"
       system("echo 123 | adt -package -storetype pkcs12 -keystore #{@paths.build}/cert.pfx #{@paths.release}/twump-#{app_version}.air app.xml . > /dev/null")
       FileUtils.cp("#{@paths.src}/app.xml", @paths.release, :preserve => true)
