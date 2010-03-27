@@ -7,7 +7,9 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
     this.songlist = new Twump.View.Songlist({dragCode: "reorderFromPlaylist",
       contextMenuDescriptor: [
         {id: 'copyPathToClipboard', title: 'copy full path to clipboard', onClick: this.onCopyPathToClipboardClick.bind(this)},
-        {id: 'deleteContext', title: 'remove from playlist', onClick: this.onDeleteContextClick.bind(this)}
+        {id: 'deleteContext', title: 'remove from playlist', onClick: this.onDeleteContextClick.bind(this)},
+        {id: 'repeatPattern', title: 'repeat selected files', onClick: this.onSetRepeatPatternClick.bind(this)},
+        {id: 'clearRepeatPattern', title: 'clear repeat selection', onClick: this.onClearRepeatPatternClick.bind(this)},
       ]
     });
     
@@ -47,5 +49,20 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
   
   bringPlayingItemToFocus: function(){
     this.songlist.bringToFocus(this.playingItem);
+  },
+  
+  onSetRepeatPatternClick: function(){
+    this.onSetRepeatPattern(this.selectedItems());
+  },
+  
+  onClearRepeatPatternClick: function(){
+    this.onSetRepeatPattern([]);
+  },
+  
+  setRepeatPattern: function(files){
+    this.songlist.list.removeHtmlClassFromAll('repeatPattern');
+    (files || []).each(function(file){
+      this.songlist.list.setItemHtmlClass(file, 'repeatPattern');
+    }.bind(this))
   }
 });

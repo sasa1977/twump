@@ -17,10 +17,6 @@
   background-color: white;
 }
 
-.songlist .playing {
-  color: blue;
-}
-
 .index {
   width:40px;
 }
@@ -43,4 +39,12 @@
 
 .songlistItem:active {
   cursor: move;
+}
+
+.songlistItem.repeatPattern {
+  color:green;
+}
+
+.songlistItem.playing {
+  color: blue;
 }

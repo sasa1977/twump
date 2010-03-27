@@ -111,5 +111,10 @@ Twump.Controller.PlaylistMixin = {
   
   jumpTo: function(file){
     this.play(file);
+  },
+  
+  onSetRepeatPattern: function(files){
+    this.playlist.setRepeatPattern(files || []);
+    this.playlistWindow.setRepeatPattern(files || [])
   }
 }

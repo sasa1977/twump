@@ -80,6 +80,10 @@ Twump.Model.Songlist.prototype = {
     return this.files.first();
   },
   
+  include: function(file){
+    return (this.indexOf(file) != null);
+  },
+  
   length: function(){return this.files.length},
   empty: function(){return this.files.length == 0},
   
