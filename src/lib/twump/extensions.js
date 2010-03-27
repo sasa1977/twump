@@ -60,8 +60,14 @@ Array.prototype.findAndDelete = function(el){
 
 ////////////////////////////////////////////////////////////
 // Date
-
 Date.prototype.shortTime = function(){
   return this.getHours().toString().padRight(2, "0") + ":" + this.getMinutes().toString().padRight(2, "0")
 }
 
+
+////////////////////////////////////////////////////////////
+// Object
+Object.wrap = function(object, memberName, newValue){
+  object[memberName + "Original"] = object[memberName];
+  object[memberName] = newValue;
+}

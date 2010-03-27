@@ -109,6 +109,11 @@ Object.extend(Twump.Model.Playlist.prototype, {
   }
 });
 
+Object.wrap(Twump.Model.Playlist.prototype, "shuffle", function(from){
+  this.shuffleOriginal(from);
+  this.setRepeatPattern([]);
+})
+
 
 Twump.Model.Playlist.deserialize = function(data){
   var playlist = new Twump.Model.Playlist();

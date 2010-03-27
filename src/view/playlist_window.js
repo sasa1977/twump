@@ -17,7 +17,7 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
     this.songlist.onPageChanged = function(files){this.onPageChanged(files)}.bind(this);
   
     [
-      "selectItem", "selectedItems", "refreshItem", "refreshCurrentPage", "displayed", "normalizedHeight",
+      "selectItem", "selectedItems", "refreshItem", "displayed", "normalizedHeight",
       "onWindowSizeChanged", "onDragFinished"
     ].each(function(passthrough){
       this[passthrough] = this.songlist[passthrough].bind(this.songlist);
@@ -39,6 +39,12 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
   display: function(playlist){
     this.playlist = playlist;
     this.songlist.display(playlist);
+    this.setRepeatPattern(playlist.repeatPattern)
+  },
+  
+  refreshCurrentPage: function(){
+    this.setRepeatPattern(this.playlist.repeatPattern);
+    this.songlist.refreshCurrentPage();
   },
   
   setPlayingItem: function(file){
