@@ -62,6 +62,7 @@ Twump.Controller.PlaylistMixin = {
     this.playlist.clear();
     this.setCurrentIndex(0);
     this.redrawPlayList();
+    this.saveCurrentList();
   },
   
   onEditorClick: function(){

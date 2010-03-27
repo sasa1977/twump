@@ -71,44 +71,32 @@ Twump.Controller.DiskOperationsMixin = {
     }.bind(this))
   },
   
-  onOpenFolderClick: function(){
-    this.openFolder();
-  },
-  
   onAddFolderAtEnd: function(){
-   (this.playlist.empty()) ? this.openFolder() : this.addFolder();
+   Twump.Api.openFolder({onSelect: this.openFolderDelegate(
+     function(newFiles){
+       this.playlist.addPaths(newFiles)
+     }.bind(this))
+   })
   },
   
   onAddFolderAfterCurrent: function(){
-    (this.playlist.empty()) ? this.openFolder() : this.addFolderAfterCurrent();
-  },
-
-  openFolder: function(){
-    Twump.Api.openFolder({onSelect: this.openFolderSelected.bind(this)})
-  },
-  
-  openFolderSelected: function(paths){
-    this.stop();
-    this.setPlaylist(new Twump.Model.Playlist(paths));
-    this.playCurrent();
+    Twump.Api.openFolder({onSelect: this.openFolderDelegate(
+       function(newFiles){
+         this.playlist.insertPathsAt(this.playlist.next(), newFiles);
+       }.bind(this))
+     })
   },
   
-  addFolder: function(){
-    Twump.Api.openFolder({onSelect: this.addFolderSelected.bind(this)})
-  },
-  
-  addFolderSelected: function(newFiles){
-    this.playlist.addPaths(newFiles);
-    this.refreshCurrentPage();
-  },
-  
-  addFolderAfterCurrent: function(){
-    Twump.Api.openFolder({onSelect: this.addFolderAfterCurrentSelected.bind(this)})
-  },
-  
-  addFolderAfterCurrentSelected: function(newFiles){
-    this.playlist.insertPathsAt(this.playlist.next(), newFiles);
-    this.refreshCurrentPage();
+  openFolderDelegate: function(code){
+    return function(newFiles){
+      code(newFiles);
+      
+      if (!this.playlist.currentFile())
+        this.setCurrentIndex(0);
+      
+      this.refreshCurrentPage();
+      this.saveCurrentList();
+    }.bind(this)
   },
   
   onFilesDropped: function(files){
