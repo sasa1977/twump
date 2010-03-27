@@ -4,12 +4,16 @@ Object.extend(Twump.View.PlaylistWindow.prototype, Twump.View.Common);
 
 Object.extend(Twump.View.PlaylistWindow.prototype, {
   initialize: function(){
-    this.songlist = new Twump.View.Songlist({dragCode: "reorderFromPlaylist"});
+    this.songlist = new Twump.View.Songlist({dragCode: "reorderFromPlaylist",
+      contextMenuDescriptor: [
+        {id: 'copyPathToClipboard', title: 'copy full path to clipboard', onClick: this.onCopyPathToClipboardClick.bind(this)},
+        {id: 'deleteContext', title: 'remove from playlist', onClick: this.onDeleteContextClick.bind(this)}
+      ]
+    });
+    
     this.songlist.onItemSelected = function(item){this.onItemSelected(item)}.bind(this);
     this.songlist.onPageChanged = function(files){this.onPageChanged(files)}.bind(this);
   
-    this.addEventListeners('click', ['copyPathToClipboard', 'deleteContext']);
-    
     [
       "selectItem", "selectedItems", "refreshItem", "refreshCurrentPage", "displayed", "normalizedHeight",
       "onWindowSizeChanged", "onDragFinished"
@@ -22,12 +26,12 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
     return this.songlist.itemUnderMouseIndex;
   },
   
-  onCopyPathToClipboardClick: function(){
-    Twump.Api.copyTextToClipboard(this.songlist.relatedContextMenuItem.path)
+  onCopyPathToClipboardClick: function(item){
+    Twump.Api.copyTextToClipboard(item.path)
   },
   
-  onDeleteContextClick: function(){
-    this.onDeleteClick();
+  onDeleteContextClick: function(item){
+    this.onDeleteClick(item);
   },
   
   display: function(playlist){

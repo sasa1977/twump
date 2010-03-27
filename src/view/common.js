@@ -81,5 +81,42 @@ Twump.View.Common = {
       memo[property] = window.nativeWindow[property];
       return memo;
     })
-  }
+  },
+  
+  openContextMenu: function(event, items, data){
+    var contextMenu = $('contextMenu');
+    if (!contextMenu) {
+      contextMenu = $(document.createElement('div'));
+      contextMenu.id = 'contextMenu';
+      contextMenu.addClassName('contextMenu')
+      document.body.appendChild(contextMenu);
+    }
+    
+    contextMenu.update(this.contextMenuTemplate.process({items: items}))
+    
+    Position.absolutize(contextMenu);
+    contextMenu.style.top = event.clientY.toString() + "px";
+    contextMenu.style.left = event.clientX.toString() + "px";
+    contextMenu.show();
+    
+    items.each(function(item){
+      $(item.id).addEventListener('click', function(){item.onClick(data)}.bind(this))
+    })
+  },
+  
+  closeContextMenu: function(){
+    var contextMenu = $('contextMenu');
+    if (!contextMenu) return;
+    
+    contextMenu.hide();
+    contextMenu.update('')
+  },
+  
+  contextMenuTemplate: TrimPath.parseTemplate(" \
+    {for item in items} \
+      <div id='${item.id}' class='contextMenuItem'> \
+        ${item.title} \
+      </div> \
+    {/for} \
+  ")
 }

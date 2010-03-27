@@ -109,21 +109,8 @@ Object.extend(Twump.View.Songlist.prototype, {
   },
   
   onItemRightClick: function(item, event){
-    this.openContextMenu(item, event)
-  },
-  
-  openContextMenu: function(item, event){
-    var contextMenu = $('songlistContextMenu')
-    contextMenu.show();
-    Position.absolutize(contextMenu);
-    contextMenu.style.top = event.clientY.toString() + "px";
-    contextMenu.style.left = event.clientX.toString() + "px";
-    
-    this.relatedContextMenuItem = item;
-  },
-  
-  closeContextMenu: function(){
-    $('songlistContextMenu').hide();
+    if (this.contextMenuDescriptor)
+      this.openContextMenu(event, this.contextMenuDescriptor, item)
   },
   
   songlistTemplate: TrimPath.parseTemplate(" \

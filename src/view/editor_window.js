@@ -8,9 +8,13 @@ Object.extend(Twump.View.EditorWindow.prototype, {
     this.delayExecute = new Twump.Utils.DelayExecute(1000);
 
     this.addEventListener('filter', 'keydown');
-    this.addEventListeners('click', ['remove', 'jumpTo']);
     
-    this.songlist = new Twump.View.Songlist({dragCode: "reorderFromEditor"});
+    this.songlist = new Twump.View.Songlist({dragCode: "reorderFromEditor",
+      contextMenuDescriptor: [
+        {id: 'remove', title: 'remove from playlist', onClick: this.onRemoveClick.bind(this)},
+        {id: 'jumpTo', title: 'jump to', onClick: this.onJumpToClick.bind(this)}
+      ]
+    });
     this.songlist.onItemSelected = this.onItemSelected.bind(this);
     
     this.initResizeableSonglist(this.songlist, ['filter', 'header', 'resize']);
@@ -34,6 +38,14 @@ Object.extend(Twump.View.EditorWindow.prototype, {
   },
   
   onItemSelected: function(item){
-    this.onJumpToClick();
+    this.onJumpToClick(item);
+  },
+  
+  onJumpToClick: function(item){
+    this.onJumpTo(item);
+  },
+  
+  onRemoveClick: function(item){
+    this.onRemove(item);
   }
 });

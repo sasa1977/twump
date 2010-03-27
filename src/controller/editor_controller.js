@@ -6,7 +6,7 @@ Object.extend(Twump.Controller.Editor.prototype, {
   initialize: function(options){
     Object.extend(this, options);
     
-    this.subscribeToViewEvents(this.editorWindow, ["filterChanged", "removeClick", "jumpToClick", "windowResized"]);
+    this.subscribeToViewEvents(this.editorWindow, ["filterChanged", "remove", "jumpTo", "windowResized"]);
 
     this.editorWindow.setDimensions(this.playerController.options.editorWindowDimensions);
   },
@@ -18,11 +18,11 @@ Object.extend(Twump.Controller.Editor.prototype, {
     this.lastFilter = filter;
   },
   
-  onRemoveClick: function(){
+  onRemove: function(){
     this.playerController.deleteFromPlaylist(this.selectedItems())
   },
   
-  onJumpToClick: function(){
+  onJumpTo: function(){
     var selectedItem = this.selectedItems()[0];
     if (!selectedItem) return;
     

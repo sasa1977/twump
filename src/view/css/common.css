@@ -33,3 +33,8 @@ table {
 #close:hover {
   background-color:white;
 }
+
+.contextMenu {
+  background-color: cyan;
+  float: left;
+}
