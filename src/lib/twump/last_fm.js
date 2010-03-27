@@ -147,8 +147,11 @@ LastFm.prototype = {
   
   lastScrobbled: [],
   addLastScrobbled: function(justScrobbled){
-    this.lastScrobbled = justScrobbled.reverse().concat(this.lastScrobbled);
-    this.lastScrobbled.splice(5);
+    this.lastScrobbled = justScrobbled.reverse().map(function(scrobbled){
+      return Object.extend(Object.clone(scrobbled), {scrobbledAt: new Date()})
+    }).concat(this.lastScrobbled);
+    
+    this.lastScrobbled.splice(5); // keep only most recent items
   },
   
   notify: function(event) {

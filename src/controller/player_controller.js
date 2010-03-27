@@ -14,7 +14,7 @@ Object.extend(Twump.Controller.Player.prototype, {
   
     Object.extend(this, options);
     
-    this.subscribeToViewEvents(this.mainWindow, ["windowResized", "windowClosing"]);
+    this.subscribeToViewEvents(this.mainWindow, ["windowResized", "windowClosing", "lastFmTooltip"]);
     
     this.subscribeToViewEvents(this.playerWindow, [
       "previousClick", "nextClick", "pauseClick", "stopClick", "playClick", 

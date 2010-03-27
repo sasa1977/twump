@@ -7,6 +7,9 @@ Object.extend(Twump.View.MainWindow.prototype, {
     
     this.insertHeader('player');
     this.initResizeableSonglist(this.playlistWindow, ['player', 'header', 'resize', 'statusBar']);
+    
+    new Tooltip('lastFmStatus', 'tooltip');
+    this.addEventListener('lastFmStatus', 'mouseover')
   },
   
   showLastFmLogin: function(login){
@@ -15,5 +18,31 @@ Object.extend(Twump.View.MainWindow.prototype, {
   
   clearLastFmLogin: function(){
     $('lastFmStatus').update();
-  }
+  },
+  
+  onLastFmStatusMouseover: function(event){
+    this.onLastFmTooltip();
+  },
+  
+  setLastFmTooltip: function(lastScrobbled){
+    if (!lastScrobbled.length)
+      $('tooltip').update('Nothing scrobbled yet.')
+    else
+      $('tooltip').update(this.lastFmHistoryTooltip.process({lastScrobbled: lastScrobbled}));
+  },
+  
+  lastFmHistoryTooltip: TrimPath.parseTemplate(" \
+    Last scrobbled: <br/> \
+    {for song in lastScrobbled} \
+      <table cellpadding='0' cellspacing='0' border='0' \
+        <tr> \
+          <td class='lastFmScrobbledEntry' width='*'> \
+            ${song.performer} - ${song.name} \
+          </td> \
+          <td>&nbsp;</td> \
+          <td> \
+            <div class='lastFmScrobbledAt'>${song.scrobbledAt.shortTime()}</td> \
+          </td>\
+    {/for} \
+  ")
 })

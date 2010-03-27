@@ -69,5 +69,10 @@ Twump.Controller.LastFmMixin = {
   
   onLastFmHandshaked: function(){
     this.mainWindow.showLastFmLogin(this.lastFmLoginData().login)
+  },
+  
+  onLastFmTooltip: function(){
+    if (this.lastFm.connected())
+      this.mainWindow.setLastFmTooltip(this.lastFm.lastScrobbled)
   }
 }

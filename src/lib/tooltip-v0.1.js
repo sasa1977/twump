@@ -89,9 +89,10 @@ Tooltip.prototype = {
       this.delayExecute.schedule(function(){
         this.showTooltip(event);
         
+        // autohide tooltip after some time
         this.autohider = setTimeout(function(){
           this.hideTooltip(event)
-        }.bind(this), 5000)
+        }.bind(this), 20000)
         
       }.bind(this))
     }.bind(this)

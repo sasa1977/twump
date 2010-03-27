@@ -56,3 +56,12 @@ Array.prototype.findAndDelete = function(el){
     this.splice(position, 1);
 }
 
+
+
+////////////////////////////////////////////////////////////
+// Date
+
+Date.prototype.shortTime = function(){
+  return this.getHours().toString().padRight(2, "0") + ":" + this.getMinutes().toString().padRight(2, "0")
+}
+
