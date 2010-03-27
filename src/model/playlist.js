@@ -29,7 +29,7 @@ Object.extend(Twump.Model.Playlist.prototype, {
   nextPlaying: function(){
     if (!this.currentFile()) return;
     
-    if (this.repeat && this.currentFile() == this.last())
+    if (this.repeats() && this.currentFile() == this.last())
       return this.first();
       
     return this.next();
@@ -43,10 +43,14 @@ Object.extend(Twump.Model.Playlist.prototype, {
   previousPlaying: function(){
     if (!this.currentFile()) return;
     
-    if (this.repeat && this.currentFile() == this.first())
+    if (this.repeats() && this.currentFile() == this.first())
       return this.last();
     
     return this.previous();
+  },
+  
+  repeats: function(){
+    return (this.repeatMode != null && this.repeatMode != "no");
   },
   
   remove: function(files){

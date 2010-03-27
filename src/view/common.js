@@ -84,6 +84,8 @@ Twump.View.Common = {
   },
   
   openContextMenu: function(event, items, data){
+    this.closeContextMenu();
+    
     var contextMenu = $('contextMenu');
     if (!contextMenu) {
       contextMenu = $(document.createElement('div'));
@@ -93,12 +95,21 @@ Twump.View.Common = {
     }
     
     contextMenu.update(this.contextMenuTemplate.process({items: items}))
-    
-    Position.absolutize(contextMenu);
-    contextMenu.style.top = event.clientY.toString() + "px";
-    contextMenu.style.left = event.clientX.toString() + "px";
     contextMenu.show();
     
+    var yPos = event.clientY;
+    if (yPos + $('contextMenu').offsetHeight > document.body.offsetHeight)
+      yPos -= $('contextMenu').offsetHeight;
+    
+    var xPos = event.clientX;
+    if (xPos + $('contextMenu').offsetWidth > document.body.offsetWidth)
+      xPos -= $('contextMenu').offsetWidth;
+  
+    Position.absolutize(contextMenu);
+    contextMenu.style.top = yPos.toString() + "px";
+    contextMenu.style.left = xPos.toString() + "px";
+    contextMenu.show();
+  
     items.each(function(item){
       $(item.id).addEventListener('click', function(){item.onClick(data)}.bind(this))
     })
@@ -110,6 +121,7 @@ Twump.View.Common = {
     
     contextMenu.hide();
     contextMenu.update('')
+    contextMenu.remove();
   },
   
   contextMenuTemplate: TrimPath.parseTemplate(" \

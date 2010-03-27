@@ -82,9 +82,28 @@ Object.extend(Twump.View.PlayerWindow.prototype, {
   },
   
   showPlaylistState: function(playlist){
-    if (playlist.repeat)
-      $('repeat').addClassName('toggled')
-    else
-      $('repeat').removeClassName('toggled')
+    $('repeat').update(playlist.repeatMode || "no")
+  },
+  
+  onRepeatClick: function(event){
+    Event.stop(event);
+    
+    this.openContextMenu(event, [
+      {id: 'noRepeat', title: 'no repeat', onClick: this.onNoRepeatClick.bind(this)},
+      {id: 'repeatLinear', title: 'repeat', onClick: this.onRepeatLinearClick.bind(this)},
+      {id: 'repeatShuffle', title: 'reshuffle and repeat', onClick: this.onRepeatShuffleClick.bind(this)}
+    ]);
+  },
+  
+  onNoRepeatClick: function(){
+    this.onRepeatMode("no");
+  },
+  
+  onRepeatLinearClick: function(){
+    this.onRepeatMode("repeat");
+  },
+  
+  onRepeatShuffleClick: function(){
+    this.onRepeatMode("reshuffle");
   }
 });

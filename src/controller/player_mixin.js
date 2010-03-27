@@ -123,8 +123,8 @@ Twump.Controller.PlayerMixin = {
     this.player.setPosition(Math.max(this.player.playbackPercent() / 100 - 0.05, 0));
   },
   
-  onRepeatClick: function(){
-    this.playlist.repeat = !this.playlist.repeat;
+  onRepeatMode: function(mode){
+    this.playlist.repeatMode = mode;
     this.playerWindow.showPlaylistState(this.playlist);
     this.savePlayerData();
   }
