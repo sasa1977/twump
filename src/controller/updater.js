@@ -5,7 +5,7 @@ Twump.Controller.Updater = {
         var currentVersion = Twump.Api.currentApplicationVersion();
         var remoteVersion = Twump.Api.parseVersionInfo(response.responseText);
         
-        if (remoteVersion > currentVersion){
+        if (this.newVersion(currentVersion, remoteVersion)){
           if (confirm(
             "New version is available.\n" +
             "Current version: " + currentVersion + "\n" +
@@ -59,5 +59,27 @@ Twump.Controller.Updater = {
     if (this.updateFromLocal()) return true;
   
     this.shouldUpdate(this.downloadRemote.bind(this))
+  },
+  
+  newVersion: function(currentVersion, remoteVersion){
+    var versionParts = remoteVersion.split('.');
+    var currentVersionParts = currentVersion.split('.')
+    
+    var result = false;
+    
+    versionParts.each(function(part, index){
+      var originalPart = currentVersionParts[index] || "";
+      var len = Math.max(part.length, originalPart.length)
+      
+      part = part.padRight(len, "0");
+      originalPart = originalPart.padRight(len, "0")
+      
+      if (part != originalPart) {
+        result = part > originalPart;
+        throw $break;
+      }
+    })
+    
+    return result;
   }
 }
