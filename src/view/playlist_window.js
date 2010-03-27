@@ -8,7 +8,8 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
       contextMenuDescriptor: [
         {id: 'copyPathToClipboard', title: 'copy full path to clipboard', onClick: this.onCopyPathToClipboardClick.bind(this)},
         {id: 'deleteContext', title: 'remove from playlist', onClick: this.onDeleteContextClick.bind(this)},
-        {id: 'repeatPattern', title: 'repeat selected files', onClick: this.onSetRepeatPatternClick.bind(this)},
+        {id: 'shuffleSelection', title: 'shuffle selection', onClick: this.onShuffleSelectionClick.bind(this)},
+        {id: 'repeatPattern', title: 'repeat selection', onClick: this.onSetRepeatPatternClick.bind(this)},
         {id: 'clearRepeatPattern', title: 'clear repeat selection', onClick: this.onClearRepeatPatternClick.bind(this)},
       ]
     });
@@ -70,5 +71,9 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
     (files || []).each(function(file){
       this.songlist.list.setItemHtmlClass(file, 'repeatPattern');
     }.bind(this))
+  },
+  
+  onShuffleSelectionClick: function(){
+    this.onShuffleSelection();
   }
 });

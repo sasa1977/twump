@@ -116,5 +116,10 @@ Twump.Controller.PlaylistMixin = {
   onSetRepeatPattern: function(files){
     this.playlist.setRepeatPattern(files || []);
     this.playlistWindow.setRepeatPattern(files || [])
+  },
+  
+  onShuffleSelection: function(){
+    this.playlist.shuffleFiles(this.playlistWindow.selectedItems());
+    this.refreshCurrentPage();
   }
 }

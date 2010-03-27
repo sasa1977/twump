@@ -65,6 +65,8 @@ Object.extend(Twump.Model.Playlist.prototype, {
   },
   
   cleanupRepeatPattern: function(){
+    if (!this.repeatPattern) return;
+    
     this.repeatPattern.each(function(file, index){
       if (!this.include(file))
         this.repeatPattern[index] = null;

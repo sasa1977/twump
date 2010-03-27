@@ -68,6 +68,12 @@ Twump.Model.Songlist.prototype = {
     return this.positions[file.id];
   },
   
+  indicesOf: function(files){
+    return files.map(function(file){
+      return this.indexOf(file)
+    }.bind(this))
+  },
+  
   idToIndex: function(id){
     return this.indexOf(this.file(id))
   },
@@ -89,6 +95,10 @@ Twump.Model.Songlist.prototype = {
   
   shuffle: function(from){
     this.setFiles(this.files.shuffle(from))
+  },
+  
+  shuffleFiles: function(files){
+    this.setFiles(this.files.shuffleItems(this.indicesOf(files)));
   },
   
   clear: function(){

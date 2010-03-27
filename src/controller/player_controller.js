@@ -27,7 +27,8 @@ Object.extend(Twump.Controller.Player.prototype, {
     ]);
     
     this.subscribeToViewEvents(this.playlistWindow, [
-      "pageChanged", "copyPathToClipboard", "itemSelected", "deleteClick", "setRepeatPattern"
+      "pageChanged", "copyPathToClipboard", "itemSelected", "deleteClick", "setRepeatPattern", 
+      "shuffleSelection"
     ]);
     
     this.player = new Twump.PlayerFacade();

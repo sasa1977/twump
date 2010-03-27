@@ -43,6 +43,22 @@ Array.prototype.shuffle = function(from){
   )
 }
 
+Array.prototype.shuffleItems = function(indices){
+  var result = this.clone();
+  
+  var items = result.itemsAt(indices);
+  items = items.shuffle();
+  indices.each(function(arrayPosition, indexIndex){
+    result[arrayPosition] = items[indexIndex]
+  })
+
+  return result;
+}
+
+Array.prototype.itemsAt = function(indices){
+  return indices.map(function(index){return this[index]}.bind(this))
+}
+
 
 Array.prototype.insertArrayAt = function(index, data){
   var firstPart = this.slice(0, index)
