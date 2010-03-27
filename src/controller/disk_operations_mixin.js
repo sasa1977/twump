@@ -100,9 +100,10 @@ Twump.Controller.DiskOperationsMixin = {
   },
   
   onFilesDropped: function(files){
-    this.playlist.insertPathsAt(this.playlistWindow.itemUnderMouseIndex(), files);
-    this.refreshCurrentPage();
-    this.playlistWindow.onDragFinished();
+    this.openFolderDelegate(function(files){
+      this.playlist.insertPathsAt(this.playlistWindow.itemUnderMouseIndex(), files);
+      this.playlistWindow.onDragFinished();
+    }.bind(this))(files);
   },
   
   setLastFolder: function(data){
