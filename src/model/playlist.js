@@ -29,13 +29,11 @@ Object.extend(Twump.Model.Playlist.prototype, {
   nextPlaying: function(){
     if (!this.currentFile()) return;
     
-    var result = {file: this.next()};
+    if (this.inRepeatPattern())
+      return this.nextFromRepeatPattern();
     
-    if (this.hasRepeatPattern()) {
-      result.reshuffled = this.willReshuffleRepeatPattern();
-      result.file = this.nextFromRepeatPattern();
-    }
-    else if (this.repeats() && this.currentFile() == this.last()){
+    var result = {file: this.next()};
+    if (this.repeats() && this.currentFile() == this.last()){
       if (this.shuffles()) {
         this.shuffle();
         result.reshuffled = true;
@@ -48,54 +46,61 @@ Object.extend(Twump.Model.Playlist.prototype, {
     return result;
   },
   
+  repeatPatternMap: {},
+  
+  repeatPattern: function(){
+    return Object.keys(this.repeatPatternMap).inject([], function(memo, id){
+      if (this.repeatPatternMap[id] && this.include(this.file(id)))
+        memo.push(this.file(id));
+        
+      return memo;
+    }.bind(this))
+  },
+  
   setRepeatPattern: function(files, reshuffle){
-    this.repeatPattern = files.clone();
-    this.repeatIndex = -1;
+    this.repeatPatternMap = (files || []).inject({}, function(memo, file){
+      memo[file.id] = true;
+      return memo;
+    })
+
     this.reshuffleRepeatPattern = reshuffle;
   },
   
-  willReshuffleRepeatPattern: function(){
-    return this.hasRepeatPattern() && this.reshuffleRepeatPattern &&
-     (this.repeatIndex >= this.repeatPattern.length - 1);
+  inRepeatPattern: function(){
+    return this.currentFile() && this.repeatPatternMap[this.currentFile().id];
   },
   
   nextFromRepeatPattern: function(){
-    this.cleanupRepeatPattern();
-    if (!this.hasRepeatPattern()) return null;
+    if (!this.inRepeatPattern() || !this.currentFile()) return null;
     
-    if (this.willReshuffleRepeatPattern()) {
-      this.shuffleFiles(this.repeatPattern);
-      this.sortRepeatPattern();
+    var nextIndex = this.length(), firstIndex = this.length();
+    
+    Object.keys(this.repeatPatternMap).each(function(id){
+      if (!this.repeatPatternMap[id] || !this.include(this.file(id))) {
+        this.repeatPatternMap[id] = null;
+        return;
+      }
+      
+      var fileIndex = this.idToIndex(id)
+      firstIndex = Math.min(firstIndex, fileIndex);
+      
+      if (fileIndex > this.currentIndex() && fileIndex < nextIndex)
+        nextIndex = fileIndex;
+    }.bind(this));
+    
+    if (nextIndex >= this.length())
+      nextIndex = firstIndex;
+
+    var result = {file: this.fileAt(nextIndex)}
+    if (nextIndex < this.currentIndex() && this.reshuffleRepeatPattern) {
+      this.shuffleFiles(this.repeatPattern());
+      result.reshuffled = true;
+      result.file = this.fileAt(firstIndex);
     }
     
-    this.repeatIndex = (this.repeatIndex + 1) % this.repeatPattern.length;
-    return this.repeatPattern[this.repeatIndex];
+    return result;
   },
-  
-  hasRepeatPattern: function(){
-    return this.repeatPattern && this.repeatPattern.length > 0
-  },
-  
-  cleanupRepeatPattern: function(){
-    if (!this.hasRepeatPattern()) return;
     
-    this.repeatPattern.each(function(file, index){
-      if (!this.include(file))
-        this.repeatPattern[index] = null;
-    }.bind(this))
-    
-    this.repeatPattern = this.repeatPattern.compact();
-    this.sortRepeatPattern();
-  },
-  
-  sortRepeatPattern: function(){
-    if (!this.hasRepeatPattern()) return;
-    
-    this.repeatPattern = this.repeatPattern.sortBy(function(file){
-      return this.indexOf(file)
-    }.bind(this))
-  },
-  
   previous: function(){
     if (!this.currentFile()) return;
     return this.fileAt(this.indexOf(this.currentFile()) - 1);

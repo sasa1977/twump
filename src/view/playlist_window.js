@@ -41,11 +41,11 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
   display: function(playlist){
     this.playlist = playlist;
     this.songlist.display(playlist);
-    this.setRepeatPattern(playlist.repeatPattern)
+    this.setRepeatPattern(playlist.repeatPattern())
   },
   
   refreshCurrentPage: function(){
-    this.setRepeatPattern(this.playlist.repeatPattern);
+    this.setRepeatPattern(this.playlist.repeatPattern());
     this.songlist.refreshCurrentPage();
   },
   
