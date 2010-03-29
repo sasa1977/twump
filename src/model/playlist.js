@@ -50,7 +50,7 @@ Object.extend(Twump.Model.Playlist.prototype, {
   
   repeatPattern: function(){
     return Object.keys(this.repeatPatternMap).inject([], function(memo, id){
-      if (this.repeatPatternMap[id] && this.include(this.file(id)))
+      if (this.repeatPatternMap[id] && this.file(id))
         memo.push(this.file(id));
         
       return memo;
@@ -76,7 +76,7 @@ Object.extend(Twump.Model.Playlist.prototype, {
     var nextIndex = this.length(), firstIndex = this.length();
     
     Object.keys(this.repeatPatternMap).each(function(id){
-      if (!this.repeatPatternMap[id] || !this.include(this.file(id))) {
+      if (!this.repeatPatternMap[id] || !this.file(id)) {
         this.repeatPatternMap[id] = null;
         return;
       }
