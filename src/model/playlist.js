@@ -100,6 +100,30 @@ Object.extend(Twump.Model.Playlist.prototype, {
     
     return result;
   },
+  
+  previousFromRepeatPattern: function(){
+    if (!this.inRepeatPattern() || !this.currentFile()) return null;
+    
+    var previousIndex = -1, lastIndex = -1;
+    
+    Object.keys(this.repeatPatternMap).each(function(id){
+      if (!this.repeatPatternMap[id] || !this.include(this.file(id))) {
+        this.repeatPatternMap[id] = null;
+        return;
+      }
+      
+      var fileIndex = this.idToIndex(id)
+      lastIndex = Math.max(lastIndex, fileIndex);
+      
+      if (fileIndex < this.currentIndex() && fileIndex > previousIndex)
+        previousIndex = fileIndex;
+    }.bind(this));
+    
+    if (previousIndex < 0)
+      previousIndex = lastIndex;
+
+    return this.fileAt(previousIndex);
+  },
     
   previous: function(){
     if (!this.currentFile()) return;
@@ -108,6 +132,9 @@ Object.extend(Twump.Model.Playlist.prototype, {
   
   previousPlaying: function(){
     if (!this.currentFile()) return;
+    
+    if (this.inRepeatPattern())
+      return this.previousFromRepeatPattern();
     
     if (this.repeats() && this.currentFile() == this.first())
       return this.last();
