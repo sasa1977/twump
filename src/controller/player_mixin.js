@@ -97,6 +97,8 @@ Twump.Controller.PlayerMixin = {
 
     if (playingInfo.reshuffled)
       this.redrawPlayList();
+    else if (playingInfo.reshuffledRepeatPattern)
+      this.refreshCurrentPage();
   },
   
   onPauseClick: function(){

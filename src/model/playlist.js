@@ -94,7 +94,7 @@ Object.extend(Twump.Model.Playlist.prototype, {
     var result = {file: this.fileAt(nextIndex)}
     if (nextIndex < this.currentIndex() && this.reshuffleRepeatPattern) {
       this.shuffleFiles(this.repeatPattern());
-      result.reshuffled = true;
+      result.reshuffledRepeatPattern = true;
       result.file = this.fileAt(firstIndex);
     }
     
