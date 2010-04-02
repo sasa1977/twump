@@ -68,7 +68,7 @@ Object.extend(Twump.View.Songlist.prototype, {
     return this.list.displayed(file);
   },
   
-  itemHeight: 18,
+  itemHeight: 15,
   
   normalizedHeight: function(requestedHeight){
     return Math.round(requestedHeight / this.itemHeight) * this.itemHeight;

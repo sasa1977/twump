@@ -121,5 +121,9 @@ Twump.Controller.PlaylistMixin = {
   onShuffleSelection: function(){
     this.playlist.shuffleFiles(this.playlistWindow.selectedItems());
     this.refreshCurrentPage();
+  },
+  
+  onShowCurrentClick: function(){
+    this.autofocusCurrentItem();
   }
 }
