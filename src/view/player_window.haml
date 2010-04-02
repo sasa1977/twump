@@ -8,7 +8,7 @@
   :ruby
     def play_window_button(id, content)
       <<-eos
-        <div class='playWindowButton' id='#{id}'>#{content}</div>
+        <div class='button' id='#{id}'>#{content}</div>
       eos
     end
     
@@ -21,7 +21,7 @@
   
   %body{:ondragover => "event.preventDefault()", :onload => "init();",
     :ondragenter => "event.preventDefault()", 
-    :style => "overflow:hidden;-webkit-user-select:none; font-family:verdana;font-size:14px;"}
+    :style => "overflow:hidden;-webkit-user-select:none;"}
   
     =render_partial('title_bar')
     
@@ -38,7 +38,7 @@
         #playProgress.playProgress
         .clear
         
-      .buttonList
+      .buttonList.playerControls
         .buttonGroup
           =play_window_button('openFolder', 'load folder')
           =play_window_button('loadList', 'load list')
@@ -48,7 +48,7 @@
           =play_window_button('options', 'options')
         .clear
         
-      .buttonList
+      .buttonList.playerControls
         =play_window_button('previous', 'previous')
         =play_window_button('play', 'play')
         =play_window_button('pause', 'pause')
@@ -58,7 +58,7 @@
           #volume.volume
         .clear
         
-      .buttonList
+      .buttonList.playerControls
         .buttonGroup
           =play_window_button('shuffle', 'shuffle')
           =play_window_button('shuffleRemaining', 'shuffle rest')

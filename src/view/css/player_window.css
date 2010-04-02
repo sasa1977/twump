@@ -18,17 +18,18 @@
   padding-right:30px;
 }
 
-.playWindowButton{
+.button{
   float:left;
   cursor:pointer;
-  padding:5px;
-  padding-left:10px;
-  padding-right:10px;
-  font-size:12px;
 }
-.playWindowButton:hover{background-color:white}
 
-.playWindowButton.toggled {
+.playerControls .button {
+  padding:2px 10px;
+}
+
+.button:hover{background-color:white}
+
+.button.toggled {
   font-weight: bold;
 }
 
@@ -63,7 +64,7 @@
 }
 
 .volumeContainer {
-  padding-top:10px;
+  padding-top:5px;
   width:100px;
 }
 
