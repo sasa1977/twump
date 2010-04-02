@@ -80,7 +80,8 @@
 
     #statusBar.statusBar
       .buttonList
-        #lastFmStatus{:style => "float:left"}
+        .buttonGroup
+          =play_window_button('lastFmStatus', '')
         .rightButtonGroup
           =play_window_button('repeat', 'repeat')
     .clear

@@ -9,7 +9,9 @@ Object.extend(Twump.View.MainWindow.prototype, {
     this.initResizeableSonglist(this.playlistWindow, ['player', 'header', 'resize', 'statusBar']);
     
     new Tooltip('lastFmStatus', 'tooltip');
+    
     this.addEventListener('lastFmStatus', 'mouseover')
+    this.addEventListener('lastFmStatus', 'click')
   },
   
   showLastFmLogin: function(login){
@@ -18,6 +20,13 @@ Object.extend(Twump.View.MainWindow.prototype, {
   
   clearLastFmLogin: function(){
     $('lastFmStatus').update();
+  },
+  
+  setScrobblingStatus: function(status){
+    if (status.paused)
+      $('lastFmStatus').addClassName('paused');
+    else
+      $('lastFmStatus').removeClassName('paused')
   },
   
   onLastFmStatusMouseover: function(event){

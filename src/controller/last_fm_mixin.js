@@ -74,5 +74,9 @@ Twump.Controller.LastFmMixin = {
   onLastFmTooltip: function(){
     if (this.lastFm.connected())
       this.mainWindow.setLastFmTooltip(this.lastFm.lastScrobbled)
+  },
+  
+  onLastFmStatusClick: function(){
+    this.mainWindow.setScrobblingStatus({paused: this.lastFm.pauseOrResumeScrobble()})
   }
 }

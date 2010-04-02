@@ -14,6 +14,11 @@ LastFm.prototype = {
     })
   },
   
+  pauseOrResumeScrobble: function(){
+    this.scrobblePaused = !this.scrobblePaused;
+    return this.scrobblePaused;
+  },
+  
   connected: function(){
     return (this.sessionData != null);
   },
@@ -51,7 +56,7 @@ LastFm.prototype = {
   },
   
   nowPlaying: function(data){
-    if (!this.sessionData) return;
+    if (!this.sessionData || this.scrobblePaused) return;
     
     new Ajax.Request(this.sessionData.nowPlayingUrl, {
       method: 'post',
@@ -61,7 +66,7 @@ LastFm.prototype = {
   },
   
   scrobbleQueued: function(){ 
-    if (!this.sessionData || !this.scrobbleQueue.length) return;
+    if (!this.sessionData || !this.scrobbleQueue.length || this.scrobblePaused) return;
     
     if (this.scrobbledAt != null && (new Date() - this.scrobbledAt) / 1000 < 60) {
       // no scrobbling in next 60 seconds unless scrobble succeeded
@@ -111,7 +116,7 @@ LastFm.prototype = {
   scrobbleQueue: [],
   
   pushForScrobble: function(data){
-    if (!this.sessionData) return;
+    if (!this.sessionData || this.scrobblePaused) return;
     
     this.scrobbleQueue.push(data);
     

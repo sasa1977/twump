@@ -82,3 +82,7 @@
 .statusBar{
   float:left;
 }
+
+#lastFmStatus.paused {
+  color: lightgrey;
+}
