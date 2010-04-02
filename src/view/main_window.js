@@ -33,8 +33,8 @@ Object.extend(Twump.View.MainWindow.prototype, {
   
   lastFmHistoryTooltip: TrimPath.parseTemplate(" \
     Last scrobbled: <br/> \
-    {for song in lastScrobbled} \
-      <table cellpadding='0' cellspacing='0' border='0' \
+    <table cellpadding='0' cellspacing='0' border='0' \
+      {for song in lastScrobbled} \
         <tr> \
           <td class='lastFmScrobbledEntry' width='*'> \
             ${song.performer} - ${song.name} \
@@ -43,6 +43,8 @@ Object.extend(Twump.View.MainWindow.prototype, {
           <td> \
             <div class='lastFmScrobbledAt'>${song.scrobbledAt.shortTime()}</td> \
           </td>\
-    {/for} \
+        </tr> \
+      {/for} \
+    </table> \
   ")
 })
