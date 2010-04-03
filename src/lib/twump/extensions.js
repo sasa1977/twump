@@ -87,3 +87,15 @@ Object.wrap = function(object, memberName, newValue){
   object[memberName + "Original"] = object[memberName];
   object[memberName] = newValue;
 }
+
+
+
+////////////////////////////////////////////////////////////
+// Class
+Class.define = function(){
+  var klass = Class.create();
+  for (var i = 0; i < arguments.length;i++)
+    Object.extend(klass.prototype, arguments[i]);
+  
+  return klass;
+}

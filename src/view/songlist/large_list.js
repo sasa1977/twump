@@ -1,5 +1,4 @@
-Twump.View.LargeList = Class.create();
-Twump.View.LargeList.prototype = {
+Twump.View.LargeList = Class.define({
   initialize: function(options){
     Object.extend(this, options);
 
@@ -255,4 +254,4 @@ Twump.View.LargeList.prototype = {
     this.removeHtmlClassFromAll('selected');
     this.selectedItemsMap = {};
   }
-}
+});

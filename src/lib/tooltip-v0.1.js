@@ -54,8 +54,7 @@
  * You can use my_tooltip.destroy() to remove the event observers and thereby the tooltip.
  */
 
-var Tooltip = Class.create();
-Tooltip.prototype = {
+var Tooltip = Class.define({
   initialize: function(element, tool_tip) {
     var options = Object.extend({
       default_css: false,
@@ -214,5 +213,4 @@ Tooltip.prototype = {
     }
     return innerWidth;	
   }
-
-}
+})

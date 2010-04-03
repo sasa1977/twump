@@ -1,6 +1,5 @@
 Twump.Utils = {}
-Twump.Utils.DelayExecute = Class.create()
-Twump.Utils.DelayExecute.prototype = {
+Twump.Utils.DelayExecute = Class.define({
   initialize: function(delay){
     this.delay = delay || 5000;
     this.delayedExecutors = []
@@ -41,7 +40,7 @@ Twump.Utils.DelayExecute.prototype = {
   lastStep: function(step){
     return step == this.delayedExecutors.length - 1;
   }
-}
+});
 
 
 

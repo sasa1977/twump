@@ -1,5 +1,4 @@
-Twump.Model.Song = Class.create();
-Twump.Model.Song.prototype = {
+Twump.Model.Song = Class.define({
   initialize: function(data){
     Object.extend(this, data);
     if (!this.displayName)
@@ -38,4 +37,4 @@ Twump.Model.Song.prototype = {
 
     return searchParts.join(" ").match(regex);
   }
-};
+});
