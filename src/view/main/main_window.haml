@@ -4,6 +4,12 @@
     %title
     
     =render_partial('view/main/main_window_includes')
+    
+    :javascript
+      function init(){
+        if (Twump.Controller.Updater.update()) return;
+        Twump.application = new Twump.Application();
+      }
   
   :ruby
     def play_window_button(id, content)
@@ -11,13 +17,6 @@
         <div class='button' id='#{id}'>#{content}</div>
       eos
     end
-    
-  :javascript
-
-    function init(){
-      if (Twump.Controller.Updater.update()) return;
-      Twump.application = new Twump.Application();
-    }
   
   %body{:ondragover => "event.preventDefault()", :onload => "init();",
     :ondragenter => "event.preventDefault()"}
