@@ -16,7 +16,7 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
     });
     
     this.songlist.onItemSelected = function(item){this.onItemSelected(item)}.bind(this);
-    this.songlist.onPageChanged = function(files){this.onPageChanged(files)}.bind(this);
+    this.songlist.onPageChanged = function(songs){this.onPageChanged(songs)}.bind(this);
   
     [
       "selectItem", "selectedItems", "refreshItem", "displayed", "normalizedHeight",
@@ -49,10 +49,10 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
     this.songlist.refreshCurrentPage();
   },
   
-  setPlayingItem: function(file){
+  setPlayingItem: function(song){
     this.songlist.list.removeHtmlClassFromAll('playing');
-    this.songlist.list.setItemHtmlClass(file, 'playing');
-    this.playingItem = file
+    this.songlist.list.setItemHtmlClass(song, 'playing');
+    this.playingItem = song
   },
   
   bringPlayingItemToFocus: function(){
@@ -71,10 +71,10 @@ Object.extend(Twump.View.PlaylistWindow.prototype, {
     this.onSetRepeatPattern(this.selectedItems(), true)
   },
   
-  setRepeatPattern: function(files){
+  setRepeatPattern: function(songs){
     this.songlist.list.removeHtmlClassFromAll('repeatPattern');
-    (files || []).each(function(file){
-      this.songlist.list.setItemHtmlClass(file, 'repeatPattern');
+    (songs || []).each(function(song){
+      this.songlist.list.setItemHtmlClass(song, 'repeatPattern');
     }.bind(this))
   },
   
