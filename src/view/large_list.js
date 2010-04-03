@@ -150,7 +150,7 @@ Twump.View.LargeList.prototype = {
     if (event.button == 2 && this.onRightClick)
       this.onRightClick(item, event);
     
-    if (!this.itemSelected(item) && !event.ctrlKey)
+    if (!this.itemSelected(item) && !event.ctrlKey && !event.metaKey)
       this.onItemClick(item, event);
   },
   
@@ -196,11 +196,11 @@ Twump.View.LargeList.prototype = {
   },
   
   onItemClick: function(item, data){
-    if ((!data.shiftKey && !data.ctrlKey) || this.selectionEmpty())
+    if ((!data.shiftKey && !data.ctrlKey && !data.metaKey) || this.selectionEmpty())
       this.selectItem(item);
     else if (data.shiftKey)
       this.selectToItem(item);
-    else if (data.ctrlKey)
+    else if (data.ctrlKey || data.metaKey)
       this.ctrlSelectItem(item);
   },
   
