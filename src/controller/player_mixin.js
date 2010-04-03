@@ -1,6 +1,6 @@
 Twump.Controller.PlayerMixin = {
-  setCurrentFile: function(file){
-    this.playlist.setCurrentFile(file);
+  setCurrentSong: function(file){
+    this.playlist.setCurrentSong(file);
     if (!file) return;
     
     this.setPlaylistPlayingItem();
@@ -8,7 +8,7 @@ Twump.Controller.PlayerMixin = {
   },
   
   setCurrentIndex: function(index){
-    this.setCurrentFile(this.playlist.itemAt(index))
+    this.setCurrentSong(this.playlist.itemAt(index))
   },
 
   setVolume: function(volume){
@@ -36,15 +36,15 @@ Twump.Controller.PlayerMixin = {
     
     air.System.gc();
        
-    if (!this.playlist.currentFile()) return;
+    if (!this.playlist.currentSong()) return;
     
-    this.loadMetadata(this.playlist.currentFile(), true);
+    this.loadMetadata(this.playlist.currentSong(), true);
     
     this.playing = true;
     
-    this.logger.log('playing: ' + this.playlist.currentFile().path)
+    this.logger.log('playing: ' + this.playlist.currentSong().path)
     
-    this.player.play(this.playlist.currentFile().path, {
+    this.player.play(this.playlist.currentSong().path, {
       volume: this.volume,
       onPlayProgress: this.onPlayProgress.bind(this),
       onPlaybackComplete: this.onPlaybackComplete.bind(this)
@@ -62,7 +62,7 @@ Twump.Controller.PlayerMixin = {
   },
   
   onPlayProgress: function(data){
-    var completeData = Object.extend(data, {file: this.playlist.currentFile().displayName});
+    var completeData = Object.extend(data, {file: this.playlist.currentSong().displayName});
   
     this.playerWindow.displayPlayProgress(completeData);
     this.lastFmPlayProgress(completeData);
@@ -76,7 +76,7 @@ Twump.Controller.PlayerMixin = {
   play: function(file){
     if (!file) return;
 
-    this.setCurrentFile(file);
+    this.setCurrentSong(file);
     this.playCurrent();
   },
    
@@ -93,7 +93,7 @@ Twump.Controller.PlayerMixin = {
   
   onNextClick: function(){
     var playingInfo = this.playlist.nextPlaying();
-    this.play(playingInfo.file);
+    this.play(playingInfo.song);
 
     if (playingInfo.reshuffled)
       this.redrawPlayList();
@@ -110,7 +110,7 @@ Twump.Controller.PlayerMixin = {
   },
   
   onPlayClick: function(){
-    this.play(this.playlist.currentFile());  
+    this.play(this.playlist.currentSong());  
   },
   
   onPreviousClick: function(){

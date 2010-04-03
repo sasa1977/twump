@@ -17,14 +17,14 @@ Twump.Controller.PlaylistMixin = {
   setPlaylistPlayingItem: function(){
     if (this.playlist.empty()) return;
     
-    this.playlistWindow.setPlayingItem(this.playlist.currentFile());
-    this.playlistWindow.selectItem(this.playlist.currentFile());
+    this.playlistWindow.setPlayingItem(this.playlist.currentSong());
+    this.playlistWindow.selectItem(this.playlist.currentSong());
     
     this.autofocusCurrentItem();
   },
   
   autofocusCurrentItem: function(){
-    if (!this.playlistWindow.displayed(this.playlist.currentFile()))
+    if (!this.playlistWindow.displayed(this.playlist.currentSong()))
       this.playlistWindow.bringPlayingItemToFocus();
   },
   
