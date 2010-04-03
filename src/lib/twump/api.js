@@ -49,10 +49,12 @@ Twump.Api = {
   },
   
   _addEventListener: function(object, eventId, callback){
-    object.addEventListener(eventId, function(event){
-      object.removeEventListener(eventId, arguments.callee);
+    var callee = function(event){
+      object.removeEventListener(eventId, callee);
       callback(event);
-    })
+    }
+    
+    object.addEventListener(eventId, callee)
   },
   
   initFileForOpenSave: function(options){
@@ -104,16 +106,22 @@ Twump.Api = {
   songMetadata: function(path, callback){
     var sound = this.sound(path);
     
-    this._addEventListener(sound, air.Event.ID3, function(event){
+    var onId3Loaded = function(event){
       callback({name: event.target.id3.TIT2, performer: event.target.id3.TPE1});
-      air.System.gc();
-    })
+    };
     
-    this._addEventListener(sound, air.Event.COMPLETE, function(event){
+    var onSoundLoaded = function(event){
       callback({length: sound.length / 1000});
+
+      sound.removeEventListener(air.Event.ID3, onId3Loaded);
+      sound.removeEventListener(air.Event.COMPLETE, onSoundLoaded)
       sound = null;
+      
       air.System.gc();
-    })
+    }
+    
+    sound.addEventListener(air.Event.ID3, onId3Loaded);
+    sound.addEventListener(air.Event.COMPLETE, onSoundLoaded);
   },
   
   writeEncrypted: function(key, value){
