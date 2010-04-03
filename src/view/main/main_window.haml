@@ -3,7 +3,7 @@
     %meta{ :content => "text/html;charset=UTF-8", "http-equiv" => "Content-type" }/
     %title
     
-    =render_partial('view/player/player_window_includes')
+    =render_partial('view/main/main_window_includes')
   
   :ruby
     def play_window_button(id, content)
@@ -25,14 +25,6 @@
     =render_partial('view/common/title_bar')
     =render_partial('view/player/player')
     =render_partial('view/playlist/playlist')
-
-    #statusBar.statusBar
-      .buttonList
-        .buttonGroup
-          =play_window_button('lastFmStatus', '')
-        .rightButtonGroup
-          =play_window_button('repeat', 'repeat')
-    .clear
-
+    =render_partial('view/main/status_bar')
     =render_partial('view/common/resize')
     =render_partial('view/common/tooltip')
