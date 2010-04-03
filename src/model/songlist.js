@@ -1,5 +1,4 @@
-Twump.Model.Songlist = Class.create();
-Twump.Model.Songlist.prototype = {
+Twump.Model.Songlist = Class.define({
   initialize: function(paths){
     this.lastId = 0;
     this.songsIndex = {}
@@ -211,4 +210,4 @@ Twump.Model.Songlist.prototype = {
     }
     return result;
   }
-};
+});

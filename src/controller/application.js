@@ -1,5 +1,4 @@
-Twump.Application = Class.create();
-Twump.Application.prototype = {
+Twump.Application = Class.define({
   initialize: function(){
     var playerWindow = new Twump.View.PlayerWindow();
     var playlistWindow = new Twump.View.PlaylistWindow();
@@ -12,4 +11,4 @@ Twump.Application.prototype = {
       logger: Twump.Api.Logger
     });
   }
-};
+});

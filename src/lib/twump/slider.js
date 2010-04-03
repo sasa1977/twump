@@ -80,69 +80,71 @@ Twump.SliderBase = {
 }
 
 
-Twump.VerticalSlider = Class.create();
-Object.extend(Twump.VerticalSlider.prototype, Twump.SliderBase);
-Object.extend(Twump.VerticalSlider.prototype, {
-  sliderHeight: 30,
+Twump.VerticalSlider = Class.define(
+  Twump.SliderBase,
+  {
+    sliderHeight: 30,
   
-  setSliderDimensions: function(){
+    setSliderDimensions: function(){
     
-  },
+    },
 
-  drawSlider: function(pos){
-    var barPos = Position.cumulativeOffset(this.bar)
+    drawSlider: function(pos){
+      var barPos = Position.cumulativeOffset(this.bar)
   
-    this.slider().style.top = (barPos[1] + pos).toString() + "px";
-    this.slider().style.left = barPos[0];
-    this.slider().style.height = this.sliderHeight.toString() + "px"
-    this.slider().style.width = this.bar.offsetWidth.toString() + "px"
-  },
+      this.slider().style.top = (barPos[1] + pos).toString() + "px";
+      this.slider().style.left = barPos[0];
+      this.slider().style.height = this.sliderHeight.toString() + "px"
+      this.slider().style.width = this.bar.offsetWidth.toString() + "px"
+    },
   
-  normalizeCoordinate: function(coordinate){
-    return Math.max(0,Math.min(coordinate.clientY - Position.cumulativeOffset(this.bar)[1], this.bar.offsetHeight));
-  },
+    normalizeCoordinate: function(coordinate){
+      return Math.max(0,Math.min(coordinate.clientY - Position.cumulativeOffset(this.bar)[1], this.bar.offsetHeight));
+    },
 
-  computeCoordinates: function(value){
-    return Math.round(value * (this.bar.offsetHeight - this.sliderHeight) / (this.max - 1))
-  },
+    computeCoordinates: function(value){
+      return Math.round(value * (this.bar.offsetHeight - this.sliderHeight) / (this.max - 1))
+    },
 
-  coordinateToValue: function(pos){
-    if (!this.max) return 0;
+    coordinateToValue: function(pos){
+      if (!this.max) return 0;
   
-    return Math.round((this.max - 1) * pos / this.bar.offsetHeight);
+      return Math.round((this.max - 1) * pos / this.bar.offsetHeight);
+    }
   }
-});
+);
 
 
-Twump.HorizontalSlider = Class.create();
-Object.extend(Twump.HorizontalSlider.prototype, Twump.SliderBase);
-Object.extend(Twump.HorizontalSlider.prototype, {
-  sliderWidth: 30,
+Twump.HorizontalSlider = Class.define(
+  Twump.SliderBase,
+  {
+    sliderWidth: 30,
   
-  setSliderDimensions: function(){
+    setSliderDimensions: function(){
     
-  },
+    },
 
-  drawSlider: function(pos){
-    var barPos = Position.cumulativeOffset(this.bar)
+    drawSlider: function(pos){
+      var barPos = Position.cumulativeOffset(this.bar)
   
-    this.slider().style.left = (barPos[0] + pos).toString() + "px";
-    this.slider().style.top = barPos[1];
-    this.slider().style.height = this.bar.offsetHeight,toString() + "px"
-    this.slider().style.width = this.sliderWidth.toString() + "px"
-  },
+      this.slider().style.left = (barPos[0] + pos).toString() + "px";
+      this.slider().style.top = barPos[1];
+      this.slider().style.height = this.bar.offsetHeight,toString() + "px"
+      this.slider().style.width = this.sliderWidth.toString() + "px"
+    },
   
-  normalizeCoordinate: function(coordinate){
-    return Math.max(0,Math.min(coordinate.clientX - Position.cumulativeOffset(this.bar)[0], this.bar.offsetWidth));
-  },
+    normalizeCoordinate: function(coordinate){
+      return Math.max(0,Math.min(coordinate.clientX - Position.cumulativeOffset(this.bar)[0], this.bar.offsetWidth));
+    },
 
-  computeCoordinates: function(value){
-    return Math.round(value * (this.bar.offsetWidth - this.sliderWidth) / (this.max - 1))
-  },
+    computeCoordinates: function(value){
+      return Math.round(value * (this.bar.offsetWidth - this.sliderWidth) / (this.max - 1))
+    },
 
-  coordinateToValue: function(pos){
-    if (!this.max) return 0;
+    coordinateToValue: function(pos){
+      if (!this.max) return 0;
   
-    return Math.round((this.max - 1) * pos / this.bar.offsetWidth);
+      return Math.round((this.max - 1) * pos / this.bar.offsetWidth);
+    }
   }
-});
+);

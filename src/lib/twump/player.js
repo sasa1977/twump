@@ -1,5 +1,4 @@
-Twump.Player = Class.create();
-Twump.Player.prototype = {
+Twump.Player = Class.define({
   initialize: function(file, options){
     this.options = options || {}  
         
@@ -146,12 +145,11 @@ Twump.Player.prototype = {
     if (callback)
       callback(arg);
   }
-};
+});
 
 
 
-Twump.PlayerFacade = Class.create();
-Twump.PlayerFacade.prototype = {
+Twump.PlayerFacade = Class.define({
   initialize: function(){},
   
   play: function(file, options){
@@ -189,5 +187,4 @@ Twump.PlayerFacade.prototype = {
     if (!this.playing()) return 0;
     return this.player.playbackPercent();
   }
-}
-
+});

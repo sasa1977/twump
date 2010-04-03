@@ -1,5 +1,4 @@
-LastFm = Class.create();
-LastFm.prototype = {
+LastFm = Class.define({
   initialize: function(userData, logger) {
     this.userData = userData;
     this.logger = logger || {log: function(){}}
@@ -164,4 +163,4 @@ LastFm.prototype = {
     if (handler)
       handler();
   }
-}
+})

@@ -1,68 +1,67 @@
-Twump.Controller.Player = Class.create()
+Twump.Controller.Player = Class.define(
+  Twump.Controller.Common,
+  Twump.Controller.PlaylistMixin,
+  Twump.Controller.PlayerMixin,
+  Twump.Controller.SerializationMixin,
+  Twump.Controller.DiskOperationsMixin,
+  Twump.Controller.LastFmMixin,
+  Twump.Controller.ChildWindowsMixin,
 
-Object.extend(Twump.Controller.Player.prototype, Twump.Controller.Common);
-Object.extend(Twump.Controller.Player.prototype, Twump.Controller.PlaylistMixin);
-Object.extend(Twump.Controller.Player.prototype, Twump.Controller.PlayerMixin);
-Object.extend(Twump.Controller.Player.prototype, Twump.Controller.SerializationMixin);
-Object.extend(Twump.Controller.Player.prototype, Twump.Controller.DiskOperationsMixin);
-Object.extend(Twump.Controller.Player.prototype, Twump.Controller.LastFmMixin);
-Object.extend(Twump.Controller.Player.prototype, Twump.Controller.ChildWindowsMixin);
-
-Object.extend(Twump.Controller.Player.prototype, {
-  initialize: function(options){
-    this.initializing = true;
+  {
+    initialize: function(options){
+      this.initializing = true;
   
-    Object.extend(this, options);
+      Object.extend(this, options);
     
-    this.subscribeToViewEvents(this.mainWindow, [
-      "windowResized", "windowClosing", "lastFmTooltip", "lastFmStatusClick"
-    ]);
+      this.subscribeToViewEvents(this.mainWindow, [
+        "windowResized", "windowClosing", "lastFmTooltip", "lastFmStatusClick"
+      ]);
     
-    this.subscribeToViewEvents(this.playerWindow, [
-      "previousClick", "nextClick", "pauseClick", "stopClick", "playClick", 
-      "volumeChange", "setPlayPosition", 
-      "addFolderAtEnd", "addFolderAfterCurrent",
-      "loadListClick", "saveListClick", "shuffleClick", 
-      "shuffleRemainingClick", "deleteClick", "clearClick",
-      "editorClick", "drop", "filesDropped", "optionsClick",
-      "repeatMode", "showCurrentClick"
-    ]);
+      this.subscribeToViewEvents(this.playerWindow, [
+        "previousClick", "nextClick", "pauseClick", "stopClick", "playClick", 
+        "volumeChange", "setPlayPosition", 
+        "addFolderAtEnd", "addFolderAfterCurrent",
+        "loadListClick", "saveListClick", "shuffleClick", 
+        "shuffleRemainingClick", "deleteClick", "clearClick",
+        "editorClick", "drop", "filesDropped", "optionsClick",
+        "repeatMode", "showCurrentClick"
+      ]);
     
-    this.subscribeToViewEvents(this.playlistWindow, [
-      "pageChanged", "copyPathToClipboard", "itemSelected", "deleteClick", "setRepeatPattern", 
-      "shuffleSelection"
-    ]);
+      this.subscribeToViewEvents(this.playlistWindow, [
+        "pageChanged", "copyPathToClipboard", "itemSelected", "deleteClick", "setRepeatPattern", 
+        "shuffleSelection"
+      ]);
     
-    this.player = new Twump.PlayerFacade();
-    this.setPlaylist(new Twump.Model.Playlist())
-    this.loadPlayerData();
-    this.loadLastList();
+      this.player = new Twump.PlayerFacade();
+      this.setPlaylist(new Twump.Model.Playlist())
+      this.loadPlayerData();
+      this.loadLastList();
     
-    document.body.addEventListener('keydown', this.keyboardDispatcher.bind(this));
-    this.progressStep = 0;
+      document.body.addEventListener('keydown', this.keyboardDispatcher.bind(this));
+      this.progressStep = 0;
     
-    this.initializing = false;
-    setTimeout(this.savePlayerData.bind(this), 1000);
-  },
+      this.initializing = false;
+      setTimeout(this.savePlayerData.bind(this), 1000);
+    },
   
-  onWindowResized: function(){
-    this.savePlayerData();
-  },
+    onWindowResized: function(){
+      this.savePlayerData();
+    },
   
-  onWindowClosing: function(){
-    this.closeAllChildWindows();
-  },
+    onWindowClosing: function(){
+      this.closeAllChildWindows();
+    },
   
-  onOptionsClick: function(){
-    this.openOrCloseChildWindow('options', {url: "../options/options_window.html", 
-      playerController: this
-    });
-  },
+    onOptionsClick: function(){
+      this.openOrCloseChildWindow('options', {url: "../options/options_window.html", 
+        playerController: this
+      });
+    },
   
-  onDrop: function(options){
-    this.playlistWindow.onDragFinished();
-    this[options.action](options);
-  },
+    onDrop: function(options){
+      this.playlistWindow.onDragFinished();
+      this[options.action](options);
+    },
   
   convertMap: function(map){
     return Object.keys(map).inject({}, function(memo, key){
@@ -106,12 +105,13 @@ Object.extend(Twump.Controller.Player.prototype, {
     else if (event.altKey) relevantMap = altMap;
     else if (event.shiftKey) relevantMap = shiftMap;
   
-    if (!relevantMap)  return;
+      if (!relevantMap)  return;
     
-    var method = this["on" + (relevantMap[event.keyCode] || "").capitalizeEachWord()];
-    if (method) {
-      method.bind(this)();
-      return false;
+      var method = this["on" + (relevantMap[event.keyCode] || "").capitalizeEachWord()];
+      if (method) {
+        method.bind(this)();
+        return false;
+      }
     }
   }
-})
+);

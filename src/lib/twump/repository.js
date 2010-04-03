@@ -10,9 +10,7 @@ Twump.Repository = {
 
 Twump.Repository.Playlists = {}
 
-Twump.Repository.Playlists.M3u = Class.create();
-Twump.Repository.Playlists.M3u.extensions = ["m3u", "m3u8"];
-Twump.Repository.Playlists.M3u.prototype = {
+Twump.Repository.Playlists.M3u = Class.define({
   initialize: function(file){
     this.file = file;
   },
@@ -82,4 +80,6 @@ Twump.Repository.Playlists.M3u.prototype = {
     
     return Twump.Model.Playlist.deserialize(listData);
   }
-}
+});
+
+Twump.Repository.Playlists.M3u.extensions = ["m3u", "m3u8"];
