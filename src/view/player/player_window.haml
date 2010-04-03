@@ -3,7 +3,7 @@
     %meta{ :content => "text/html;charset=UTF-8", "http-equiv" => "Content-type" }/
     %title
     
-    =render_partial('player_window_includes')
+    =render_partial('view/player/player_window_includes')
   
   :ruby
     def play_window_button(id, content)
@@ -23,7 +23,7 @@
     :ondragenter => "event.preventDefault()", 
     :style => "overflow:hidden;-webkit-user-select:none;"}
   
-    =render_partial('title_bar')
+    =render_partial('view/common/title_bar')
     
     #player
       .playingInfo
@@ -86,5 +86,5 @@
           =play_window_button('repeat', 'repeat')
     .clear
 
-    =render_partial('resize')
-    =render_partial('tooltip')
+    =render_partial('view/common/resize')
+    =render_partial('view/common/tooltip')

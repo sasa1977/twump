@@ -4,7 +4,7 @@
     <version>0.0.9</version> 
     <filename>twump</filename> 
     <initialWindow> 
-        <content>view/player_window.html</content> 
+        <content>view/player/player_window.html</content> 
         <visible>true</visible> 
         <systemChrome>none</systemChrome>
         <width>500</width>

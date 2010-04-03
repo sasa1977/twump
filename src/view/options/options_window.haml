@@ -2,21 +2,16 @@
   %head
     %title
     
-    =render_partial "common_includes"
-    
-    :ruby
-      haml_concat stylesheet_include("view/css/options")
+    =render_partial "view/common/common_includes"
     
     :ruby
       haml_concat javascript_include(
         "lib/twump/last_fm",
         
-        "controller/common",
         "controller/options_controller",
         "controller/options_view",
         
-        "view/common",
-        "view/options_window"
+        "view/options/options_window"
       )
     
    
@@ -29,7 +24,7 @@
       }
       
   %body{:onload => "init();", :style => "overflow:hidden;-webkit-user-select:none;"}
-    =render_partial('title_bar')
+    =render_partial('view/common/title_bar')
     
     last.fm
     %br/

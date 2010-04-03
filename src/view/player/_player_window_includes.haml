@@ -1,10 +1,10 @@
-=render_partial "common_includes"
+=render_partial "view/common/common_includes"
 
 :erb
   <%=
     stylesheet_include(
-      "view/css/player_window",
-      "view/css/playlist"
+      "view/player/player_window",
+      "view/playlist/playlist"
     )
   %>
   
@@ -25,7 +25,7 @@
       "controller/player_controller",
      
       "view/main_window", 
-      "view/player_window",
-      "view/playlist_window"
+      "view/player/player_window",
+      "view/playlist/playlist_window"
     )
   %>

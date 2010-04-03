@@ -68,7 +68,7 @@ Twump.Controller.PlaylistMixin = {
   },
   
   onEditorClick: function(){
-    this.openOrCloseChildWindow('editor', {url: "editor_window.html", 
+    this.openOrCloseChildWindow('editor', {url: "../editor/editor_window.html", 
       playerController: this, playlist: this.playlist
     });
   },
