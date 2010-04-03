@@ -29,14 +29,14 @@ Twump.Repository.Playlists.M3u.prototype = {
     options = options || {}
     var m3u = "#EXTM3U\n";
     
-    playlist.files.each(function(file){
+    playlist.songs.each(function(song){
       m3u += "#EXTINF:"
       
-      if (file.metadata){
-        m3u += parseInt(file.metadata.length || 0) + "," + file.displayName;
+      if (song.metadata){
+        m3u += parseInt(song.metadata.length || 0) + "," + song.displayName;
       }
       
-      var path = file.path;
+      var path = song.path;
       
       if (options.relative)
         path = this.file.parent.getRelativePath(new air.File(file.path), true);
@@ -53,7 +53,7 @@ Twump.Repository.Playlists.M3u.prototype = {
     var lines = data.split("\n");
     
     var index = 0;
-    var fileData = null, displayName = null;
+    var songData = null, displayName = null;
     for (var length = lines.length;index < length;index++) {
       var line = lines[index].strip();
       if (line.length > 0){
@@ -63,7 +63,7 @@ Twump.Repository.Playlists.M3u.prototype = {
           var parts = extinf.split(",");
           var songLength = parseInt(parts[0]);
           if (songLength)
-            fileData = {length: songLength}
+            songData = {length: songLength}
 
           var parsedDisplayName = parts.splice(1,parts.length - 1).join(",").strip();
           if (parsedDisplayName.length > 0)
@@ -72,9 +72,9 @@ Twump.Repository.Playlists.M3u.prototype = {
         else if (!line.startsWith("#")){
           var path = this.file.parent.resolvePath(line).nativePath;
           
-          listData.push({metadata: fileData, path: path, displayName: displayName})
+          listData.push({metadata: songData, path: path, displayName: displayName})
           
-          fileData = null;
+          songData = null;
           displayName = null;
         }
       }

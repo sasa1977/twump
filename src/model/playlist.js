@@ -3,12 +3,12 @@ Twump.Model.Playlist = Class.create();
 Object.extend(Twump.Model.Playlist.prototype, Twump.Model.Songlist.prototype);
 
 Object.extend(Twump.Model.Playlist.prototype, {
-  currentFile: function(){
+  currentSong: function(){
     return this.current;
   },
   
-  setCurrentFile: function(file){
-    this.current = file;
+  setCurrentSong: function(song){
+    this.current = song;
   },
   
   currentIndex: function(){
@@ -18,28 +18,28 @@ Object.extend(Twump.Model.Playlist.prototype, {
   },
   
   setCurrentIndex: function(index){
-    this.setCurrentFile(this.itemAt(index))
+    this.setCurrentSong(this.itemAt(index))
   },
   
   next: function(){
-    if (!this.currentFile()) return;
-    return this.fileAt(this.indexOf(this.currentFile()) + 1);
+    if (!this.currentSong()) return;
+    return this.songAt(this.indexOf(this.currentSong()) + 1);
   },
   
   nextPlaying: function(){
-    if (!this.currentFile()) return;
+    if (!this.currentSong()) return;
     
     if (this.inRepeatPattern())
       return this.nextFromRepeatPattern();
     
-    var result = {file: this.next()};
-    if (this.repeats() && this.currentFile() == this.last()){
+    var result = {song: this.next()};
+    if (this.repeats() && this.currentSong() == this.last()){
       if (this.shuffles()) {
         this.shuffle();
         result.reshuffled = true;
       }
       
-      result.file = this.first();
+      result.song = this.first();
       result.repeated = true;
     }
     
@@ -50,16 +50,16 @@ Object.extend(Twump.Model.Playlist.prototype, {
   
   repeatPattern: function(){
     return Object.keys(this.repeatPatternMap).inject([], function(memo, id){
-      if (this.repeatPatternMap[id] && this.file(id))
-        memo.push(this.file(id));
+      if (this.repeatPatternMap[id] && this.song(id))
+        memo.push(this.song(id));
         
       return memo;
     }.bind(this))
   },
   
-  setRepeatPattern: function(files, reshuffle){
-    this.repeatPatternMap = (files || []).inject({}, function(memo, file){
-      memo[file.id] = true;
+  setRepeatPattern: function(songs, reshuffle){
+    this.repeatPatternMap = (songs || []).inject({}, function(memo, song){
+      memo[song.id] = true;
       return memo;
     })
 
@@ -67,76 +67,76 @@ Object.extend(Twump.Model.Playlist.prototype, {
   },
   
   inRepeatPattern: function(){
-    return this.currentFile() && this.repeatPatternMap[this.currentFile().id];
+    return this.currentSong() && this.repeatPatternMap[this.currentSong().id];
   },
   
   nextFromRepeatPattern: function(){
-    if (!this.inRepeatPattern() || !this.currentFile()) return null;
+    if (!this.inRepeatPattern() || !this.currentSong()) return null;
     
     var nextIndex = this.length(), firstIndex = this.length();
     
     Object.keys(this.repeatPatternMap).each(function(id){
-      if (!this.repeatPatternMap[id] || !this.file(id)) {
+      if (!this.repeatPatternMap[id] || !this.song(id)) {
         this.repeatPatternMap[id] = null;
         return;
       }
       
-      var fileIndex = this.idToIndex(id)
-      firstIndex = Math.min(firstIndex, fileIndex);
+      var songIndex = this.idToIndex(id)
+      firstIndex = Math.min(firstIndex, songIndex);
       
-      if (fileIndex > this.currentIndex() && fileIndex < nextIndex)
-        nextIndex = fileIndex;
+      if (songIndex > this.currentIndex() && songIndex < nextIndex)
+        nextIndex = songIndex;
     }.bind(this));
     
     if (nextIndex >= this.length())
       nextIndex = firstIndex;
 
-    var result = {file: this.fileAt(nextIndex)}
+    var result = {song: this.songAt(nextIndex)}
     if (nextIndex < this.currentIndex() && this.reshuffleRepeatPattern) {
-      this.shuffleFiles(this.repeatPattern());
+      this.shuffleSongs(this.repeatPattern());
       result.reshuffledRepeatPattern = true;
-      result.file = this.fileAt(firstIndex);
+      result.song = this.songAt(firstIndex);
     }
     
     return result;
   },
   
   previousFromRepeatPattern: function(){
-    if (!this.inRepeatPattern() || !this.currentFile()) return null;
+    if (!this.inRepeatPattern() || !this.currentSong()) return null;
     
     var previousIndex = -1, lastIndex = -1;
     
     Object.keys(this.repeatPatternMap).each(function(id){
-      if (!this.repeatPatternMap[id] || !this.include(this.file(id))) {
+      if (!this.repeatPatternMap[id] || !this.include(this.song(id))) {
         this.repeatPatternMap[id] = null;
         return;
       }
       
-      var fileIndex = this.idToIndex(id)
-      lastIndex = Math.max(lastIndex, fileIndex);
+      var songIndex = this.idToIndex(id)
+      lastIndex = Math.max(lastIndex, songIndex);
       
-      if (fileIndex < this.currentIndex() && fileIndex > previousIndex)
-        previousIndex = fileIndex;
+      if (songIndex < this.currentIndex() && songIndex > previousIndex)
+        previousIndex = songIndex;
     }.bind(this));
     
     if (previousIndex < 0)
       previousIndex = lastIndex;
 
-    return this.fileAt(previousIndex);
+    return this.songAt(previousIndex);
   },
     
   previous: function(){
-    if (!this.currentFile()) return;
-    return this.fileAt(this.indexOf(this.currentFile()) - 1);
+    if (!this.currentSong()) return;
+    return this.songAt(this.indexOf(this.currentSong()) - 1);
   },
   
   previousPlaying: function(){
-    if (!this.currentFile()) return;
+    if (!this.currentSong()) return;
     
     if (this.inRepeatPattern())
       return this.previousFromRepeatPattern();
     
-    if (this.repeats() && this.currentFile() == this.first())
+    if (this.repeats() && this.currentSong() == this.first())
       return this.last();
     
     return this.previous();
@@ -150,13 +150,13 @@ Object.extend(Twump.Model.Playlist.prototype, {
     return this.repeatMode == "reshuffle";
   },
   
-  remove: function(files){
-    if (!this.currentFile()) return;
+  remove: function(songs){
+    if (!this.currentSong()) return;
     
-    var newFile = this.deleteFiles(files, this.currentFile());
+    var newSong = this.deleteSongs(songs, this.currentSong());
 
-    if (newFile != this.currentFile()){ // in this case, we removed currently selected file
-      this.setCurrentFile(newFile);
+    if (newSong != this.currentSong()){ // in this case, we removed currently playing song
+      this.setCurrentSong(newSong);
       return {removedCurrent: true};
     }
     
@@ -173,11 +173,11 @@ Object.wrap(Twump.Model.Playlist.prototype, "shuffle", function(from){
 Twump.Model.Playlist.deserialize = function(data){
   var playlist = new Twump.Model.Playlist();
   
-  var files = $A(data).map(function(fileData){
-    return new Twump.Model.File(fileData)
+  var songs = $A(data).map(function(songData){
+    return new Twump.Model.Song(songData)
   });
   
-  playlist.adjustAndSetFiles(files);
+  playlist.adjustAndSetSongs(songs);
   
   return playlist;
 }

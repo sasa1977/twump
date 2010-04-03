@@ -23,18 +23,18 @@ Object.extend(Twump.View.Songlist.prototype, {
     this.list.onRightClick = this.onItemRightClick.bind(this);
     this.list.onStartDrag = this.onStartDrag.bind(this);
     this.list.onDragFinished = this.onDragFinished.bind(this);
-    this.list.onPageChanged = function(files){
+    this.list.onPageChanged = function(songs){
       if (this.onPageChanged)
-        this.onPageChanged(files)
+        this.onPageChanged(songs)
     }.bind(this);
   },
   
   onSonglistMouseover: function(event){
     var tooltipText = ''
       
-    var file = this.list.findModel(event.srcElement);
-    if (file)
-      tooltipText = file.path;
+    var song = this.list.findModel(event.srcElement);
+    if (song)
+      tooltipText = song.path;
       
     $('tooltip').update(tooltipText)
   },
@@ -43,8 +43,8 @@ Object.extend(Twump.View.Songlist.prototype, {
     return this.list.selectedItems;
   },
   
-  selectItem: function(file){
-    this.list.selectItem(file)
+  selectItem: function(song){
+    this.list.selectItem(song)
   },
   
   onItemDoubleClick: function(item, event){
@@ -57,15 +57,15 @@ Object.extend(Twump.View.Songlist.prototype, {
   },
   
   display: function(playlist){
-    playlist.item = playlist.file;
-    playlist.itemAt = playlist.fileAt;
+    playlist.item = playlist.song;
+    playlist.itemAt = playlist.songAt;
     this.list.setModel(playlist);
 
     this.displayPage(playlist.page({start: 0, range: this.pageLength}))
   },
   
-  displayed: function(file){
-    return this.list.displayed(file);
+  displayed: function(song){
+    return this.list.displayed(song);
   },
   
   itemHeight: 15,
@@ -95,8 +95,8 @@ Object.extend(Twump.View.Songlist.prototype, {
     this.notifyViewportChange(page);
   },
   
-  bringToFocus: function(file){
-    this.displayPage(this.list.model.pageAround({file: file, range: this.pageLength}))
+  bringToFocus: function(song){
+    this.displayPage(this.list.model.pageAround({song: song, range: this.pageLength}))
   },
   
   refreshCurrentPage: function(){
@@ -116,22 +116,22 @@ Object.extend(Twump.View.Songlist.prototype, {
   songlistTemplate: TrimPath.parseTemplate(" \
     <table cellspacing='0' cellpadding='0' border='0'> \
       <tbody id='itemsParent'> \
-        {for file in items} \
-          <tr class='songlistItem' itemId='${file.id}'>\
+        {for song in items} \
+          <tr class='songlistItem' itemId='${song.id}'>\
             <td>\
               <div class='index'> \
-                ${model.indexOf(file)+1}. \
+                ${model.indexOf(song)+1}. \
               </div> \
             </td> \
             <td> \
               <div class='title'> \
                 <nobr> \
-                  ${file.displayName} \
+                  ${song.displayName} \
                 </nobr>\
               </div> \
             </td> \
             <td class='length'> \
-              ${file.displayLength()}\
+              ${song.displayLength()}\
             </td> \
           </tr> \
         {/for} \
@@ -139,12 +139,12 @@ Object.extend(Twump.View.Songlist.prototype, {
      </table> \
   "),
  
-  refreshItem: function(file){
-    var element = this.list.htmlItem(file);
+  refreshItem: function(song){
+    var element = this.list.htmlItem(song);
     if (!element) return;
     
-    element.getElementsBySelector('.title')[0].update("<nobr>" + file.displayName + "</nobr>")
-    element.getElementsBySelector('.length')[0].update(file.displayLength() || "")
+    element.getElementsBySelector('.title')[0].update("<nobr>" + song.displayName + "</nobr>")
+    element.getElementsBySelector('.length')[0].update(song.displayLength() || "")
   },
   
   onSonglistDragover: function(event){
@@ -156,7 +156,7 @@ Object.extend(Twump.View.Songlist.prototype, {
     if (this.itemUnderMouseIndex)
       this.list.setItemHtmlClass(this.itemUnderMouseIndex, 'dropBefore');
     else {
-      var last = this.list.model.files.last();
+      var last = this.list.model.songs.last();
       if (last)
         this.list.setItemHtmlClass(last, 'dropAfter');
     }
@@ -169,12 +169,12 @@ Object.extend(Twump.View.Songlist.prototype, {
   
   onStartDrag: function(){
     if (this.dragCode && this.selectedItems().length)
-      Twump.Api.startDrag({text: "twump:" + this.dragCode, files: this.selectedFiles()});
+      Twump.Api.startDrag({text: "twump:" + this.dragCode, files: this.selectedPaths()});
   },
   
-  selectedFiles: function(){
-    return this.selectedItems().map(function(file){
-      return file.path;
+  selectedPaths: function(){
+    return this.selectedItems().map(function(song){
+      return song.path;
     })
   }
 });

@@ -93,7 +93,7 @@ Twump.Controller.DiskOperationsMixin = {
     return function(newFiles){
       code(newFiles);
       
-      if (!this.playlist.currentFile())
+      if (!this.playlist.currentSong())
         this.setCurrentIndex(0);
       
       this.refreshCurrentPage();

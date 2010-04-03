@@ -17,14 +17,14 @@ Twump.Controller.PlaylistMixin = {
   setPlaylistPlayingItem: function(){
     if (this.playlist.empty()) return;
     
-    this.playlistWindow.setPlayingItem(this.playlist.currentFile());
-    this.playlistWindow.selectItem(this.playlist.currentFile());
+    this.playlistWindow.setPlayingItem(this.playlist.currentSong());
+    this.playlistWindow.selectItem(this.playlist.currentSong());
     
     this.autofocusCurrentItem();
   },
   
   autofocusCurrentItem: function(){
-    if (!this.playlistWindow.displayed(this.playlist.currentFile()))
+    if (!this.playlistWindow.displayed(this.playlist.currentSong()))
       this.playlistWindow.bringPlayingItemToFocus();
   },
   
@@ -74,20 +74,20 @@ Twump.Controller.PlaylistMixin = {
   },
   
   reorderFromPlaylist: function(options){
-    this.moveFiles({
+    this.moveSongs({
       items: this.playlistWindow.selectedItems(), 
       before: this.playlistWindow.itemUnderMouseIndex()
     })
   },
   
   reorderFromEditor: function(options){
-    this.moveFiles({
+    this.moveSongs({
       items: this.childController('editor').selectedItems(), 
       before: this.playlistWindow.itemUnderMouseIndex()
     })
   },
   
-  moveFiles: function(options){
+  moveSongs: function(options){
     this.playlist.moveBefore(options.items,  options.before);
     this.refreshCurrentPage();
   },
@@ -96,30 +96,30 @@ Twump.Controller.PlaylistMixin = {
     this.play(item)
   },
   
-  onPageChanged: function(files){
+  onPageChanged: function(songs){
     Twump.Utils.scheduleInChunks(    
-      files.map(function(file){
+      songs.map(function(song){
         return function(){
-          if (file && !file.loadingMetadata) {
-            this.loadMetadata(file);
-            file.loadingMetadata = true;
+          if (song && !song.loadingMetadata) {
+            this.loadMetadata(song);
+            song.loadingMetadata = true;
           }
         }.bind(this)
       }.bind(this)), {delay: 100}
     )
   },
   
-  jumpTo: function(file){
-    this.play(file);
+  jumpTo: function(song){
+    this.play(song);
   },
   
-  onSetRepeatPattern: function(files, reshuffle){
-    this.playlist.setRepeatPattern(files || [], reshuffle);
-    this.playlistWindow.setRepeatPattern(files || [])
+  onSetRepeatPattern: function(songs, reshuffle){
+    this.playlist.setRepeatPattern(songs || [], reshuffle);
+    this.playlistWindow.setRepeatPattern(songs || [])
   },
   
   onShuffleSelection: function(){
-    this.playlist.shuffleFiles(this.playlistWindow.selectedItems());
+    this.playlist.shuffleSongs(this.playlistWindow.selectedItems());
     this.refreshCurrentPage();
   },
   

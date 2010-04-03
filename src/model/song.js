@@ -1,5 +1,5 @@
-Twump.Model.File = Class.create();
-Twump.Model.File.prototype = {
+Twump.Model.Song = Class.create();
+Twump.Model.Song.prototype = {
   initialize: function(data){
     Object.extend(this, data);
     if (!this.displayName)
