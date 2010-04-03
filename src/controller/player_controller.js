@@ -64,26 +64,47 @@ Object.extend(Twump.Controller.Player.prototype, {
     this[options.action](options);
   },
   
-  keyboardDispatcher: function(event){ 
-    var standardMap = {
-      27: "stopClick", 32: "pauseClick", 33: "previousClick", 34: "nextClick", 13: "playClick",
-      46: "deleteClick", 38: "volumeUp", 40: "volumeDown", 39: "moveForward", 37: "moveBackward"
-    };
-    
-    var ctrlMap = {
-      69: "editorClick", 79: "loadListClick", 83: "saveListClick", 79: "optionsClick"
-    };
-    
-    var altMap = {
-      83: 'shuffleClick', 65: 'shuffleRemainingClick'
-    }
+  convertMap: function(map){
+    return Object.keys(map).inject({}, function(memo, key){
+      var newKey = null;
+
+      if (key.length == 1)
+        newKey = key.toUpperCase().charCodeAt(0);
+      else
+        newKey = Event["KEY_" + key]
+        
+      if (newKey)
+        memo[newKey] = map[key];
+      return memo;
+    })
+  },
   
+  keyboardDispatcher: function(event){
+    Event.stop(event)
+    
+    var standardMap = this.convertMap({
+        ESC: "stopClick", SPACE: "pauseClick", PAGEUP: "previousClick", PAGEDOWN: "nextClick", RETURN: "playClick",
+        DELETE: "deleteClick", UP: "volumeUp", DOWN: "volumeDown", RIGHT: "moveForward", LEFT: "moveBackward",
+
+        'e': "editorClick", 'l': "loadListClick", 's': "saveListClick", 'o': "optionsClick"
+    });
+    
+    var shiftMap = this.convertMap({
+      's': "shuffleClick", 'r': "shuffleRemainingClick"
+    })
+    
+    // currently air 2 beta doesn't provide good keyCodes when ctrl or alt is pressed
+    // so I don't use these for hotkeys
+    var ctrlMap = {};
+    var altMap = {};
+      
     var relevantMap = null;
     
     if (!event.ctrlKey && !event.altKey && !event.shiftKey)
       relevantMap = standardMap;
     else if (event.ctrlKey) relevantMap = ctrlMap;
     else if (event.altKey) relevantMap = altMap;
+    else if (event.shiftKey) relevantMap = shiftMap;
   
     if (!relevantMap)  return;
     

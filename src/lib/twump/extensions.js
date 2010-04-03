@@ -87,3 +87,10 @@ Object.wrap = function(object, memberName, newValue){
   object[memberName + "Original"] = object[memberName];
   object[memberName] = newValue;
 }
+
+
+////////////////////////////////////////////////////////////
+// Event
+Object.extend(Event, {
+  KEY_SPACE: 32
+});
