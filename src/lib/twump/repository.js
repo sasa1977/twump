@@ -37,7 +37,7 @@ Twump.Repository.Playlists.M3u = Class.define({
       var path = song.path;
       
       if (options.relative)
-        path = this.file.parent.getRelativePath(new air.File(file.path), true);
+        path = this.file.parent.getRelativePath(new Twump.Api.File(song.path), true);
       
       m3u += "\n" + path + "\n"
     }.bind(this))

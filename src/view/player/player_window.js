@@ -44,7 +44,7 @@ Twump.View.PlayerWindow = Class.define(
           return file.nativePath;
         });
       
-        this.onFilesDropped(Twump.Api.collectMusicPaths(air.File.getFilesRecursive(draggedFiles)))
+        this.onFilesDropped(Twump.Api.collectMusicPaths(Twump.Api.File.getFilesRecursive(draggedFiles)))
       }
     },
   

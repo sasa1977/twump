@@ -117,7 +117,7 @@ Twump.Api = {
       sound.removeEventListener(air.Event.COMPLETE, onSoundLoaded)
       sound = null;
       
-      air.System.gc();
+      Twump.Api.garbageCollect();
     }
     
     sound.addEventListener(air.Event.ID3, onId3Loaded);
@@ -177,6 +177,10 @@ Twump.Api = {
   
   deleteFile: function(path){
     new air.File(path).deleteFile();
+  },
+  
+  garbageCollect: function(){
+    air.System.gc();
   }
 }
 
@@ -223,6 +227,8 @@ air.File.url = function(urlOrNativePath){
   var file = new air.File(urlOrNativePath);
   return file.url;
 }
+
+Twump.Api.File = air.File;
 
 
 

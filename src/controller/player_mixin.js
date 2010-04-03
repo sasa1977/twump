@@ -34,7 +34,7 @@ Twump.Controller.PlayerMixin = {
     this.stop();
     this.saveCurrentList();
     
-    air.System.gc();
+    Twump.Api.garbageCollect()
        
     if (!this.playlist.currentSong()) return;
     
