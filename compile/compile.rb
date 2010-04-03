@@ -2,6 +2,7 @@ require 'rubygems'
 require 'find'
 require 'fileutils'
 require 'haml'
+require 'pathname'
 
 require 'rexml/document'
 
@@ -50,13 +51,15 @@ end
 
 
 class CompilingContext
-  def initialize(file)
+  def initialize(file, paths)
     @file = file
+    @paths = paths
   end
 
   def javascript_include(*paths)
     includes = paths.map do |path|
-      "<script src='../#{path}.js' type='text/javascript'></script>"
+      relative_path = Pathname.new("#{@paths.intermediate_src}/#{path}").relative_path_from(Pathname.new(File.dirname(@file)))
+      "<script src='#{relative_path}.js' type='text/javascript'></script>"
     end
     
     includes.join("\n")
@@ -64,14 +67,15 @@ class CompilingContext
   
   def stylesheet_include(*paths)
     includes = paths.map do |path|
-      "<link href='../#{path}.css' rel='stylesheet' type='text/css' />"
+      relative_path = Pathname.new("#{@paths.intermediate_src}/#{path}").relative_path_from(Pathname.new(File.dirname(@file)))
+      "<link href='#{relative_path}.css' rel='stylesheet' type='text/css' />"
     end
     
     includes.join("\n")
   end
   
   def render_partial(relative)
-    partial = "#{File.dirname(@file)}/_#{relative}.haml"
+    partial = "#{@paths.intermediate_src}/#{File.dirname(relative)}/_#{File.basename(relative)}.haml"
     engine = Haml::Engine.new(File.read(partial))
     engine.render(self)
   end
@@ -149,7 +153,7 @@ private
   
   def html(haml_file)
     engine = Haml::Engine.new(File.read(haml_file))
-    engine.render(CompilingContext.new(haml_file))
+    engine.render(CompilingContext.new(haml_file, @paths))
   end
 
   def get_hamls

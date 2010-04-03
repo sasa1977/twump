@@ -54,7 +54,7 @@ Object.extend(Twump.Controller.Player.prototype, {
   },
   
   onOptionsClick: function(){
-    this.openOrCloseChildWindow('options', {url: "options_window.html", 
+    this.openOrCloseChildWindow('options', {url: "../options/options_window.html", 
       playerController: this
     });
   },

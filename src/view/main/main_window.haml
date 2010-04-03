@@ -1,0 +1,30 @@
+%html
+  %head
+    %meta{ :content => "text/html;charset=UTF-8", "http-equiv" => "Content-type" }/
+    %title
+    
+    =render_partial('view/main/main_window_includes')
+  
+  :ruby
+    def play_window_button(id, content)
+      <<-eos
+        <div class='button' id='#{id}'>#{content}</div>
+      eos
+    end
+    
+  :javascript
+
+    function init(){
+      if (Twump.Controller.Updater.update()) return;
+      Twump.application = new Twump.Application();
+    }
+  
+  %body{:ondragover => "event.preventDefault()", :onload => "init();",
+    :ondragenter => "event.preventDefault()"}
+  
+    =render_partial('view/common/title_bar')
+    =render_partial('view/player/player')
+    =render_partial('view/playlist/playlist')
+    =render_partial('view/main/status_bar')
+    =render_partial('view/common/resize')
+    =render_partial('view/common/tooltip')

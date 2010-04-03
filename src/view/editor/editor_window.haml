@@ -2,19 +2,15 @@
   %head
     %title
     
-    =render_partial "common_includes"
+    =render_partial "view/common/common_includes"
     
     :ruby
-      haml_concat stylesheet_include("view/css/editor")
-    
-    %link{ :href => "css/editor.css", :rel => "stylesheet", :type => "text/css" }/
+      haml_concat stylesheet_include("view/editor/editor")
     
     :ruby
       haml_concat javascript_include(
-        "controller/common",
         "controller/editor_controller",
-        "view/common",
-        "view/editor_window"
+        "view/editor/editor_window"
       )
     
    
@@ -28,7 +24,7 @@
       }
       
   %body{:onload => "init();", :style => "overflow:hidden;-webkit-user-select:none;"}
-    =render_partial('title_bar')
+    =render_partial('view/common/title_bar')
   
     #editor
       %input#filter{ :type => "text" }/
@@ -39,6 +35,6 @@
             #songlist
           %td.pageProgressColumn
             #pageProgress.pageProgress
-      =render_partial('resize')
+      =render_partial('view/common/resize')
 
-    =render_partial('tooltip')
+    =render_partial('view/common/tooltip')
