@@ -4,6 +4,8 @@
 
 body, table {
   font-size:12px;
+  overflow:hidden;
+  -webkit-user-select:none;
 }
 
 .tooltip{

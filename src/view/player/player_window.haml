@@ -20,63 +20,11 @@
     }
   
   %body{:ondragover => "event.preventDefault()", :onload => "init();",
-    :ondragenter => "event.preventDefault()", 
-    :style => "overflow:hidden;-webkit-user-select:none;"}
+    :ondragenter => "event.preventDefault()"}
   
     =render_partial('view/common/title_bar')
-    
-    #player
-      .playingInfo
-        %table{:cellpadding => 0, :cellspacing => 0, :border => 0}
-          %tr
-            %td
-              #remaining
-            %td
-              #playing
-      
-      .buttonList.playProgressContainer
-        #playProgress.playProgress
-        .clear
-        
-      .buttonList.playerControls
-        .buttonGroup
-          =play_window_button('openFolder', 'load folder')
-          =play_window_button('loadList', 'load list')
-          =play_window_button('saveList', 'save list')
-        
-        .rightButtonGroup
-          =play_window_button('options', 'options')
-        .clear
-        
-      .buttonList.playerControls
-        =play_window_button('previous', 'previous')
-        =play_window_button('play', 'play')
-        =play_window_button('pause', 'pause')
-        =play_window_button('stop', 'stop')
-        =play_window_button('next', 'next')
-        .volumeContainer.rightButtonGroup
-          #volume.volume
-        .clear
-        
-      .buttonList.playerControls
-        .buttonGroup
-          =play_window_button('shuffle', 'shuffle')
-          =play_window_button('shuffleRemaining', 'shuffle rest')
-          =play_window_button('showCurrent', 'show current')
-          
-        .rightButtonGroup
-          =play_window_button('editor', 'search')
-          =play_window_button('delete', 'delete')
-          =play_window_button('clear', 'clear list')
-        .clear
-    .clear
-        
-    %table{:cellpadding => 0, :cellspacing => 0, :border => 0}
-      %tr
-        %td
-          #songlist.songlist
-        %td
-          #pageProgress.pageProgress
+    =render_partial('view/player/player')
+    =render_partial('view/playlist/playlist')
 
     #statusBar.statusBar
       .buttonList
