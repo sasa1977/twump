@@ -43,8 +43,6 @@ Twump.Controller.LastFmMixin = {
   },
   
   scrobbleCurrent: function(data){
-    var file = this.playlist.currentSong();
-    
     var arg = Object.extend({startedPlaying: this.startedPlaying}, data);
     Object.extend(arg, this.playlist.currentSong().metadata)
     
@@ -53,10 +51,10 @@ Twump.Controller.LastFmMixin = {
   },
   
   scrobbleCurrentPossible: function(){
-    var file = this.playlist.currentSong();
-    return (file.metadata && 
-      file.metadata.name && file.metadata.name.length > 0 && 
-      file.metadata.performer && file.metadata.performer.length > 0
+    var song = this.playlist.currentSong();
+    return (song.metadata && 
+      song.metadata.name && song.metadata.name.length > 0 && 
+      song.metadata.performer && song.metadata.performer.length > 0
     );
   },
   

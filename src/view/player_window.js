@@ -53,7 +53,7 @@ Object.extend(Twump.View.PlayerWindow.prototype, {
   displayPlayProgress: function(data){
     this.inDisplayPlayProgress = true;
     
-    $('playing').update('<nobr>' + data.file + '</nobr>');
+    $('playing').update('<nobr>' + data.songDisplay + '</nobr>');
     $('remaining').update((data.length - data.position).secondsToTimeString());
     this.playProgress.setValue(data.playbackPercent);
     

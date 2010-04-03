@@ -1,7 +1,7 @@
 Twump.Controller.PlayerMixin = {
-  setCurrentSong: function(file){
-    this.playlist.setCurrentSong(file);
-    if (!file) return;
+  setCurrentSong: function(song){
+    this.playlist.setCurrentSong(song);
+    if (!song) return;
     
     this.setPlaylistPlayingItem();
     this.savePlayerData();
@@ -51,18 +51,18 @@ Twump.Controller.PlayerMixin = {
     });
   },
   
-  loadMetadata: function(file, force){
-    if (!force && file.metadataLoaded())
+  loadMetadata: function(song, force){
+    if (!force && song.metadataLoaded())
       return;
     
-    Twump.Api.songMetadata(file.path, function(metadata){
-      file.addMetadata(metadata);
-      this.playlistWindow.refreshItem(file);
+    Twump.Api.songMetadata(song.path, function(metadata){
+      song.addMetadata(metadata);
+      this.playlistWindow.refreshItem(song);
     }.bind(this));
   },
   
   onPlayProgress: function(data){
-    var completeData = Object.extend(data, {file: this.playlist.currentSong().displayName});
+    var completeData = Object.extend(data, {songDisplay: this.playlist.currentSong().displayName});
   
     this.playerWindow.displayPlayProgress(completeData);
     this.lastFmPlayProgress(completeData);
@@ -73,10 +73,10 @@ Twump.Controller.PlayerMixin = {
     this.onNextClick();
   },
   
-  play: function(file){
-    if (!file) return;
+  play: function(song){
+    if (!song) return;
 
-    this.setCurrentSong(file);
+    this.setCurrentSong(song);
     this.playCurrent();
   },
    
