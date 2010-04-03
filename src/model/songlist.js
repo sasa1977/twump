@@ -2,8 +2,8 @@ Twump.Model.Songlist = Class.create();
 Twump.Model.Songlist.prototype = {
   initialize: function(paths){
     this.lastId = 0;
-    this.filesIndex = {}
-    this.setFiles(this.filesFromPaths(paths || []));
+    this.songsIndex = {}
+    this.setSongs(this.songsFromPaths(paths || []));
   },
   
   generateId: function(){
@@ -11,139 +11,139 @@ Twump.Model.Songlist.prototype = {
   },
   
   reindexPositions: function(){
-    this.positions = this.files.inject({}, function(memo, file, index){
-      memo[file.id] = index;
+    this.positions = this.songs.inject({}, function(memo, song, index){
+      memo[song.id] = index;
       return memo;
     })
   },
   
-  adjustAndSetFiles: function(files){
-    this.filesIndex = {}
+  adjustAndSetSongs: function(songs){
+    this.songsIndex = {}
   
-    files.each(function(file){
-      file.id = this.generateId()
-      this.filesIndex[file.id] = file;
+    songs.each(function(song){
+      song.id = this.generateId()
+      this.songsIndex[song.id] = song;
     }.bind(this));
     
-    this.setFiles(files);
+    this.setSongs(songs);
   },
   
-  setFiles: function(files){
-    this.files = $A(files);
+  setSongs: function(songs){
+    this.songs = $A(songs);
     this.reindexPositions();
   },
   
-  rescanFilesIndex: function(){
-    this.filesIndex = {}
-    this.files.each(function(file){
-      this.filesIndex[file.id] = file
+  rescanSongsIndex: function(){
+    this.songsIndex = {}
+    this.songs.each(function(song){
+      this.songsIndex[song.id] = song
     }.bind(this))
   },
     
-  filesFromPaths: function(paths){
+  songsFromPaths: function(paths){
     return $A(paths.map(function(path){
-      var newFile = new Twump.Model.File({
+      var newSong = new Twump.Model.Song({
         id: this.generateId(), path: path
       });
       
-      this.filesIndex[newFile.id] = newFile;
+      this.songsIndex[newSong.id] = newSong;
       
-      return newFile;
+      return newSong;
     }.bind(this)))
   },
   
-  fileAt: function(position){
-    return this.files[position];
+  songAt: function(position){
+    return this.songs[position];
   },
   
-  file: function(id){
-    return this.filesIndex[id];
+  song: function(id){
+    return this.songsIndex[id];
   },
   
   paths: function(){
-    return $A(this.files.map(function(file){return file.path}));
+    return $A(this.songs.map(function(song){return song.path}));
   },
   
-  indexOf: function(file){
-    return this.positions[file.id];
+  indexOf: function(song){
+    return this.positions[song.id];
   },
   
-  indicesOf: function(files){
-    return files.map(function(file){
-      return this.indexOf(file)
+  indicesOf: function(songs){
+    return songs.map(function(song){
+      return this.indexOf(song)
     }.bind(this))
   },
   
   idToIndex: function(id){
-    return this.indexOf(this.file(id))
+    return this.indexOf(this.song(id))
   },
   
   last: function(){
-    return this.files.last();
+    return this.songs.last();
   },
   
   first: function(){
-    return this.files.first();
+    return this.songs.first();
   },
   
-  include: function(file){
-    return (this.indexOf(file) != null);
+  include: function(song){
+    return (this.indexOf(song) != null);
   },
   
-  length: function(){return this.files.length},
-  empty: function(){return this.files.length == 0},
+  length: function(){return this.songs.length},
+  empty: function(){return this.songs.length == 0},
   
   shuffle: function(from){
-    this.setFiles(this.files.shuffle(from))
+    this.setSongs(this.songs.shuffle(from))
   },
   
-  shuffleFiles: function(files){
-    this.setFiles(this.files.shuffleItems(this.indicesOf(files)));
+  shuffleSongs: function(songs){
+    this.setSongs(this.songs.shuffleItems(this.indicesOf(songs)));
   },
   
   clear: function(){
-    this.setFiles([])
+    this.setSongs([])
   },
   
-  deleteFiles: function(files, currentFile){
-    var currentIndex = this.indexOf(currentFile), newIndex = currentIndex;
+  deleteSongs: function(songs, currentSong){
+    var currentIndex = this.indexOf(currentSong), newIndex = currentIndex;
     
-    files.each(function(file){
-      var index = this.indexOf(file);
+    songs.each(function(song){
+      var index = this.indexOf(song);
       
-      this.files[index] = null;
-      this.filesIndex[file.id] = null;
+      this.songs[index] = null;
+      this.songsIndex[song.id] = null;
       
       if (index <= currentIndex)
         newIndex--;
     }.bind(this));
     
-    this.files = this.files.compact();
+    this.songs = this.songs.compact();
     this.reindexPositions();
     
-    var result = this.fileAt(newIndex);
-    if (result != currentFile) // in this case, original file was removed
-      result = this.fileAt(newIndex + 1); // so I return the next one
+    var result = this.songAt(newIndex);
+    if (result != currentSong) // in this case, currently playing was removed
+      result = this.songAt(newIndex + 1); // so I return the next one
     
     if (!result)
-      result = this.files.last();
+      result = this.songs.last();
     
     return result;
   },
   
-  insertAt: function(at, files){
-    this.setFiles(this.files.insertArrayAt(at, files).compact());
+  insertAt: function(at, songs){
+    this.setSongs(this.songs.insertArrayAt(at, songs).compact());
   },
   
   insertPathsAt: function(item, paths){
     if (!item)
       this.addPaths(paths)
     else      
-      this.insertAt(this.indexOf(item), this.filesFromPaths(paths));
+      this.insertAt(this.indexOf(item), this.songsFromPaths(paths));
   },
   
   addPaths: function(paths){
-    this.insertAt(this.length(), this.filesFromPaths(paths));
+    this.insertAt(this.length(), this.songsFromPaths(paths));
   },
   
   search: function(filter){
@@ -155,32 +155,32 @@ Twump.Model.Songlist.prototype = {
     
     var result = new Twump.Model.Songlist();
     
-    var files = (this.files.inject([],function(memo, file){
-      if (file.match(regex))
-        memo.push(file);
+    var songs = (this.songs.inject([],function(memo, song){
+      if (song.match(regex))
+        memo.push(song);
       
       return memo;
     }));
     
-    result.setFiles(files);
-    result.rescanFilesIndex();
+    result.setSongs(songs);
+    result.rescanSongsIndex();
     
     return result;
   },
   
-  moveBefore: function(files, before){
+  moveBefore: function(songs, before){
     var position = this.length();
     
     if (before) position = this.indexOf(before);
     
-    var filesToMove = files.inject([], function(memo, file){
-      memo.push(file);
-      this.files[this.indexOf(file)] = null;
+    var songsToMove = songs.inject([], function(memo, song){
+      memo.push(song);
+      this.songs[this.indexOf(song)] = null;
       
       return memo;
     }.bind(this))
     
-    this.insertAt(position, filesToMove);
+    this.insertAt(position, songsToMove);
   },
   
   pageAround: function(options){
@@ -188,7 +188,7 @@ Twump.Model.Songlist.prototype = {
     
     var before = parseInt(options.range/2);
   
-    var start = Math.max(this.indexOf(options.file) - before, 0);
+    var start = Math.max(this.indexOf(options.song) - before, 0);
     var end = Math.min(start + options.range, this.length());
     start = Math.max(end - options.range, 0);
     
@@ -207,7 +207,7 @@ Twump.Model.Songlist.prototype = {
   items: function(bounds){
     var result = []
     for (var index = bounds.start;index < bounds.end;index++) {
-      result.push(this.fileAt(index));
+      result.push(this.songAt(index));
     }
     return result;
   }

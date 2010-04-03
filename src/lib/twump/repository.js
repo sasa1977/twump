@@ -29,7 +29,7 @@ Twump.Repository.Playlists.M3u.prototype = {
     options = options || {}
     var m3u = "#EXTM3U\n";
     
-    playlist.files.each(function(file){
+    playlist.songs.each(function(file){
       m3u += "#EXTINF:"
       
       if (file.metadata){

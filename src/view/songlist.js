@@ -57,8 +57,8 @@ Object.extend(Twump.View.Songlist.prototype, {
   },
   
   display: function(playlist){
-    playlist.item = playlist.file;
-    playlist.itemAt = playlist.fileAt;
+    playlist.item = playlist.song;
+    playlist.itemAt = playlist.songAt;
     this.list.setModel(playlist);
 
     this.displayPage(playlist.page({start: 0, range: this.pageLength}))
@@ -95,8 +95,8 @@ Object.extend(Twump.View.Songlist.prototype, {
     this.notifyViewportChange(page);
   },
   
-  bringToFocus: function(file){
-    this.displayPage(this.list.model.pageAround({file: file, range: this.pageLength}))
+  bringToFocus: function(song){
+    this.displayPage(this.list.model.pageAround({song: song, range: this.pageLength}))
   },
   
   refreshCurrentPage: function(){
@@ -156,7 +156,7 @@ Object.extend(Twump.View.Songlist.prototype, {
     if (this.itemUnderMouseIndex)
       this.list.setItemHtmlClass(this.itemUnderMouseIndex, 'dropBefore');
     else {
-      var last = this.list.model.files.last();
+      var last = this.list.model.songs.last();
       if (last)
         this.list.setItemHtmlClass(last, 'dropAfter');
     }

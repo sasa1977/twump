@@ -119,7 +119,7 @@ Twump.Controller.PlaylistMixin = {
   },
   
   onShuffleSelection: function(){
-    this.playlist.shuffleFiles(this.playlistWindow.selectedItems());
+    this.playlist.shuffleSongs(this.playlistWindow.selectedItems());
     this.refreshCurrentPage();
   },
   
