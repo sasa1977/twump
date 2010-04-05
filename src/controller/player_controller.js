@@ -22,7 +22,7 @@ Twump.Controller.Player = Class.define(
         "volumeChange", "setPlayPosition", 
         "addFolderAtEnd", "addFolderAfterCurrent",
         "loadListClick", "saveListClick", "shuffleClick", 
-        "shuffleRemainingClick", "removeSelected", "removeNonExisting", "clearClick",
+        "shuffleRemainingClick", "removeSelected", "removeNonExisting", "removeDuplicate", "clearClick",
         "editorClick", "drop", "filesDropped", "optionsClick",
         "repeatMode", "showCurrentClick"
       ]);

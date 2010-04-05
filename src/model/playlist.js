@@ -168,6 +168,10 @@ Object.wrap(Twump.Model.Playlist.prototype, "shuffle", function(from){
   this.setRepeatPattern([]);
 })
 
+Object.wrap(Twump.Model.Playlist.prototype, "duplicateSongs", function(){
+  return this.duplicateSongsOriginal(this.currentSong());
+})
+
 
 Twump.Model.Playlist.deserialize = function(data){
   var playlist = new Twump.Model.Playlist();

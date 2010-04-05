@@ -110,7 +110,8 @@ Twump.View.PlayerWindow = Class.define(
       
       this.openContextMenu(event, [
         {id: 'remove', title: 'selected', onClick: this.onRemoveSelected.bind(this)},
-        {id: 'removeNonExisting', title: 'non existing', onClick: this.onRemoveNonExisting.bind(this)}
+        {id: 'removeNonExisting', title: 'non existing', onClick: this.onRemoveNonExisting.bind(this)},
+        {id: 'removeDuplicate', title: 'duplicate', onClick: this.onRemoveDuplicate.bind(this)}
       ]);
     }
   }

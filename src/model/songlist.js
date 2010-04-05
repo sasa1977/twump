@@ -139,19 +139,34 @@ Twump.Model.Songlist = Class.define({
     });
   },
   
-  removeDuplicateSongs: function(currentSong){
+  duplicateSongs: function(currentSong){
+    // first stage: index songs by pathname
     var map = this.songs.inject({}, function(memo, song){
-      map[song.path] = map[song.path] || [];
-      map[song.path].push(song);
-      return map;
+      memo[song.path] = memo[song.path] || [];
+      
+      // If song is current song it will be pushed at the map beginning
+      // which will help me in the next stage to avoid deleting current
+      // song.
+      if (song != currentSong)
+        memo[song.path].push(song);
+      else
+        memo[song.path] = [song].concat(memo[song.path])
+
+      return memo;
     });
     
+    // second stage: collect all but one song from the buckets where there
+    // are more than one song
     var songsToRemove = [];
+    
     Object.keys(map).each(function(path){
-      if (map[song.path].length > 0){
-        
-      }
-    })
+      map[path].each(function(song, index){
+        if (index > 0)
+          songsToRemove.push(song);
+      })
+    });
+    
+    return songsToRemove;
   },
   
   insertAt: function(at, songs){
