@@ -30,8 +30,8 @@ Twump.Controller.PlaylistMixin = {
   
   onShuffleClick: function(){
     this.playlist.shuffle();
-    this.redrawPlayList();
-    this.play(this.playlist.first());
+    this.refreshCurrentPage();
+    this.autofocusCurrentItem();
   },
   
   onShuffleRemainingClick: function(){
