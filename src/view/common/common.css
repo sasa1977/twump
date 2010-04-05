@@ -40,3 +40,12 @@ body, table {
   background-color: cyan;
   float: left;
 }
+
+.slider {
+  background-color: lightblue;
+  cursor: move;
+}
+
+.pageProgress .slider {
+  height:30px;
+}
