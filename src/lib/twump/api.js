@@ -104,6 +104,9 @@ Twump.Api = {
   },
   
   songMetadata: function(path, callback){
+    if (!Twump.Api.File.exists(path))
+      return;
+    
     var sound = this.sound(path);
     
     var onId3Loaded = function(event){

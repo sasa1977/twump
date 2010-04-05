@@ -1,6 +1,14 @@
 Twump.Player = Class.define({
   initialize: function(file, options){
-    this.options = options || {}  
+    this.options = options || {}
+    
+    if (!Twump.Api.File.exists(file)){
+      setTimeout(function(){
+        this.onPlaybackComplete();
+      }.bind(this), 2000)
+      
+      return;
+    }
         
     this.sound = Twump.Api.sound(file)
     this.play();

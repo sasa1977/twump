@@ -9,6 +9,10 @@ Twump.SliderBase = {
     this.slider().addEventListener('mousedown', this.onStartSlide.bind(this), false);
   },
   
+  dimensions: function(){
+    return this.bar.getDimensions();
+  },
+  
   max: 0, value: 0, position: 0,
   
   refresh: function(){
@@ -56,8 +60,7 @@ Twump.SliderBase = {
   slider: function(){
     if (!this.sliderElement) {
       this.sliderElement = $(document.createElement('div'));
-      this.sliderElement.style.backgroundColor = "lightblue";
-      this.sliderElement.style.cursor = "move"
+      this.sliderElement.addClassName('slider')
       
       this.bar.appendChild(this.sliderElement);
       Position.absolutize(this.sliderElement);
@@ -67,8 +70,6 @@ Twump.SliderBase = {
   },
   
   setValue: function(value){
-    if (!this.max) return;
-
     this.value = Math.max(0, Math.min(value, this.max - 1));
     this.drawSlider(this.computeCoordinates(this.value));
   },
@@ -83,18 +84,11 @@ Twump.SliderBase = {
 Twump.VerticalSlider = Class.define(
   Twump.SliderBase,
   {
-    sliderHeight: 30,
-  
-    setSliderDimensions: function(){
-    
-    },
-
     drawSlider: function(pos){
       var barPos = Position.cumulativeOffset(this.bar)
   
       this.slider().style.top = (barPos[1] + pos).toString() + "px";
       this.slider().style.left = barPos[0];
-      this.slider().style.height = this.sliderHeight.toString() + "px"
       this.slider().style.width = this.bar.offsetWidth.toString() + "px"
     },
   
@@ -103,7 +97,7 @@ Twump.VerticalSlider = Class.define(
     },
 
     computeCoordinates: function(value){
-      return Math.round(value * (this.bar.offsetHeight - this.sliderHeight) / (this.max - 1))
+      return Math.round(value * (this.bar.offsetHeight - this.slider().offsetHeight) / (this.max - 1))
     },
 
     coordinateToValue: function(pos){
@@ -118,19 +112,12 @@ Twump.VerticalSlider = Class.define(
 Twump.HorizontalSlider = Class.define(
   Twump.SliderBase,
   {
-    sliderWidth: 30,
-  
-    setSliderDimensions: function(){
-    
-    },
-
     drawSlider: function(pos){
       var barPos = Position.cumulativeOffset(this.bar)
   
       this.slider().style.left = (barPos[0] + pos).toString() + "px";
       this.slider().style.top = barPos[1];
       this.slider().style.height = this.bar.offsetHeight,toString() + "px"
-      this.slider().style.width = this.sliderWidth.toString() + "px"
     },
   
     normalizeCoordinate: function(coordinate){
@@ -138,7 +125,7 @@ Twump.HorizontalSlider = Class.define(
     },
 
     computeCoordinates: function(value){
-      return Math.round(value * (this.bar.offsetWidth - this.sliderWidth) / (this.max - 1))
+      return Math.round(value * (this.bar.offsetWidth - this.slider().offsetWidth) / (this.max - 1))
     },
 
     coordinateToValue: function(pos){
