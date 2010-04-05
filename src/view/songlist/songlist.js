@@ -88,10 +88,12 @@ Twump.View.Songlist = Class.define(
   
     displayPage: function(page){
       if (!this.list.model) return;
+      
+      if (page >= this.maxPages())
+        page = Math.max(0, this.maxPages() - 1);
     
-      this.list.setPage({page: page, maximum: this.maxPages(), itemsInViewPort: this.pageLength});
       this.resizeScroller();
-      this.notifyViewportChange(page);
+      this.list.setPage({page: page, maximum: this.maxPages(), itemsInViewPort: this.pageLength});
     },
     
     resizeScroller: function(){
@@ -105,11 +107,6 @@ Twump.View.Songlist = Class.define(
   
     refreshCurrentPage: function(){
       this.displayPage(this.list.pageScroller.getPage());
-    },
-  
-    notifyViewportChange: function(bounds){
-      if (this.onScrollChanged)
-        this.onScrollChanged(this.list.model.items(bounds))
     },
   
     onItemRightClick: function(item, event){
