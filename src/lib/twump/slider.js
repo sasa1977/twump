@@ -9,6 +9,10 @@ Twump.SliderBase = {
     this.slider().addEventListener('mousedown', this.onStartSlide.bind(this), false);
   },
   
+  dimensions: function(){
+    return this.bar.getDimensions();
+  },
+  
   max: 0, value: 0, position: 0,
   
   refresh: function(){

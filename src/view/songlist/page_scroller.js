@@ -4,6 +4,9 @@ Twump.View.PageScroller = Class.define(
     initialize: function(id){
       this.pageSlider = new Twump.VerticalSlider(id, {onChange: this.onPageSliderChange.bind(this)});
     },
+    
+    dimensions: function(){return this.pageSlider.dimensions()},
+    slider: function(){return this.pageSlider.slider()},
   
     setPage: function(page, max){
       this.ignorePageChange = true;

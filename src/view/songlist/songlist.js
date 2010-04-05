@@ -75,7 +75,7 @@ Twump.View.Songlist = Class.define(
     pageLength: 18,
   
     maxPages: function(){
-      return (this.list.model.length() - this.pageLength + 1);
+      return Math.max(0, this.list.model.length() - this.pageLength + 1);
     },
   
     onWindowSizeChanged: function(songlistHeight){
@@ -90,7 +90,13 @@ Twump.View.Songlist = Class.define(
       if (!this.list.model) return;
     
       this.list.setPage({page: page, maximum: this.maxPages(), itemsInViewPort: this.pageLength});
+      this.resizeScroller();
       this.notifyViewportChange(page);
+    },
+    
+    resizeScroller: function(){
+      var height = Math.max(20, this.list.pageScroller.dimensions().height - this.maxPages() * 10);
+      this.list.pageScroller.slider().style.height = height.toString() + "px";
     },
   
     bringToFocus: function(song){
