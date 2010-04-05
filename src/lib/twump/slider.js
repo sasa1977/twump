@@ -70,8 +70,6 @@ Twump.SliderBase = {
   },
   
   setValue: function(value){
-    if (!this.max) return;
-
     this.value = Math.max(0, Math.min(value, this.max - 1));
     this.drawSlider(this.computeCoordinates(this.value));
   },
