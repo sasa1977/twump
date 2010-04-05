@@ -16,7 +16,7 @@ Twump.View.EditorWindow = Class.define(
       });
       this.songlist.onItemSelected = this.onItemSelected.bind(this);
     
-      this.initResizeableSonglist(this.songlist, ['filter', 'header', 'resize']);
+      this.initResizeableSonglist(this.songlist, ['filter', 'header', 'resize'], 4);
     
       $('filter').activate();
     },

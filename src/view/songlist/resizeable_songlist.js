@@ -1,5 +1,6 @@
 Twump.View.ResizeableSonglist = {
-  initResizeableSonglist: function(songlistWindowReference, fixedElements){
+  initResizeableSonglist: function(songlistWindowReference, fixedElements, correction){
+    this.correction = correction || 0
     this.fixedElements = fixedElements;
     this.songlistWindowReference = songlistWindowReference;
     
@@ -24,8 +25,8 @@ Twump.View.ResizeableSonglist = {
   
   normalizeWindowHeight: function(desiredWindowHeight){
     var fixedHeight = this.fixedElements.inject(0, function(memo, id){
-      return memo + $(id).clientHeight;
-    });
+      return memo + $(id).offsetHeight;
+    }) + this.correction;
   
     var maxSonglistHeight = desiredWindowHeight - fixedHeight;
     var songlistHeight = this.songlistWindowReference.normalizedHeight(maxSonglistHeight);
