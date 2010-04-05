@@ -151,7 +151,7 @@ Twump.Model.Playlist = Class.define(
     remove: function(songs){
       if (!this.currentSong()) return;
     
-      var newSong = this.deleteSongs(songs, this.currentSong());
+      var newSong = this.removeSongs(songs, this.currentSong());
 
       if (newSong != this.currentSong()){ // in this case, we removed currently playing song
         this.setCurrentSong(newSong);
@@ -166,6 +166,10 @@ Twump.Model.Playlist = Class.define(
 Object.wrap(Twump.Model.Playlist.prototype, "shuffle", function(from){
   this.shuffleOriginal(from);
   this.setRepeatPattern([]);
+})
+
+Object.wrap(Twump.Model.Playlist.prototype, "duplicateSongs", function(){
+  return this.duplicateSongsOriginal(this.currentSong());
 })
 
 

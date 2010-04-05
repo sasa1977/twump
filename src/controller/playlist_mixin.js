@@ -40,11 +40,11 @@ Twump.Controller.PlaylistMixin = {
     this.saveCurrentList();
   },
   
-  onDeleteClick: function(){
-    this.deleteFromPlaylist(this.playlistWindow.selectedItems());
+  onRemoveSelected: function(){
+    this.removeFromPlaylist(this.playlistWindow.selectedItems());
   },
   
-  deleteFromPlaylist: function(items){
+  removeFromPlaylist: function(items){
     if (this.playlist.empty()) return;
   
     var result = this.playlist.remove(items);
@@ -56,6 +56,19 @@ Twump.Controller.PlaylistMixin = {
       if (this.playing)
         this.playCurrent();
     }
+  },
+  
+  onRemoveNonExisting: function(){
+    this.removeWithNotification(this.playlist.nonExistingSongs())
+  },
+  
+  onRemoveDuplicate: function(){
+    this.removeWithNotification(this.playlist.duplicateSongs());
+  },
+  
+  removeWithNotification: function(songs){
+    this.removeFromPlaylist(songs);
+    alert(songs.length.toString() + ' song(s) removed.')
   },
   
   onClearClick: function(){

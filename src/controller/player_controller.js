@@ -22,13 +22,13 @@ Twump.Controller.Player = Class.define(
         "volumeChange", "setPlayPosition", 
         "addFolderAtEnd", "addFolderAfterCurrent",
         "loadListClick", "saveListClick", "shuffleClick", 
-        "shuffleRemainingClick", "deleteClick", "clearClick",
+        "shuffleRemainingClick", "removeSelected", "removeNonExisting", "removeDuplicate", "clearClick",
         "editorClick", "drop", "filesDropped", "optionsClick",
         "repeatMode", "showCurrentClick"
       ]);
     
       this.subscribeToViewEvents(this.playlistWindow, [
-        "pageChanged", "copyPathToClipboard", "itemSelected", "deleteClick", "setRepeatPattern", 
+        "pageChanged", "copyPathToClipboard", "itemSelected", "removeSelected", "setRepeatPattern", 
         "shuffleSelection"
       ]);
     

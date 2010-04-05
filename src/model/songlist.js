@@ -104,7 +104,7 @@ Twump.Model.Songlist = Class.define({
     this.setSongs([])
   },
   
-  deleteSongs: function(songs, currentSong){
+  removeSongs: function(songs, currentSong){
     var currentIndex = this.indexOf(currentSong), newIndex = currentIndex;
     
     songs.each(function(song){
@@ -128,6 +128,45 @@ Twump.Model.Songlist = Class.define({
       result = this.songs.last();
     
     return result;
+  },
+  
+  nonExistingSongs: function(){
+    return this.songs.inject([], function(memo, song){
+      if (!Twump.Api.File.exists(song.path))
+        memo.push(song)
+        
+      return memo;
+    });
+  },
+  
+  duplicateSongs: function(currentSong){
+    // first stage: index songs by pathname
+    var map = this.songs.inject({}, function(memo, song){
+      memo[song.path] = memo[song.path] || [];
+      
+      // If song is current song it will be pushed at the map beginning
+      // which will help me in the next stage to avoid deleting current
+      // song.
+      if (song != currentSong)
+        memo[song.path].push(song);
+      else
+        memo[song.path] = [song].concat(memo[song.path])
+
+      return memo;
+    });
+    
+    // second stage: collect all but one song from the buckets where there
+    // are more than one song
+    var songsToRemove = [];
+    
+    Object.keys(map).each(function(path){
+      map[path].each(function(song, index){
+        if (index > 0)
+          songsToRemove.push(song);
+      })
+    });
+    
+    return songsToRemove;
   },
   
   insertAt: function(at, songs){

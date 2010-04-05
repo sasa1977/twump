@@ -17,7 +17,7 @@ Twump.Controller.Editor = Class.define(
     },
   
     onRemove: function(){
-      this.playerController.deleteFromPlaylist(this.selectedItems())
+      this.playerController.removeFromPlaylist(this.selectedItems())
     },
   
     onJumpTo: function(){
