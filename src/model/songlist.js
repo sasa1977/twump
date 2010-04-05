@@ -130,6 +130,30 @@ Twump.Model.Songlist = Class.define({
     return result;
   },
   
+  nonExistingSongs: function(){
+    return this.songs.inject([], function(memo, song){
+      if (!Twump.Api.File.exists(song.path))
+        memo.push(song)
+        
+      return memo;
+    });
+  },
+  
+  removeDuplicateSongs: function(currentSong){
+    var map = this.songs.inject({}, function(memo, song){
+      map[song.path] = map[song.path] || [];
+      map[song.path].push(song);
+      return map;
+    });
+    
+    var songsToRemove = [];
+    Object.keys(map).each(function(path){
+      if (map[song.path].length > 0){
+        
+      }
+    })
+  },
+  
   insertAt: function(at, songs){
     this.setSongs(this.songs.insertArrayAt(at, songs).compact());
   },

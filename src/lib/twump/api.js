@@ -228,8 +228,12 @@ air.File.url = function(urlOrNativePath){
   return file.url;
 }
 
-Twump.Api.File = air.File;
+air.File.exists = function(path){
+  var file = new air.File(path);
+  return file.exists;
+}
 
+Twump.Api.File = air.File;
 
 
 Twump.Api.Logger = {

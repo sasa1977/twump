@@ -58,6 +58,12 @@ Twump.Controller.PlaylistMixin = {
     }
   },
   
+  onRemoveNonExisting: function(items){
+    var nonExistingSongs = this.playlist.nonExistingSongs();
+    this.removeFromPlaylist(nonExistingSongs);
+    alert(nonExistingSongs.length.toString() + ' song(s) removed.')
+  },
+  
   onClearClick: function(){
     if (!confirm('Are you sure?')) return;
     this.stop();
