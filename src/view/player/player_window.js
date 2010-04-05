@@ -7,7 +7,7 @@ Twump.View.PlayerWindow = Class.define(
       this.addEventListeners("click", 
         [
           "previous", "next", "pause", "stop", "play",
-          "openFolder", "loadList", "saveList", "shuffle", "shuffleRemaining", "delete", "clear", 
+          "openFolder", "loadList", "saveList", "shuffle", "shuffleRemaining", "removeContext", "clear", 
           "editor", "options", "repeat", "showCurrent"
         ]
       );
@@ -103,6 +103,14 @@ Twump.View.PlayerWindow = Class.define(
   
     onRepeatShuffleClick: function(){
       this.onRepeatMode("reshuffle");
+    },
+    
+    onRemoveContextClick: function(event){
+      Event.stop(event);
+      
+      this.openContextMenu(event, [
+        {id: 'remove', title: 'remove selected', onClick: this.onRemoveSelected.bind(this)}
+      ]);
     }
   }
 );

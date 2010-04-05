@@ -22,13 +22,13 @@ Twump.Controller.Player = Class.define(
         "volumeChange", "setPlayPosition", 
         "addFolderAtEnd", "addFolderAfterCurrent",
         "loadListClick", "saveListClick", "shuffleClick", 
-        "shuffleRemainingClick", "deleteClick", "clearClick",
+        "shuffleRemainingClick", "removeSelected", "clearClick",
         "editorClick", "drop", "filesDropped", "optionsClick",
         "repeatMode", "showCurrentClick"
       ]);
     
       this.subscribeToViewEvents(this.playlistWindow, [
-        "pageChanged", "copyPathToClipboard", "itemSelected", "deleteClick", "setRepeatPattern", 
+        "pageChanged", "copyPathToClipboard", "itemSelected", "removeSelected", "setRepeatPattern", 
         "shuffleSelection"
       ]);
     
@@ -66,7 +66,7 @@ Twump.Controller.Player = Class.define(
     keyboardDispatcher: function(event){ 
       var standardMap = {
         27: "stopClick", 32: "pauseClick", 33: "previousClick", 34: "nextClick", 13: "playClick",
-        46: "deleteClick", 38: "volumeUp", 40: "volumeDown", 39: "moveForward", 37: "moveBackward"
+        46: "removeSelected", 38: "volumeUp", 40: "volumeDown", 39: "moveForward", 37: "moveBackward"
       };
     
       var ctrlMap = {

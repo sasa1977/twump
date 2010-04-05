@@ -40,11 +40,11 @@ Twump.Controller.PlaylistMixin = {
     this.saveCurrentList();
   },
   
-  onDeleteClick: function(){
-    this.deleteFromPlaylist(this.playlistWindow.selectedItems());
+  onRemoveSelected: function(){
+    this.removeFromPlaylist(this.playlistWindow.selectedItems());
   },
   
-  deleteFromPlaylist: function(items){
+  removeFromPlaylist: function(items){
     if (this.playlist.empty()) return;
   
     var result = this.playlist.remove(items);

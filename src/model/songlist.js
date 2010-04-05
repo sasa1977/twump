@@ -104,7 +104,7 @@ Twump.Model.Songlist = Class.define({
     this.setSongs([])
   },
   
-  deleteSongs: function(songs, currentSong){
+  removeSongs: function(songs, currentSong){
     var currentIndex = this.indexOf(currentSong), newIndex = currentIndex;
     
     songs.each(function(song){

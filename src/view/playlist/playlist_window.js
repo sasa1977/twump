@@ -6,7 +6,7 @@ Twump.View.PlaylistWindow = Class.define(
       this.songlist = new Twump.View.Songlist({dragCode: "reorderFromPlaylist",
         contextMenuDescriptor: [
           {id: 'copyPathToClipboard', title: 'copy full path to clipboard', onClick: this.onCopyPathToClipboardClick.bind(this)},
-          {id: 'deleteContext', title: 'remove from playlist', onClick: this.onDeleteContextClick.bind(this)},
+          {id: 'remove', title: 'remove from playlist', onClick: this.onRemoveClick.bind(this)},
           {id: 'shuffleSelection', title: 'shuffle selection', onClick: this.onShuffleSelectionClick.bind(this)},
           {id: 'repeatPattern', title: 'repeat selection', onClick: this.onSetRepeatPatternClick.bind(this)},
           {id: 'repeatShufflePattern', title: 'repeat and reshuffle selection', onClick: this.onSetRepeatPatternWithShuffleClick.bind(this)},
@@ -33,8 +33,8 @@ Twump.View.PlaylistWindow = Class.define(
       Twump.Api.copyTextToClipboard(item.path)
     },
   
-    onDeleteContextClick: function(item){
-      this.onDeleteClick(item);
+    onRemoveClick: function(item){
+      this.onRemoveSelected(item);
     },
   
     display: function(playlist){
