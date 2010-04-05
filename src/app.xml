@@ -5,7 +5,7 @@
     <filename>twump</filename> 
     <initialWindow> 
         <content>view/main/main_window.html</content> 
-        <visible>true</visible> 
+        <visible>false</visible> 
         <systemChrome>none</systemChrome>
         <width>500</width>
     		<height>510</height>

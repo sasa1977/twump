@@ -42,6 +42,7 @@ Twump.Controller.Player = Class.define(
     
       this.initializing = false;
       setTimeout(this.savePlayerData.bind(this), 1000);
+      window.nativeWindow.activate();
     },
   
     onWindowResized: function(){
