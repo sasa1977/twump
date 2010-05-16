@@ -71,9 +71,9 @@ Twump.Controller.Updater = {
       var originalPart = currentVersionParts[index] || "";
       var len = Math.max(part.length, originalPart.length)
       
-      part = part.padRight(len, "0");
-      originalPart = originalPart.padRight(len, "0")
-      
+      part = part.padRight(len, "0").toString();
+      originalPart = originalPart.padRight(len, "0").toString();
+            
       if (part != originalPart) {
         result = part > originalPart;
         throw $break;
