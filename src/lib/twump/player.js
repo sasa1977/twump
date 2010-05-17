@@ -60,7 +60,7 @@ Twump.Player = Class.define({
   
   startMonitorPlaying: function(){
     if (this.timer) return;
-    this.timer = setInterval(this.monitorPlaying.bind(this), 500);
+    this.timer = setInterval(this.monitorPlaying.bind(this), 200);
     this.lastMonitoredPosition = null;
     this.notChangedTimes = 0;
   },
@@ -129,7 +129,7 @@ Twump.Player = Class.define({
   },
   
   tryResolveStuck: function(){
-    var newPosition = this.channel.position + 10 * (this.stuckCount() + 1);
+    var newPosition = this.channel.position + 50 * (this.stuckCount() + 1);
     this.stop();
     this.play(newPosition);
     this._stuckCount = this.stuckCount() + 1;
@@ -144,7 +144,7 @@ Twump.Player = Class.define({
   },
   
   tooManyStucks: function(){
-    return this.stuckCount() >= 4;
+    return this.stuckCount() >= 10;
   },
   
   fireProgress: function(){
@@ -174,6 +174,7 @@ Twump.Player = Class.define({
     if (!this.playing()) return;
 
     this.channel.soundTransform = new air.SoundTransform(volume, this.channel.soundTransform.pan);
+    this.options.volume = volume;
   },
   
   setPosition: function(position){
