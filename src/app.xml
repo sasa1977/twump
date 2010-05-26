@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?> 
-<application xmlns="http://ns.adobe.com/air/application/2.0beta2"> 
+<application xmlns="http://ns.adobe.com/air/application/2.0"> 
     <id>twump</id> 
-    <version>0.0.12</version> 
+    <version>0.0.13</version> 
     <filename>twump</filename> 
     <initialWindow> 
         <content>view/main/main_window.html</content> 
