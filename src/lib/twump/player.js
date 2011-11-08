@@ -60,16 +60,16 @@ Twump.Player = Class.define({
   
   startMonitorPlaying: function(){
     if (this.timer) return;
-    this.timer = setInterval(this.monitorPlaying.bind(this), 500);
+    this.timer = setInterval(this.monitorPlaying.bind(this), 200);
     this.lastMonitoredPosition = null;
     this.notChangedTimes = 0;
   },
   
   stopMonitorPlaying: function(){
     if (!this.timer) return;
+    clearInterval(this.timer);
     this.timer = null;
     this.lastMonitoredPosition = null;
-    clearInterval(this.timer);
   },
   
   isPlayingFinished: function() {
@@ -80,9 +80,9 @@ Twump.Player = Class.define({
     //
     // The one minute check is because the song is loading simultaneously as it is being played. 
     // Therefore it might happen at the beginning that the position equals the length of currently loaded part. 
-    // To avoid false end detection, I don't use this condition in the first minute of playing.
-    if (this.channel.length >= 60000 && this.channel.position >= this.sound.length)
-      return true;
+    // To avoid false end detection, I don't use this condition immediately.
+    if (this.sound.length >= 60000 && this.channel.position >= this.sound.length)
+      return {lengthReached: true};
     
     // 2. If I repeatedly don't notice position change -> finish.
     //
@@ -90,13 +90,19 @@ Twump.Player = Class.define({
     // to handle the songs shorter than one minute (see comment above)
     if (!this.lastMonitoredPositionChanged())
       this.notChangedTimes++;
-    else
+    else {
       this.notChangedTimes = 0;
+      this.clearStuckCount();
+    }
 
     // I return true (playing finished) only when the position didn't change for couple of successive cheks
     // to avoid false detection when the user changes playing position. Otherwise it might happen that the user 
     // changes to the position which is the same as the last detected, and I mistakenly detect no position change.
-    return this.notChangedTimes >= 4;
+    
+    if (this.notChangedTimes >= 1)
+      return {positionStuck: true};
+    
+    return null;
   },
   
   lastMonitoredPositionChanged: function(){
@@ -106,10 +112,39 @@ Twump.Player = Class.define({
   monitorPlaying: function(){
     if (!this.playing()) return;
     
-    if (!this.isPlayingFinished())
+    var playingFinished = this.isPlayingFinished();
+    
+    if (!playingFinished)
       this.fireProgress();
+    else {
+      if (playingFinished.positionStuck && !this.tooManyStucks())
+        this.tryResolveStuck();
+      else
+        this.onPlaybackComplete();
+    }
+  },
+  
+  stuckCount: function(){
+    return this._stuckCount || 0;
+  },
+  
+  tryResolveStuck: function(){
+    var newPosition = this.channel.position + 50 * (this.stuckCount() + 1);
+    this.stop();
+    this.play(newPosition);
+    this._stuckCount = this.stuckCount() + 1;
+    this.stuckResolveAttempt = true;
+  },
+  
+  clearStuckCount: function(){
+    if (this.stuckResolveAttempt)
+      this.stuckResolveAttempt = false;
     else
-      this.onPlaybackComplete();
+      this._stuckCount = 0;
+  },
+  
+  tooManyStucks: function(){
+    return this.stuckCount() >= 10;
   },
   
   fireProgress: function(){
@@ -139,6 +174,7 @@ Twump.Player = Class.define({
     if (!this.playing()) return;
 
     this.channel.soundTransform = new air.SoundTransform(volume, this.channel.soundTransform.pan);
+    this.options.volume = volume;
   },
   
   setPosition: function(position){
